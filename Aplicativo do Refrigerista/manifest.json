@@ -1,0 +1,16 @@
+{
+  "name": "RefriTech Pro",
+  "short_name": "RefriTech",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0a4d8c",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2916/2916315.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
