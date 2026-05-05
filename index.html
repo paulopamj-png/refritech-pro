@@ -374,51 +374,56 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
 
 /* Tools tile grid */
 .tools-section {
-  padding: 4px 16px 8px;
+  padding: 4px 12px 8px;
 }
 .tool-tile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
 }
 .tool-tile {
   background: white;
   border-radius: var(--radius-md);
-  padding: 14px;
+  padding: 10px 10px;
   border: 1px solid var(--border-soft);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   cursor: pointer;
   transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
   box-shadow: var(--shadow-sm);
+  min-width: 0;
+  overflow: hidden;
 }
 .tool-tile:active {
   transform: scale(0.97);
   border-color: var(--accent);
 }
 .tool-tile-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
-.tool-tile-icon svg { width: 20px; height: 20px; }
-.tool-tile-text { min-width: 0; flex: 1; }
+.tool-tile-icon svg { width: 18px; height: 18px; }
+.tool-tile-text { min-width: 0; flex: 1; overflow: hidden; }
 .tool-tile-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.2px;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tool-tile-sub {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-mute);
-  margin-top: 2px;
+  margin-top: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -821,18 +826,33 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
 }
 
 /* Module chips — seletor de módulos a calcular */
+/* ── Módulos a calcular ─────────────────────────── */
 .modules-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
+
+/* Geometria: linha inteira, centralizado */
+.module-chip[data-for-module="geometry"] {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #e8f4fd 0%, #dceefb 100%);
+  border-color: var(--accent);
+}
+
+/* Chip base */
 .module-chip {
   position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  background: white;
   border: 2px solid var(--border-soft);
   border-radius: 10px;
   cursor: pointer;
@@ -840,6 +860,8 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
   user-select: none;
 }
 .module-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+/* Checkbox — canto superior direito */
 .module-chip input[type="checkbox"] {
   position: absolute;
   top: 6px;
@@ -850,40 +872,59 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
   cursor: pointer;
   accent-color: var(--accent);
 }
+.module-chip[data-for-module="geometry"] input[type="checkbox"] {
+  display: block;
+}
+
+/* Ícone */
 .module-chip-icon {
   flex-shrink: 0;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-mute);
   transition: color 0.18s;
 }
 .module-chip-icon svg { width: 22px; height: 22px; }
-.module-chip-text { min-width: 0; }
+
+/* Texto */
+.module-chip-text { min-width: 0; flex: 1; }
 .module-chip-name {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
   line-height: 1.2;
 }
+.module-chip[data-for-module="geometry"] .module-chip-name {
+  font-size: 13px;
+  color: var(--primary);
+}
 .module-chip-sub {
   font-size: 9.5px;
   color: var(--text-mute);
-  margin-top: 1px;
+  margin-top: 2px;
   line-height: 1.25;
 }
-.module-chip:has(input:checked) {
-  border-color: var(--accent);
-  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
-}
+
+/* Cores de fundo individuais — cada Q tem a sua paleta */
+.module-chip[data-for-module="q1"] { background: #fff0f0; border-color: #ffcdd2; }
+.module-chip[data-for-module="q2"] { background: #e8f4fd; border-color: #bbdefb; }
+.module-chip[data-for-module="q3"] { background: #e8f8f1; border-color: #b2dfdb; }
+.module-chip[data-for-module="q4"] { background: #fff8ee; border-color: #ffe0b2; }
+.module-chip[data-for-module="q5"] { background: #fffde7; border-color: #fff176; }
+.module-chip[data-for-module="q6"] { background: #f8f0ff; border-color: #e1bee7; }
+
+/* Desmarcado: desbota */
 .module-chip:has(input:not(:checked)) {
-  background: var(--bg-soft);
-  opacity: 0.65;
+  opacity: 0.55;
+  filter: grayscale(0.4);
 }
-.module-chip:has(input:not(:checked)) .module-chip-icon {
-  color: var(--text-mute);
+
+/* Marcado: borda colorida mais forte, sem opacidade */
+.module-chip:has(input:checked) {
+  opacity: 1;
+  filter: none;
 }
 
 /* Caixinha azul: Dados extraídos das tabelas */
@@ -2623,20 +2664,20 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
           </button>
         </div>
         <div class="modules-grid">
-          <label class="module-chip">
+          <label class="module-chip" data-for-module="geometry">
             <input type="checkbox" data-module="geometry" checked onchange="syncModules()">
-            <div class="module-chip-icon">
+            <div class="module-chip-icon" style="color:var(--primary)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
               </svg>
             </div>
             <div class="module-chip-text">
               <div class="module-chip-name">Geometria</div>
-              <div class="module-chip-sub">Dimensões, isolante, ΔT</div>
+              <div class="module-chip-sub">Dimensões · Isolante · ΔT</div>
             </div>
           </label>
 
-          <label class="module-chip">
+          <label class="module-chip" data-for-module="q1">
             <input type="checkbox" data-module="q1" checked onchange="syncModules()">
             <div class="module-chip-icon" style="color:#e63946">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2644,12 +2685,12 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
               </svg>
             </div>
             <div class="module-chip-text">
-              <div class="module-chip-name">Q1 — Transmissão</div>
-              <div class="module-chip-sub">Tab.1 — paredes, teto, piso</div>
+              <div class="module-chip-name">Transmissão (Q1)</div>
+              <div class="module-chip-sub">Paredes, teto, piso</div>
             </div>
           </label>
 
-          <label class="module-chip">
+          <label class="module-chip" data-for-module="q2">
             <input type="checkbox" data-module="q2" checked onchange="syncModules()">
             <div class="module-chip-icon" style="color:#1976d2">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2657,12 +2698,12 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
               </svg>
             </div>
             <div class="module-chip-text">
-              <div class="module-chip-name">Q2 — Infiltração</div>
-              <div class="module-chip-sub">Tab.2·3 — abertura de porta</div>
+              <div class="module-chip-name">Infiltração (Q2)</div>
+              <div class="module-chip-sub">Abertura de porta</div>
             </div>
           </label>
 
-          <label class="module-chip">
+          <label class="module-chip" data-for-module="q3">
             <input type="checkbox" data-module="q3" checked onchange="syncModules()">
             <div class="module-chip-icon" style="color:#06a77d">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2670,12 +2711,12 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
               </svg>
             </div>
             <div class="module-chip-text">
-              <div class="module-chip-name">Q3 — Produto</div>
-              <div class="module-chip-sub">Tab.4 — sensível, latente, respiração</div>
+              <div class="module-chip-name">Produto (Q3)</div>
+              <div class="module-chip-sub">Sensível, latente</div>
             </div>
           </label>
 
-          <label class="module-chip">
+          <label class="module-chip" data-for-module="q4">
             <input type="checkbox" data-module="q4" checked onchange="syncModules()">
             <div class="module-chip-icon" style="color:#f57c00">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2683,25 +2724,25 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
               </svg>
             </div>
             <div class="module-chip-text">
-              <div class="module-chip-name">Q4 — Pessoas</div>
-              <div class="module-chip-sub">Tab.5 — calor de ocupação</div>
+              <div class="module-chip-name">Pessoas (Q4)</div>
+              <div class="module-chip-sub">Calor de ocupação</div>
             </div>
           </label>
 
-          <label class="module-chip">
+          <label class="module-chip" data-for-module="q5">
             <input type="checkbox" data-module="q5" checked onchange="syncModules()">
-            <div class="module-chip-icon" style="color:#fbc02d">
+            <div class="module-chip-icon" style="color:#f4a100">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12c1 1 2 2 2 4h4c0-2 1-3 2-4a7 7 0 00-4-12z"/>
               </svg>
             </div>
             <div class="module-chip-text">
-              <div class="module-chip-name">Q5 — Iluminação</div>
-              <div class="module-chip-sub">10 W/m² × horas/dia</div>
+              <div class="module-chip-name">Iluminação (Q5)</div>
+              <div class="module-chip-sub">W/m² × horas</div>
             </div>
           </label>
 
-          <label class="module-chip">
+          <label class="module-chip" data-for-module="q6">
             <input type="checkbox" data-module="q6" checked onchange="syncModules()">
             <div class="module-chip-icon" style="color:#7b1fa2">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2709,11 +2750,13 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
               </svg>
             </div>
             <div class="module-chip-text">
-              <div class="module-chip-name">Q6 — Motores</div>
-              <div class="module-chip-sub">Ventiladores do evaporador</div>
+              <div class="module-chip-name">Motores (Q6)</div>
+              <div class="module-chip-sub">Ventiladores</div>
             </div>
           </label>
         </div>
+        <!-- Linha divisória entre chips e campos -->
+        <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border-soft),transparent);margin-top:14px;margin-bottom:2px"></div>
       </div>
 
       <!-- Tipo de câmara — relevante quando dimensões ou transmissão/infiltração/iluminação/motores -->
@@ -7106,20 +7149,20 @@ function calcChamber() {
   const solarDelta  = getTab6(solarSup, solarOri); // °C extras por insolação (Tab.6)
   const deltaT      = deltaTbase + solarDelta;
 
-  // ── Q1 — Transmissão pelas paredes (Tabela 1) ─────────
+  // ── Q1 Transmissão pelas paredes (Tabela 1) ─────────
   // isoSel já é a chave direta da tab1: 'eps100', 'purPlaca75', 'purPainel100', etc.
   const isoKey = isoSel;
   const factorTab1 = getTab1Factor(deltaT, isoKey);  // kcal/m²·24h
   const q1_kcal24  = areaTotal * factorTab1;          // kcal/24h
 
-  // ── Q2 — Infiltração pela porta (Tabelas 2 e 3) ───────
+  // ── Q2 Infiltração pela porta (Tabelas 2 e 3) ───────
   const acima0   = tInt >= 0;
   let   nTrocas  = getTab2(volume, acima0);
   if (uso === 'intenso') nTrocas *= 2;
   const factorTab3 = getTab3(tInt, tExt, ur);             // kcal/m³
   const q2_kcal24  = volume * nTrocas * factorTab3;   // kcal/24h
 
-  // ── Q3 — Produto (Tabela 4 + equações) ───────────────
+  // ── Q3 Produto (Tabela 4 + equações) ───────────────
   // Usa tFinal como temperatura que a carga deve atingir.
   // Para câmara completa: tFinal = tInt (câmara)
   // Para modo só-produto: tFinal = chTFinal (campo dedicado)
@@ -7201,7 +7244,7 @@ function calcChamber() {
     foodDetail = 'Valores genéricos (selecione um alimento para maior precisão)';
   }
 
-  // ── Q4 — Pessoas (Tabela 5) ────────────────────────────
+  // ── Q4 Pessoas (Tabela 5) ────────────────────────────
   // Temperatura para Tab.5: usa chTCamQ4 quando disponível (modo só-Q4), senão tInt
   const tCamQ4Block = document.getElementById('chTCamQ4Block');
   const usaTCamQ4 = tCamQ4Block && tCamQ4Block.style.display !== 'none';
@@ -7211,7 +7254,7 @@ function calcChamber() {
   const qPessoa  = getTab5(tParaTab5);    // kcal/h por pessoa
   const q4_kcal24 = pessoas * qPessoa * horas;
 
-  // ── Q5 — Iluminação ──────────────────────────────────
+  // ── Q5 Iluminação ──────────────────────────────────
   // Área do piso: usa campos dedicados do Q5 se piso não veio das dimensões
   const pisoQ5Block = document.getElementById('chPisoQ5Block');
   const q5usaDedicado = pisoQ5Block && pisoQ5Block.style.display !== 'none';
@@ -7224,7 +7267,7 @@ function calcChamber() {
   const potLuzKw  = potLuzW / 1000;                 // kW
   const q5_kcal24 = potLuzKw * 860 * horasLuz;      // kcal/24h
 
-  // ── Q6 — Motores (ventiladores evaporador) ────────────
+  // ── Q6 Motores (ventiladores evaporador) ────────────
   // Usa lista de motores individuais (motorList) se disponível, senão chMotores (legado)
   const horasMotor = parseFloat(document.getElementById('chHorasMotor')?.value) || 24;
   const nTotalCV   = (typeof getMotoresTotalCV === 'function' && motorList.length > 0)
@@ -7426,8 +7469,8 @@ function calcChamber() {
 
     <div class="result-block" style="margin-top:12px">
       <div class="result-title">🔥 Decomposição da carga térmica</div>
-      ${M.has('q1') ? `<div class="result-row"><span class="result-row-label">Q1 — Transmissão paredes (Tab.1)</span><span class="result-row-value">${q1_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q1_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
-      ${M.has('q2') ? `<div class="result-row"><span class="result-row-label">Q2 — Infiltração porta (Tab.2·3) · ${nTrocas.toFixed(1)} trocas/24h</span><span class="result-row-value">${q2_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q2_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
+      ${M.has('q1') ? `<div class="result-row"><span class="result-row-label">Q1 Transmissão paredes (Tab.1)</span><span class="result-row-value">${q1_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q1_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
+      ${M.has('q2') ? `<div class="result-row"><span class="result-row-label">Q2 Infiltração porta (Tab.2·3) · ${nTrocas.toFixed(1)} trocas/24h</span><span class="result-row-value">${q2_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q2_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
       ${M.has('q3') ? `
       <div class="result-row"><span class="result-row-label">Q3 — Carga Térmica do Produto</span><span class="result-row-value">${q3_kcal24.toFixed(1)} kcal <span style="opacity:0.55;font-size:10px">(${(q3_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
       ${foodParcelas.length > 0 ? foodParcelas.map(p => `
@@ -7482,13 +7525,13 @@ function calcChamber() {
         </div>
       `).join('') : ''}
       ` : ''}
-      ${M.has('q4') ? `<div class="result-row"><span class="result-row-label">Q4 — Pessoas · ${pessoas} × ${qPessoa} kcal/h × ${horas}h (Tab.5)</span><span class="result-row-value">${q4_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q4_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
+      ${M.has('q4') ? `<div class="result-row"><span class="result-row-label">Q4 Pessoas · ${pessoas} × ${qPessoa} kcal/h × ${horas}h (Tab.5)</span><span class="result-row-value">${q4_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q4_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
       ${M.has('q5') ? `
-      <div class="result-row"><span class="result-row-label">Q5 — Iluminação</span><span class="result-row-value">${q5_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q5_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
+      <div class="result-row"><span class="result-row-label">Q5 Iluminação</span><span class="result-row-value">${q5_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q5_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
       <div class="result-row" style="font-size:11px;color:var(--text-mute)"><span style="grid-column:1/-1">&nbsp;&nbsp;↳ Área piso ${areaPisoQ5.toFixed(2)} m² × ${wattsM2} W/m² = ${potLuzW.toFixed(0)} W = ${potLuzKw.toFixed(3)} kW · ${potLuzKw.toFixed(3)} × 860 × ${horasLuz}h</span></div>
       ` : ''}
       ${M.has('q6') ? `
-      <div class="result-row"><span class="result-row-label">Q6 — Motores ventiladores</span><span class="result-row-value">${q6_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q6_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
+      <div class="result-row"><span class="result-row-label">Q6 Motores ventiladores</span><span class="result-row-value">${q6_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q6_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
       <div class="result-row" style="font-size:11px;color:var(--text-mute)"><span style="grid-column:1/-1">&nbsp;&nbsp;↳ N = ${nTotalCV.toFixed(2)} CV × 632,41 kcal/h × ${horasMotor}h/dia</span></div>
       ` : ''}
       <div class="result-row" style="border-top:2px solid var(--border);margin-top:4px;padding-top:8px"><span class="result-row-label" style="font-weight:700">Total diário</span><span class="result-row-value">${qTotal_24.toFixed(0)} kcal/24h</span></div>
