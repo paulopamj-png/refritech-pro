@@ -852,12 +852,16 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 10px 10px 10px 26px;
   border: 2px solid var(--border-soft);
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.18s ease;
   user-select: none;
+}
+/* Geometria não precisa de padding-left extra (tem layout centralizado) */
+.module-chip[data-for-module="geometry"] {
+  padding: 10px 16px 10px 26px;
 }
 .module-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
 
@@ -865,7 +869,7 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
 .module-chip input[type="checkbox"] {
   position: absolute;
   top: 6px;
-  right: 6px;
+  left: 6px;
   width: 14px;
   height: 14px;
   margin: 0;
@@ -2346,7 +2350,7 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
         <div class="hub-card-text">
           <div class="hub-card-title">Ar Condicionado</div>
           <div class="hub-card-sub">Splits, ACJs, multi-splits e VRFs</div>
-          <div class="hub-card-meta">110 modelos · 12 marcas</div>
+          <div class="hub-card-meta">230 modelos · 24 marcas</div>
         </div>
         <div class="hub-card-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
@@ -2363,7 +2367,7 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
         <div class="hub-card-text">
           <div class="hub-card-title">Geladeiras / Refrigeradores</div>
           <div class="hub-card-sub">Frost Free, Side by Side, Top/Bottom Mount</div>
-          <div class="hub-card-meta">20 modelos · 6 marcas</div>
+          <div class="hub-card-meta">34 modelos · 7 marcas</div>
         </div>
         <div class="hub-card-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
@@ -2380,7 +2384,7 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
         <div class="hub-card-text">
           <div class="hub-card-title">Bebedouros / Purificadores</div>
           <div class="hub-card-sub">Coluna, pressão, refrigerados</div>
-          <div class="hub-card-meta">12 modelos · 5 marcas</div>
+          <div class="hub-card-meta">22 modelos · 5 marcas</div>
         </div>
         <div class="hub-card-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
@@ -2407,51 +2411,10 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
     </button>
     <div>
       <div class="header-title">Ar Condicionado</div>
-      <div class="header-subtitle">Splits & Multi-splits</div>
+      <div class="header-subtitle">Splits, ACJs, multi-splits e VRFs</div>
     </div>
   </div>
-  <div class="scroll-area">
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <input type="text" id="resSearch" placeholder="Buscar marca ou modelo..." oninput="filterModels()">
-    </div>
-
-    <div class="chip-row" id="chipRow">
-      <div class="chip active" data-brand="all" onclick="filterByBrand(this, 'all')">Todas</div>
-      <div class="chip" data-brand="Samsung" onclick="filterByBrand(this, 'Samsung')">Samsung</div>
-      <div class="chip" data-brand="LG" onclick="filterByBrand(this, 'LG')">LG</div>
-      <div class="chip" data-brand="Daikin" onclick="filterByBrand(this, 'Daikin')">Daikin</div>
-      <div class="chip" data-brand="Midea" onclick="filterByBrand(this, 'Midea')">Midea</div>
-      <div class="chip" data-brand="Gree" onclick="filterByBrand(this, 'Gree')">Gree</div>
-      <div class="chip" data-brand="Electrolux" onclick="filterByBrand(this, 'Electrolux')">Electrolux</div>
-      <div class="chip" data-brand="Fujitsu" onclick="filterByBrand(this, 'Fujitsu')">Fujitsu</div>
-      <div class="chip" data-brand="Philco" onclick="filterByBrand(this, 'Philco')">Philco</div>
-      <div class="chip" data-brand="Consul" onclick="filterByBrand(this, 'Consul')">Consul</div>
-      <div class="chip" data-brand="Komeco" onclick="filterByBrand(this, 'Komeco')">Komeco</div>
-      <div class="chip" data-brand="Elgin" onclick="filterByBrand(this, 'Elgin')">Elgin</div>
-      <div class="chip" data-brand="TCL" onclick="filterByBrand(this, 'TCL')">TCL</div>
-    </div>
-
-    <div class="section-title">Modelos disponíveis</div>
-    <div id="modelList"></div>
-
-    <div class="section-title" style="margin-top:24px">Solução de problemas</div>
-    <div class="list-card" onclick="openTroubleshoot('residential')">
-      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-        </svg>
-      </div>
-      <div class="list-card-content">
-        <div class="list-card-title">Solucionador de Ar Condicionado</div>
-        <div class="list-card-sub">Defeitos comuns em splits e ACJs · diagnóstico e reparo</div>
-      </div>
-      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-    </div>
-  </div>
+  <div class="scroll-area" id="acContent"></div>
 </div>
 
 <!-- ============================================
@@ -3763,41 +3726,7 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
       <div class="header-subtitle">Refrigeradores domésticos</div>
     </div>
   </div>
-  <div class="scroll-area">
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <input type="text" id="fridgeSearch" placeholder="Buscar marca ou modelo..." oninput="filterFridges()">
-    </div>
-
-    <div class="chip-row" id="fridgeChips">
-      <div class="chip active" onclick="filterFridgeByBrand(this, 'all')">Todas</div>
-      <div class="chip" onclick="filterFridgeByBrand(this, 'Brastemp')">Brastemp</div>
-      <div class="chip" onclick="filterFridgeByBrand(this, 'Consul')">Consul</div>
-      <div class="chip" onclick="filterFridgeByBrand(this, 'Electrolux')">Electrolux</div>
-      <div class="chip" onclick="filterFridgeByBrand(this, 'Samsung')">Samsung</div>
-      <div class="chip" onclick="filterFridgeByBrand(this, 'LG')">LG</div>
-      <div class="chip" onclick="filterFridgeByBrand(this, 'Panasonic')">Panasonic</div>
-    </div>
-
-    <div class="section-title">Modelos disponíveis</div>
-    <div id="fridgeList"></div>
-
-    <div class="section-title" style="margin-top:24px">Solução de problemas</div>
-    <div class="list-card" onclick="openTroubleshoot('fridge')">
-      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-        </svg>
-      </div>
-      <div class="list-card-content">
-        <div class="list-card-title">Solucionador de Geladeiras</div>
-        <div class="list-card-sub">Defeitos de refrigeradores domésticos · diagnóstico</div>
-      </div>
-      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-    </div>
-  </div>
+  <div class="scroll-area" id="fridgesContent"></div>
 </div>
 <div id="fridgeDetail" class="screen">
   <div class="header">
@@ -3822,43 +3751,10 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
     </button>
     <div>
       <div class="header-title">Bebedouros</div>
-      <div class="header-subtitle">Purificadores e bebedouros</div>
+      <div class="header-subtitle">Bebedouros e purificadores refrigerados</div>
     </div>
   </div>
-  <div class="scroll-area">
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <input type="text" id="drinkerSearch" placeholder="Buscar marca ou modelo..." oninput="filterDrinkers()">
-    </div>
-
-    <div class="chip-row" id="drinkerChips">
-      <div class="chip active" onclick="filterDrinkerByBrand(this, 'all')">Todas</div>
-      <div class="chip" onclick="filterDrinkerByBrand(this, 'Esmaltec')">Esmaltec</div>
-      <div class="chip" onclick="filterDrinkerByBrand(this, 'Latina')">Latina</div>
-      <div class="chip" onclick="filterDrinkerByBrand(this, 'IBBL')">IBBL</div>
-      <div class="chip" onclick="filterDrinkerByBrand(this, 'Polar')">Polar</div>
-      <div class="chip" onclick="filterDrinkerByBrand(this, 'Soft')">Soft</div>
-    </div>
-
-    <div class="section-title">Modelos disponíveis</div>
-    <div id="drinkerList"></div>
-
-    <div class="section-title" style="margin-top:24px">Solução de problemas</div>
-    <div class="list-card" onclick="openTroubleshoot('drinker')">
-      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-        </svg>
-      </div>
-      <div class="list-card-content">
-        <div class="list-card-title">Solucionador de Bebedouros</div>
-        <div class="list-card-sub">Defeitos comuns em purificadores e bebedouros</div>
-      </div>
-      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-    </div>
-  </div>
+  <div class="scroll-area" id="drinkersContent"></div>
 </div>
 <div id="drinkerDetail" class="screen">
   <div class="header">
@@ -4048,7 +3944,7 @@ function goTo(id) {
   document.querySelectorAll('.scroll-area').forEach(s => s.scrollTop = 0);
 
   // Renders contextuais quando entra em telas que precisam carregar lista
-  if (id === 'airconditioners') renderModels();
+  if (id === 'airconditioners') renderAC();
   else if (id === 'refrigerators') renderFridges();
   else if (id === 'drinkers') renderDrinkers();
   else if (id === 'freezers') renderFreezers();
@@ -4211,7 +4107,173 @@ const models = [
   // TCL
   { id: 172, brand: 'TCL', model: 'Inverter T-Pro 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
   { id: 173, brand: 'TCL', model: 'Inverter T-Pro 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
-  { id: 174, brand: 'TCL', model: 'Inverter T-Pro 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' }
+  { id: 174, brand: 'TCL', model: 'Inverter T-Pro 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 175, brand: 'TCL', model: 'Inverter T-Pro 24.000', cap: 24000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 176, brand: 'TCL', model: 'Elite Inverter 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 177, brand: 'TCL', model: 'Elite Inverter 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 178, brand: 'TCL', model: 'On/Off 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 179, brand: 'TCL', model: 'On/Off 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // SPRINGER
+  { id: 180, brand: 'Springer', model: 'Midea Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 181, brand: 'Springer', model: 'Midea Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 182, brand: 'Springer', model: 'Midea Inverter 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 183, brand: 'Springer', model: 'Midea Inverter 24.000', cap: 24000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 184, brand: 'Springer', model: 'Duo Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-410A', tension: '220V', technology: 'Inverter' },
+  { id: 185, brand: 'Springer', model: 'Duo Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-410A', tension: '220V', technology: 'Inverter' },
+  { id: 186, brand: 'Springer', model: 'Sinclair On/Off 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 187, brand: 'Springer', model: 'Sinclair On/Off 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 188, brand: 'Springer', model: 'Arctico Hi-Wall 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 189, brand: 'Springer', model: 'Arctico Hi-Wall 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // HITACHI
+  { id: 190, brand: 'Hitachi', model: 'Inverter Dodai 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 191, brand: 'Hitachi', model: 'Inverter Dodai 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 192, brand: 'Hitachi', model: 'Inverter Dodai 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 193, brand: 'Hitachi', model: 'Inverter Dodai 24.000', cap: 24000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 194, brand: 'Hitachi', model: 'Taikisha Plus 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 195, brand: 'Hitachi', model: 'Taikisha Plus 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 196, brand: 'Hitachi', model: 'Taikisha Plus 18.000', cap: 18000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 197, brand: 'Hitachi', model: 'On/Off Utopia 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 198, brand: 'Hitachi', model: 'On/Off Utopia 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // YORK
+  { id: 200, brand: 'York', model: 'Eco Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 201, brand: 'York', model: 'Eco Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 202, brand: 'York', model: 'Eco Inverter 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 203, brand: 'York', model: 'Eco Inverter 24.000', cap: 24000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 204, brand: 'York', model: 'On/Off 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 205, brand: 'York', model: 'On/Off 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // CARRIER
+  { id: 210, brand: 'Carrier', model: 'X-Power Gold 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 211, brand: 'Carrier', model: 'X-Power Gold 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 212, brand: 'Carrier', model: 'X-Power Gold 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 213, brand: 'Carrier', model: 'X-Power Gold 24.000', cap: 24000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 214, brand: 'Carrier', model: 'Puri Inverter 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 215, brand: 'Carrier', model: 'Puri Inverter 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 216, brand: 'Carrier', model: 'On/Off 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 217, brand: 'Carrier', model: 'On/Off 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // TRANE
+  { id: 220, brand: 'Trane', model: 'Tracer Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 221, brand: 'Trane', model: 'Tracer Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 222, brand: 'Trane', model: 'Tracer Inverter 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 223, brand: 'Trane', model: 'Tracer Inverter 24.000', cap: 24000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+
+  // PANASONIC
+  { id: 230, brand: 'Panasonic', model: 'CS-PZ9XKF 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 231, brand: 'Panasonic', model: 'CS-PZ12XKF 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 232, brand: 'Panasonic', model: 'CS-PZ18XKF 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 233, brand: 'Panasonic', model: 'CS-Z9SKUA 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 234, brand: 'Panasonic', model: 'CS-Z12SKUA 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+
+  // ARNO (muito popular no Brasil, Nordeste especialmente)
+  { id: 235, brand: 'Arno', model: 'Silentia Plus 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 236, brand: 'Arno', model: 'Silentia Plus 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 237, brand: 'Arno', model: 'Inverter Cleo 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 238, brand: 'Arno', model: 'Inverter Cleo 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 239, brand: 'Arno', model: 'Inverter Cleo 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 240, brand: 'Arno', model: 'Fresh Air 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 241, brand: 'Arno', model: 'Fresh Air 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+
+  // AGRATTO (popular em cidades do interior)
+  { id: 245, brand: 'Agratto', model: 'Eco Split 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 246, brand: 'Agratto', model: 'Eco Split 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 247, brand: 'Agratto', model: 'Eco Split 18.000', cap: 18000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 248, brand: 'Agratto', model: 'Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-410A', tension: '220V', technology: 'Inverter' },
+  { id: 249, brand: 'Agratto', model: 'Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-410A', tension: '220V', technology: 'Inverter' },
+  { id: 250, brand: 'Agratto', model: 'Inverter 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-410A', tension: '220V', technology: 'Inverter' },
+
+  // WANKE
+  { id: 255, brand: 'Wanke', model: 'Eco 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 256, brand: 'Wanke', model: 'Eco 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 257, brand: 'Wanke', model: 'Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 258, brand: 'Wanke', model: 'Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 259, brand: 'Wanke', model: 'Inverter 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+
+  // MONDIAL
+  { id: 260, brand: 'Mondial', model: 'Split 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 261, brand: 'Mondial', model: 'Split 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // WESTINGHOUSE
+  { id: 265, brand: 'Westinghouse', model: 'Eco Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 266, brand: 'Westinghouse', model: 'Eco Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 267, brand: 'Westinghouse', model: 'Eco Inverter 18.000', cap: 18000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 268, brand: 'Westinghouse', model: 'On/Off 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 269, brand: 'Westinghouse', model: 'On/Off 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // COMFEE (Midea OEM — muito presente em lojas de conveniência)
+  { id: 275, brand: 'Comfee', model: 'Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 276, brand: 'Comfee', model: 'Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 277, brand: 'Comfee', model: 'On/Off 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 278, brand: 'Comfee', model: 'On/Off 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // SAMSUNG — ampliar 9.000 e 12.000
+  { id: 280, brand: 'Samsung', model: 'WindFree Essential 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 281, brand: 'Samsung', model: 'WindFree Essential 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 282, brand: 'Samsung', model: 'Maldives Inverter 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 283, brand: 'Samsung', model: 'Maldives Inverter 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+
+  // LG — ampliar 9.000 e 12.000
+  { id: 285, brand: 'LG', model: 'DualCool Eco 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Dual Inverter' },
+  { id: 286, brand: 'LG', model: 'DualCool Eco 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Dual Inverter' },
+  { id: 287, brand: 'LG', model: 'DualCool Essential 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 288, brand: 'LG', model: 'DualCool Essential 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // MIDEA — ampliar 9.000 e 12.000
+  { id: 290, brand: 'Midea', model: 'M3 Inverter 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 291, brand: 'Midea', model: 'M3 Inverter 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 292, brand: 'Midea', model: 'Olímpico 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 293, brand: 'Midea', model: 'Olímpico 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+
+  // GREE — ampliar 9.000 e 12.000
+  { id: 295, brand: 'Gree', model: 'Eco Garden 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 296, brand: 'Gree', model: 'Eco Garden 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 297, brand: 'Gree', model: 'Pular 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 298, brand: 'Gree', model: 'Pular 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // PHILCO — ampliar
+  { id: 300, brand: 'Philco', model: 'Eco Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 301, brand: 'Philco', model: 'Eco Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 302, brand: 'Philco', model: 'Hi Wall 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 303, brand: 'Philco', model: 'Hi Wall 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // CONSUL — ampliar
+  { id: 305, brand: 'Consul', model: 'Bem Estar Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 306, brand: 'Consul', model: 'Bem Estar Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 307, brand: 'Consul', model: 'Bem Estar 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 308, brand: 'Consul', model: 'Bem Estar 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // ELECTROLUX — ampliar
+  { id: 310, brand: 'Electrolux', model: 'Ecoturbo Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 311, brand: 'Electrolux', model: 'Ecoturbo Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 312, brand: 'Electrolux', model: 'Power Inverter 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 313, brand: 'Electrolux', model: 'Power Inverter 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+
+  // SPRINGER — ampliar
+  { id: 315, brand: 'Springer', model: 'Carry 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 316, brand: 'Springer', model: 'Carry 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 317, brand: 'Springer', model: 'Midea Easy Fit 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 318, brand: 'Springer', model: 'Midea Easy Fit 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+
+  // ELGIN — ampliar
+  { id: 320, brand: 'Elgin', model: 'Eco Power 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 321, brand: 'Elgin', model: 'Eco Power 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-22', tension: '220V', technology: 'Convencional' },
+  { id: 322, brand: 'Elgin', model: 'Inverter Connect 9.000', cap: 9000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 323, brand: 'Elgin', model: 'Inverter Connect 12.000', cap: 12000, type: 'Split Inverter Wi-Fi', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+
+  // KOMECO — ampliar
+  { id: 325, brand: 'Komeco', model: 'Neo 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 326, brand: 'Komeco', model: 'Neo 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 327, brand: 'Komeco', model: 'Inverter 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 328, brand: 'Komeco', model: 'Inverter 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+
+  // FUJITSU — ampliar 9.000/12.000
+  { id: 330, brand: 'Fujitsu', model: 'Inverter ASBG09LMCA 9.000', cap: 9000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 331, brand: 'Fujitsu', model: 'Inverter ASBG12LMCA 12.000', cap: 12000, type: 'Split Inverter', fluid: 'R-32', tension: '220V', technology: 'Inverter' },
+  { id: 332, brand: 'Fujitsu', model: 'On/Off ASB09LFC 9.000', cap: 9000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' },
+  { id: 333, brand: 'Fujitsu', model: 'On/Off ASB12LFC 12.000', cap: 12000, type: 'Split On/Off', fluid: 'R-410A', tension: '220V', technology: 'Convencional' }
 ];
 
 /* ============================================
@@ -4266,94 +4328,313 @@ function getRefrigerantInfo(fluid) {
    manual oficial do modelo específico.
    ============================================ */
 const errorCodesDB = [
+
+  // ══════════════════════════════════════════════
+  // AR CONDICIONADO
+  // ══════════════════════════════════════════════
+
   // SAMSUNG
-  { brand: 'Samsung', code: 'E1-01', title: 'Sensor de temperatura interna (ambiente)', causes: ['Sensor NTC desconectado', 'Sensor com leitura fora da curva', 'Cabo do sensor rompido'], actions: ['Medir resistência do sensor (10 kΩ a 25 °C)', 'Verificar conexão na placa', 'Substituir sensor se fora de curva'] },
-  { brand: 'Samsung', code: 'E1-02', title: 'Sensor da serpentina (evaporadora)', causes: ['Sensor NTC do evaporador defeituoso', 'Conexão solta na PCB', 'Sensor mal posicionado na serpentina'], actions: ['Verificar fixação do sensor na curva da serpentina', 'Medir resistência (deve estar coerente com temp. medida)', 'Substituir sensor se necessário'] },
-  { brand: 'Samsung', code: 'E1-21', title: 'Sensor da condensadora (externa)', causes: ['Sensor da unidade externa defeituoso', 'Cabo de comunicação com problema', 'Placa externa danificada'], actions: ['Testar continuidade do cabo de interligação', 'Medir sensor externo', 'Verificar alimentação da PCB externa'] },
-  { brand: 'Samsung', code: 'E2-01', title: 'Comunicação interna ↔ externa', causes: ['Cabo de comunicação rompido ou invertido', 'Falha na placa interna ou externa', 'Interferência elétrica'], actions: ['Conferir polaridade dos fios de comunicação', 'Medir tensão de comunicação (típica 12–24 V CC pulsante)', 'Verificar aterramento do equipamento'] },
-  { brand: 'Samsung', code: 'E4-01', title: 'Erro de EEPROM da placa', causes: ['Memória da placa corrompida', 'Surto elétrico recente', 'Placa com defeito de fábrica'], actions: ['Desligar da rede por 5 min e religar', 'Verificar instalação de DPS', 'Substituir placa se persistir'] },
-  { brand: 'Samsung', code: 'E5-54', title: 'Proteção do compressor (sobrecorrente)', causes: ['Compressor sobrecarregado', 'Tensão de rede instável', 'Carga de fluido excessiva ou baixa'], actions: ['Medir tensão de rede (tolerância ±10%)', 'Verificar carga de fluido', 'Inspecionar capacitor (se aplicável)'] },
+  { brand:'Samsung', code:'E1-01', title:'Sensor temperatura ambiente (interna)', causes:['Sensor NTC desconectado ou com leitura fora da curva','Cabo do sensor rompido','PCB interna com defeito no canal do sensor'], actions:['Medir resistência do sensor (≈10 kΩ a 25°C, ≈6,5 kΩ a 35°C)','Verificar conector do sensor na PCB interna','Substituir sensor se fora de curva'] },
+  { brand:'Samsung', code:'E1-02', title:'Sensor da serpentina evaporadora', causes:['Sensor NTC do evaporador defeituoso','Conector solto na PCB interna','Sensor mal posicionado na curva da serpentina'], actions:['Verificar fixação do sensor com pasta térmica na curva','Medir resistência (deve ser coerente com temperatura local)','Substituir sensor se fora de curva'] },
+  { brand:'Samsung', code:'E1-21', title:'Sensor da condensadora (unidade externa)', causes:['Sensor da unidade externa defeituoso','Cabo de comunicação com problema','Placa externa danificada'], actions:['Testar continuidade do cabo de interligação','Medir sensor externo (mesma curva 10 kΩ)','Verificar alimentação da PCB externa'] },
+  { brand:'Samsung', code:'E2-01', title:'Falha de comunicação interna ↔ externa', causes:['Cabo de comunicação rompido ou com polaridade invertida','Falha na placa interna ou externa','Interferência elétrica no cabo de sinal'], actions:['Conferir polaridade dos fios de comunicação na régua de bornes','Medir tensão de comunicação (12–24 V CC pulsante)','Verificar aterramento do equipamento'] },
+  { brand:'Samsung', code:'E4-01', title:'Erro EEPROM da placa', causes:['Memória da placa corrompida por surto elétrico','Placa com defeito de fábrica','Atualização de firmware interrompida'], actions:['Desligar da rede por 5 min e religar','Verificar instalação de DPS (Dispositivo de Proteção contra Surtos)','Substituir placa se persistir'] },
+  { brand:'Samsung', code:'E5-54', title:'Proteção do compressor (sobrecorrente)', causes:['Compressor sobrecarregado ou iniciando com defeito','Tensão de rede instável abaixo de 198 V','Carga de fluido excessiva (alta pressão)'], actions:['Medir tensão de rede (tolerância ±10%)','Verificar carga de fluido com manifold','Inspecionar capacitor de partida (em modelos não-inverter)'] },
+  { brand:'Samsung', code:'E6-13', title:'Falha do motor da evaporadora', causes:['Motor DC da evaporadora com defeito','Hélice travada por corpo estranho','Cabo de feedback do motor solto'], actions:['Girar hélice manualmente para verificar travamento','Verificar conector do motor na PCB','Substituir motor se não gira ou soa anormal'] },
+  { brand:'Samsung', code:'C4-11', title:'Alta pressão de descarga', causes:['Condensador sujo ou ventilador externo parado','Carga excessiva de fluido no sistema','Não-condensáveis (ar ou nitrogênio) no circuito'], actions:['Limpar condensador com água ou ar comprimido','Verificar funcionamento do ventilador externo','Recolher fluido, fazer vácuo e recarregar conforme placa'] },
+  { brand:'Samsung', code:'C5-11', title:'Baixa pressão de sucção', causes:['Vazamento de fluido refrigerante','Filtro secador entupido ou restrito','Válvula de expansão com defeito'], actions:['Verificar pressão de baixa com manifold','Detectar vazamentos com detector eletrônico','Substituir filtro secador e verificar válvula de expansão'] },
 
   // LG
-  { brand: 'LG', code: 'CH01', title: 'Sensor de ar interno', causes: ['NTC ambiente da evaporadora defeituoso', 'Conector solto', 'Cabo cortado ou danificado'], actions: ['Verificar conector do sensor na PCB', 'Substituir sensor', 'Reset da unidade'] },
-  { brand: 'LG', code: 'CH02', title: 'Sensor de tubo (entrada serpentina)', causes: ['Sensor de tubo da evaporadora com defeito', 'Mal contato com a tubulação', 'Cabo rompido'], actions: ['Reposicionar sensor com pasta térmica', 'Medir resistência do NTC', 'Substituir se fora de curva'] },
-  { brand: 'LG', code: 'CH04', title: 'Sensor de saída da serpentina', causes: ['Sensor NTC defeituoso', 'Mal contato', 'PCB com falha'], actions: ['Inspecionar fixação na tubulação', 'Substituir sensor', 'Testar PCB se sintoma persiste'] },
-  { brand: 'LG', code: 'CH05', title: 'Comunicação interna ↔ externa', causes: ['Fio de comunicação rompido ou invertido', 'Falha de placa', 'Aterramento ausente'], actions: ['Verificar cabo 4×1,5 mm² de interligação', 'Conferir polaridade L-N-PE', 'Resetar disjuntor por 1 min'] },
-  { brand: 'LG', code: 'CH07', title: 'Erro de modo dos dispositivos', causes: ['Comandos conflitantes em multi-split', 'Configuração incorreta'], actions: ['Selecionar mesmo modo (frio/quente) em todas evaporadoras', 'Conferir DIP switches da placa'] },
-  { brand: 'LG', code: 'CH09', title: 'Falha EEPROM placa interna', causes: ['Memória corrompida', 'Surto elétrico'], actions: ['Reset elétrico de 5 min', 'Substituir placa interna'] },
-  { brand: 'LG', code: 'CH21', title: 'Sobrecorrente no IPM (Inverter)', causes: ['Módulo IPM sobrecarregado', 'Compressor com curto', 'Placa inverter danificada'], actions: ['Medir resistências do compressor (entre fases U-V-W)', 'Inspecionar IPM e radiador (pasta térmica)', 'Substituir placa inverter se IPM queimou'] },
-  { brand: 'LG', code: 'CH22', title: 'Corrente máxima (compressor)', causes: ['Carga de fluido alta', 'Condensador sujo', 'Tensão fora da faixa'], actions: ['Limpar condensador', 'Verificar carga (alta pressão)', 'Medir tensão de rede'] },
-  { brand: 'LG', code: 'CH26', title: 'Compressor DC sem partida', causes: ['Compressor travado', 'Placa inverter com falha', 'Sensor de posição com erro'], actions: ['Tentar partida manual após 10 min', 'Medir resistências dos enrolamentos', 'Substituir placa inverter'] },
+  { brand:'LG', code:'CH01', title:'Sensor de ar interno (NTC ambiente)', causes:['NTC ambiente da evaporadora defeituoso','Conector solto na PCB interna','Cabo cortado ou danificado por roedor'], actions:['Verificar conector do sensor','Medir resistência do NTC','Substituir sensor se fora de curva'] },
+  { brand:'LG', code:'CH02', title:'Sensor de tubo — entrada serpentina evaporadora', causes:['Sensor NTC defeituoso','Mau contato com a tubulação','Pasta térmica seca ou ausente'], actions:['Reposicionar sensor com pasta térmica','Medir resistência','Substituir se necessário'] },
+  { brand:'LG', code:'CH04', title:'Sensor de tubo — saída serpentina evaporadora', causes:['NTC saída com defeito','Mal contato com tubo de saída','PCB com falha no canal deste sensor'], actions:['Verificar fixação','Substituir sensor','Testar PCB se sintoma persiste'] },
+  { brand:'LG', code:'CH05', title:'Falha de comunicação interna ↔ externa', causes:['Fio de comunicação rompido ou com polaridade invertida','Falha de placa interna ou externa','Aterramento ausente ou ineficiente'], actions:['Verificar cabo 4×1,5 mm² de interligação','Conferir polaridade L-N-PE na régua de bornes','Resetar disjuntor por 1 min'] },
+  { brand:'LG', code:'CH07', title:'Conflito de modo (multi-split)', causes:['Comandos conflitantes em multi-split (aquecimento + resfriamento simultâneos)','Configuração incorreta dos DIP switches'], actions:['Selecionar mesmo modo em todas as evaporadoras','Conferir DIP switches da placa externa'] },
+  { brand:'LG', code:'CH09', title:'Falha de EEPROM — placa interna', causes:['Memória corrompida por surto','Tensão instável de alimentação'], actions:['Reset elétrico de 5 min','Substituir placa interna se persistir'] },
+  { brand:'LG', code:'CH21', title:'Sobrecorrente no IPM (módulo inverter)', causes:['IPM sobrecarregado ou com componente queimado','Compressor com curto entre fases','Placa inverter danificada por surto'], actions:['Medir resistências do compressor entre fases (U-V, V-W, U-W — devem ser iguais)','Inspecionar IPM e pasta térmica no dissipador','Substituir placa inverter se IPM queimou'] },
+  { brand:'LG', code:'CH22', title:'Corrente máxima do compressor atingida', causes:['Carga de fluido excessiva (alta pressão)','Condensador sujo','Tensão de rede fora da faixa'], actions:['Limpar condensador','Verificar carga (alta pressão > 28 bar no R-410A)','Medir tensão de rede'] },
+  { brand:'LG', code:'CH26', title:'Compressor DC não partiu', causes:['Compressor travado mecanicamente','Placa inverter com falha','Sensor de posição (Hall) com erro'], actions:['Tentar nova partida após 10 min de descanso','Medir resistências dos enrolamentos (U-V-W)','Substituir placa inverter'] },
+  { brand:'LG', code:'CH38', title:'Alta temperatura de descarga', causes:['Carga insuficiente de fluido','Restrição na linha de líquido (filtro entupido)','Válvula de expansão travada fechada'], actions:['Verificar pressões com manifold','Inspecionar filtro secador','Substituir filtro e válvula de expansão se necessário'] },
 
   // DAIKIN
-  { brand: 'Daikin', code: 'A1', title: 'Falha PCB unidade interna', causes: ['Memória corrompida', 'Surto elétrico', 'Defeito de fábrica'], actions: ['Reset elétrico 5 min', 'Verificar DPS', 'Substituir PCB'] },
-  { brand: 'Daikin', code: 'A5', title: 'Proteção alta pressão / antifreeze', causes: ['Condensador sujo', 'Filtro evaporador sujo', 'Carga alta'], actions: ['Limpar condensador e filtros', 'Verificar carga de fluido', 'Conferir ventilador externo'] },
-  { brand: 'Daikin', code: 'C4', title: 'Sensor da serpentina (interna)', causes: ['NTC da evaporadora defeituoso', 'Conector solto'], actions: ['Verificar conector', 'Medir resistência', 'Substituir sensor'] },
-  { brand: 'Daikin', code: 'C9', title: 'Sensor de ar interno', causes: ['Sensor ambiente NTC defeituoso', 'Cabo solto'], actions: ['Reapertar conexões', 'Substituir sensor'] },
-  { brand: 'Daikin', code: 'E1', title: 'Falha PCB externa', causes: ['Placa da condensadora com defeito', 'Surto', 'Componente queimado na PCB'], actions: ['Verificar capacitores eletrolíticos', 'Inspecionar fusíveis na PCB', 'Substituir placa'] },
-  { brand: 'Daikin', code: 'E5', title: 'Proteção térmica do compressor', causes: ['Compressor superaquecido', 'Carga incorreta de fluido', 'Ventilador externo parado'], actions: ['Aguardar resfriamento', 'Verificar ventilador', 'Conferir carga e pressões'] },
-  { brand: 'Daikin', code: 'E6', title: 'Bloqueio do compressor', causes: ['Compressor travado', 'Tensão fora de faixa', 'Capacitor (não-inverter) com defeito'], actions: ['Medir resistências do compressor', 'Testar capacitor', 'Substituir compressor'] },
-  { brand: 'Daikin', code: 'F3', title: 'Temperatura de descarga alta', causes: ['Carga insuficiente de fluido', 'Restrição na linha', 'Válvula expansão com defeito'], actions: ['Verificar pressões com manifold', 'Carregar fluido se necessário', 'Inspecionar filtro secador'] },
-  { brand: 'Daikin', code: 'U4', title: 'Falha de comunicação interna ↔ externa', causes: ['Cabo rompido ou invertido', 'PCB com defeito', 'Aterramento ausente'], actions: ['Verificar continuidade do cabo de comunicação', 'Conferir aterramento', 'Substituir PCB se persistir'] },
+  { brand:'Daikin', code:'A1', title:'Falha PCB unidade interna', causes:['Memória EEPROM corrompida','Surto elétrico na alimentação','Defeito de fábrica ou dano por umidade'], actions:['Reset elétrico por 5 min','Verificar DPS instalado','Substituir PCB interna'] },
+  { brand:'Daikin', code:'A3', title:'Falha no dreno / transbordo de água', causes:['Cuba de dreno cheia ou entupida','Sensor de nível com defeito','Bomba de dreno (se houver) parada'], actions:['Limpar dreno e verificar caimento mínimo de 1% para escoamento','Verificar sensor de nível da cuba','Verificar bomba de dreno se instalada'] },
+  { brand:'Daikin', code:'A5', title:'Proteção alta pressão / antifreeze', causes:['Condensador sujo ou ventilador externo parado','Filtro de ar do evaporador sujo (antifreeze)','Carga excessiva de fluido'], actions:['Limpar condensador e filtros de ar','Verificar ventilador externo (gira em sentido correto?)','Verificar carga de fluido'] },
+  { brand:'Daikin', code:'C4', title:'Sensor da serpentina (interna)', causes:['NTC da evaporadora defeituoso','Conector solto na PCB'], actions:['Verificar conector','Medir resistência do NTC','Substituir sensor'] },
+  { brand:'Daikin', code:'C9', title:'Sensor de ar interno (ambiente)', causes:['Sensor NTC ambiente defeituoso','Cabo solto'], actions:['Reapertar conexões','Substituir sensor'] },
+  { brand:'Daikin', code:'E1', title:'Falha PCB unidade externa', causes:['Placa da condensadora com componente queimado','Surto elétrico','Capacitor de barramento com defeito'], actions:['Verificar capacitores eletrolíticos (bojo, vazamento)','Inspecionar fusíveis na PCB','Substituir placa externa'] },
+  { brand:'Daikin', code:'E5', title:'Proteção térmica do compressor', causes:['Compressor superaquecido por alta pressão','Carga incorreta de fluido','Ventilador externo parado ou girando ao contrário'], actions:['Aguardar resfriamento do compressor (15–30 min)','Verificar ventilador (sentido de giro: ar deve sair pelo topo)','Conferir carga e pressões'] },
+  { brand:'Daikin', code:'E6', title:'Bloqueio ou falha do compressor', causes:['Compressor travado por lubrificação insuficiente','Tensão de rede fora da faixa ±15%','Capacitor de partida com defeito (não-inverter)'], actions:['Medir resistências dos enrolamentos do compressor','Testar capacitor com medidor LCR','Substituir compressor se travado'] },
+  { brand:'Daikin', code:'F3', title:'Alta temperatura de descarga', causes:['Carga insuficiente de fluido (vazamento)','Restrição na linha de líquido','Válvula de expansão eletrônica com defeito'], actions:['Verificar pressões (baixa < 3 bar sinaliza falta)','Carregar fluido se necessário após detectar e corrigir vazamento','Inspecionar filtro secador e válvula EEV'] },
+  { brand:'Daikin', code:'U4', title:'Falha de comunicação interna ↔ externa', causes:['Cabo de comunicação rompido, invertido ou com terra','PCB interna ou externa com defeito','Aterramento ausente ou mal feito'], actions:['Verificar continuidade do cabo (S1-S2 ou comunicação serial)','Conferir aterramento físico','Substituir PCB interna se comunicação externa OK'] },
+  { brand:'Daikin', code:'L1', title:'Falha do módulo de potência (IPM/IGBT)', causes:['IPM sobreaquecido por pasta térmica seca','Curto no compressor','Sobretensão no barramento DC'], actions:['Remover placa e inspecionar pasta no dissipador','Medir compressor (U-V, V-W, U-W)','Substituir placa inverter'] },
 
-  // MIDEA / GREE (compartilham muitos códigos pois usam mesma plataforma OEM)
-  { brand: 'Midea', code: 'E0', title: 'Erro de EEPROM da placa interna', causes: ['Memória corrompida', 'Surto elétrico'], actions: ['Reset por 5 min', 'Substituir placa interna se persistir'] },
-  { brand: 'Midea', code: 'E1', title: 'Erro de comunicação', causes: ['Cabo de comunicação rompido', 'Polaridade invertida', 'PCB defeituosa'], actions: ['Verificar cabo de interligação (W ou comunicação serial)', 'Conferir aterramento', 'Substituir placa'] },
-  { brand: 'Midea', code: 'E2', title: 'Sensor de temperatura ambiente (T1)', causes: ['NTC desconectado', 'Sensor fora de curva'], actions: ['Verificar conector na PCB interna', 'Medir resistência (10 kΩ a 25 °C)', 'Substituir sensor'] },
-  { brand: 'Midea', code: 'E3', title: 'Sensor da serpentina interna (T2)', causes: ['NTC do evaporador com falha', 'Mau contato'], actions: ['Verificar fixação', 'Medir resistência', 'Substituir sensor'] },
-  { brand: 'Midea', code: 'E4', title: 'Sensor da serpentina externa (T3)', causes: ['NTC do condensador defeituoso', 'Cabo rompido na unidade externa'], actions: ['Inspecionar cabo no terminal da PCB externa', 'Substituir sensor'] },
-  { brand: 'Midea', code: 'E5', title: 'Sensor de descarga do compressor (T5)', causes: ['NTC de descarga com defeito', 'Mau contato com tubo de descarga'], actions: ['Reposicionar com pasta térmica', 'Substituir sensor'] },
-  { brand: 'Midea', code: 'E6', title: 'Falha do motor da evaporadora', causes: ['Motor DC travado ou com defeito', 'Conector solto', 'Hélice obstruída'], actions: ['Girar manualmente o motor', 'Verificar conexão do feedback do motor', 'Substituir motor ou capacitor'] },
-  { brand: 'Midea', code: 'F1', title: 'Sensor T1 (externa)', causes: ['NTC ambiente externa', 'Cabo rompido'], actions: ['Verificar sensor da PCB externa', 'Substituir'] },
-  { brand: 'Midea', code: 'F2', title: 'Sensor T2 (externa - serpentina)', causes: ['NTC condensador'], actions: ['Verificar sensor', 'Substituir'] },
-  { brand: 'Midea', code: 'F0', title: 'Proteção sobrecorrente', causes: ['Compressor sobrecarregado', 'Tensão fora da faixa', 'Carga térmica excessiva'], actions: ['Medir tensão e corrente', 'Verificar carga de fluido', 'Limpar condensador'] },
+  // MIDEA
+  { brand:'Midea', code:'E0', title:'Erro de EEPROM — placa interna', causes:['Memória corrompida por surto ou queima parcial','Tensão instável de alimentação'], actions:['Reset por 5 min sem carga','Substituir placa interna se persistir'] },
+  { brand:'Midea', code:'E1', title:'Falha de comunicação interna ↔ externa', causes:['Cabo de comunicação rompido ou polaridade invertida','PCB defeituosa','Aterramento ausente'], actions:['Verificar cabo W (comunicação serial)','Conferir aterramento','Substituir placa'] },
+  { brand:'Midea', code:'E2', title:'Sensor T1 — temperatura ambiente interna', causes:['NTC desconectado ou fora de curva','Conector solto na PCB'], actions:['Verificar conector','Medir resistência (10 kΩ a 25°C)','Substituir sensor'] },
+  { brand:'Midea', code:'E3', title:'Sensor T2 — serpentina evaporadora', causes:['NTC do evaporador com falha','Mau contato com serpentina'], actions:['Verificar fixação','Medir resistência','Substituir sensor'] },
+  { brand:'Midea', code:'E4', title:'Sensor T3 — serpentina condensadora', causes:['NTC do condensador defeituoso','Cabo rompido na unidade externa'], actions:['Inspecionar cabo no terminal da PCB externa','Substituir sensor'] },
+  { brand:'Midea', code:'E5', title:'Sensor T5 — descarga do compressor', causes:['NTC de descarga com defeito','Mau contato com tubo de descarga'], actions:['Reposicionar com pasta térmica no tubo','Substituir sensor'] },
+  { brand:'Midea', code:'E6', title:'Falha do motor da evaporadora (DC)', causes:['Motor DC travado ou com defeito','Conector solto','Hélice obstruída por sujeira ou gelo'], actions:['Girar manualmente o motor','Verificar conexão do feedback do motor na PCB','Substituir motor ou verificar capacitor (não-DC)'] },
+  { brand:'Midea', code:'F0', title:'Proteção de sobrecorrente do compressor', causes:['Compressor sobrecarregado por carga alta','Tensão de rede fora da faixa','Condensador muito sujo'], actions:['Medir tensão e corrente de operação','Verificar carga de fluido','Limpar condensador'] },
+  { brand:'Midea', code:'F1', title:'Sensor T1 externo (ambiente externa)', causes:['NTC ambiente unidade externa','Cabo rompido'], actions:['Verificar sensor da PCB externa','Substituir'] },
+  { brand:'Midea', code:'F2', title:'Sensor T2 externo (serpentina condensadora)', causes:['NTC condensador'], actions:['Verificar sensor','Substituir'] },
+  { brand:'Midea', code:'F4', title:'Módulo IPM — sobrecorrente ou sobretemperatura', causes:['IPM sem pasta térmica ou dissipador obstruído','Curto entre fases do compressor','Tensão fora da faixa'], actions:['Inspecionar pasta térmica no IPM','Medir compressor (U-V-W)','Substituir placa inverter se IPM queimado'] },
+  { brand:'Midea', code:'P1', title:'Tensão de rede fora da faixa', causes:['Tensão abaixo de 198 V ou acima de 253 V','Queda de fase (trifásico)','DPS atuado'], actions:['Medir tensão com multímetro','Verificar bitola do cabo e disjuntor','Acionar concessionária se queda de tensão persistir'] },
 
-  // GREE (códigos próprios + compartilhados com plataforma chinesa)
-  { brand: 'Gree', code: 'E1', title: 'Proteção alta pressão', causes: ['Condensador sujo ou ventilador parado', 'Carga excessiva de fluido', 'Não-condensáveis no sistema'], actions: ['Limpar condensador', 'Verificar ventilador externo', 'Recolher e refazer vácuo + carga conforme placa'] },
-  { brand: 'Gree', code: 'E2', title: 'Proteção antifreeze (anticongelamento)', causes: ['Filtro de ar sujo', 'Carga insuficiente', 'Ventilador interno fraco'], actions: ['Limpar filtro do evaporador', 'Verificar pressão de baixa', 'Conferir velocidade do ventilador'] },
-  { brand: 'Gree', code: 'E3', title: 'Proteção baixa pressão', causes: ['Vazamento de fluido', 'Filtro secador entupido', 'Válvula de expansão restrita'], actions: ['Detectar vazamento e reparar', 'Substituir filtro secador', 'Recarregar fluido'] },
-  { brand: 'Gree', code: 'E4', title: 'Temperatura de descarga alta', causes: ['Carga baixa de fluido', 'Não-condensáveis', 'Condensação ruim'], actions: ['Verificar pressões com manifold', 'Refazer vácuo', 'Limpar condensador'] },
-  { brand: 'Gree', code: 'E5', title: 'Sobrecorrente IPM ou compressor', causes: ['Curto no compressor', 'IPM defeituoso', 'Tensão fora da faixa'], actions: ['Medir resistências do compressor (U-V-W)', 'Inspecionar IPM (módulo de potência)', 'Substituir placa inverter se IPM queimado'] },
-  { brand: 'Gree', code: 'E6', title: 'Comunicação interna ↔ externa', causes: ['Cabo rompido', 'Polaridade invertida', 'Falha PCB'], actions: ['Verificar 4 fios de interligação', 'Conferir conexão na régua de bornes', 'Substituir placa se persistir'] },
-  { brand: 'Gree', code: 'E8', title: 'Proteção alta temperatura interna', causes: ['Filtro sujo', 'Ventilador interno fraco', 'Sensor mal posicionado'], actions: ['Limpar filtros', 'Verificar motor evaporadora', 'Reposicionar sensor'] },
-  { brand: 'Gree', code: 'F0', title: 'Carga insuficiente de fluido', causes: ['Vazamento', 'Carga incorreta na instalação'], actions: ['Detectar vazamentos', 'Recarga conforme placa do equipamento'] },
-  { brand: 'Gree', code: 'F1', title: 'Sensor ambiente interno', causes: ['NTC defeituoso', 'Cabo solto'], actions: ['Substituir sensor', 'Verificar conexão'] },
-  { brand: 'Gree', code: 'F2', title: 'Sensor da serpentina interna', causes: ['NTC do evaporador'], actions: ['Substituir sensor'] },
-  { brand: 'Gree', code: 'F3', title: 'Sensor ambiente externo', causes: ['NTC da condensadora'], actions: ['Substituir sensor da PCB externa'] },
-  { brand: 'Gree', code: 'F4', title: 'Sensor serpentina externa', causes: ['NTC condensador'], actions: ['Substituir sensor'] },
-  { brand: 'Gree', code: 'F5', title: 'Sensor descarga compressor', causes: ['NTC de descarga'], actions: ['Reposicionar com pasta térmica', 'Substituir sensor'] },
-  { brand: 'Gree', code: 'H6', title: 'Falha motor evaporadora (DC)', causes: ['Motor DC travado', 'Hélice obstruída', 'Cabo de feedback solto'], actions: ['Girar manualmente', 'Limpar hélice', 'Substituir motor'] },
-  { brand: 'Gree', code: 'H3', title: 'Proteção do compressor', causes: ['Compressor superaquecido', 'Sobrecarga'], actions: ['Aguardar resfriamento', 'Verificar pressões e carga'] },
-  { brand: 'Gree', code: 'PH', title: 'Tensão DC alta no barramento', causes: ['Tensão de rede acima do limite', 'Capacitor do barramento'], actions: ['Medir tensão de entrada', 'Verificar DPS instalado', 'Substituir placa se capacitor estourou'] },
-  { brand: 'Gree', code: 'PL', title: 'Tensão DC baixa no barramento', causes: ['Tensão de rede baixa', 'Filtro de entrada com problema'], actions: ['Medir tensão (220V ±10%)', 'Verificar conexões e disjuntor'] },
+  // GREE
+  { brand:'Gree', code:'E1', title:'Proteção de alta pressão', causes:['Condensador sujo ou ventilador externo parado','Carga excessiva de fluido','Não-condensáveis (ar) no sistema'], actions:['Limpar condensador com água e escova','Verificar ventilador externo (rotação e capacitor)','Recolher fluido, fazer vácuo (500 micron) e recarregar'] },
+  { brand:'Gree', code:'E2', title:'Proteção antifreeze (anticongelamento)', causes:['Filtro de ar muito sujo — restrição de ar no evaporador','Carga insuficiente de fluido','Ventilador interno com velocidade baixa'], actions:['Limpar filtro de ar (mensal em uso intenso)','Verificar pressão de baixa > 5 bar (R-410A)','Conferir velocidade do ventilador interno'] },
+  { brand:'Gree', code:'E3', title:'Proteção de baixa pressão', causes:['Vazamento de fluido','Filtro secador entupido','Restrição na linha de líquido'], actions:['Verificar pressão de baixa','Detectar vazamento com detector eletrônico','Substituir filtro secador'] },
+  { brand:'Gree', code:'E4', title:'Proteção de temperatura de descarga', causes:['Carga insuficiente (baixa pressão → alta descarga)','Válvula EEV com defeito','Restrição na linha de líquido'], actions:['Verificar pressões (baixa < 4 bar sinaliza falta)','Substituir filtro secador se entupido','Verificar válvula EEV'] },
+  { brand:'Gree', code:'E5', title:'Sobrecorrente IPM ou compressor', causes:['Curto entre fases do compressor','IPM defeituoso','Tensão fora da faixa'], actions:['Medir resistências do compressor (U-V, V-W, U-W)','Inspecionar IPM (módulo de potência)','Substituir placa inverter se IPM queimado'] },
+  { brand:'Gree', code:'E6', title:'Comunicação interna ↔ externa', causes:['Cabo de interligação rompido ou invertido','PCB com defeito','Aterramento ineficiente'], actions:['Verificar os 4 fios de interligação na régua de bornes','Conferir conexão (COM, L, N, GND)','Substituir placa se persistir'] },
+  { brand:'Gree', code:'E8', title:'Alta temperatura interna (proteção evaporadora)', causes:['Filtro de ar sujo — restrição de ar','Ventilador interno fraco ou com defeito','Sensor T2 mal posicionado'], actions:['Limpar filtros de ar','Verificar motor do ventilador interno','Reposicionar sensor'] },
+  { brand:'Gree', code:'F0', title:'Carga insuficiente de fluido (alarme)', causes:['Vazamento lento de fluido','Carga incorreta na instalação','Filtro secador com restrição parcial'], actions:['Verificar pressões em operação (baixa < 5 bar no R-410A suspeita falta)','Detectar vazamentos','Recarregar após corrigir vazamento'] },
+  { brand:'Gree', code:'F1', title:'Sensor NTC T1 — ambiente interno', causes:['NTC defeituoso','Cabo solto'], actions:['Substituir sensor','Verificar conexão na PCB'] },
+  { brand:'Gree', code:'F2', title:'Sensor NTC T2 — serpentina interna', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Gree', code:'F3', title:'Sensor NTC T3 — ambiente externo', causes:['NTC da condensadora defeituoso'], actions:['Substituir sensor da PCB externa'] },
+  { brand:'Gree', code:'F4', title:'Sensor NTC T4 — serpentina externa', causes:['NTC condensador defeituoso'], actions:['Substituir sensor'] },
+  { brand:'Gree', code:'F5', title:'Sensor NTC T5 — descarga compressor', causes:['NTC de descarga com defeito ou descolado'], actions:['Reposicionar com pasta térmica no tubo de descarga','Substituir sensor'] },
+  { brand:'Gree', code:'H6', title:'Falha do motor da evaporadora (DC)', causes:['Motor DC travado mecanicamente','Hélice obstruída','Cabo de feedback solto na PCB'], actions:['Girar hélice manualmente (deve girar livre)','Limpar hélice de poeira e fios','Substituir motor se não responde'] },
+  { brand:'Gree', code:'H3', title:'Proteção do compressor (termostato interno)', causes:['Compressor superaquecido','Sobrecarga térmica do sistema'], actions:['Aguardar resfriamento 20–30 min','Verificar pressões e limpar trocadores'] },
+  { brand:'Gree', code:'PH', title:'Alta tensão DC no barramento inverter', causes:['Tensão de rede acima de 253 V','Capacitor do barramento DC danificado'], actions:['Medir tensão de entrada','Verificar DPS','Substituir placa se capacitor com bojo ou vazamento'] },
+  { brand:'Gree', code:'PL', title:'Baixa tensão DC no barramento inverter', causes:['Tensão de rede abaixo de 198 V','Filtro de linha com problema'], actions:['Medir tensão na entrada (220V ±10%)','Verificar conexões e bitola do cabo','Acionar concessionária se tensão baixa persistir'] },
 
   // ELECTROLUX
-  { brand: 'Electrolux', code: 'E1', title: 'Sensor temperatura ambiente', causes: ['NTC interno defeituoso', 'Cabo desconectado'], actions: ['Verificar conector', 'Substituir sensor'] },
-  { brand: 'Electrolux', code: 'E2', title: 'Sensor da serpentina interna', causes: ['NTC do evaporador'], actions: ['Substituir sensor'] },
-  { brand: 'Electrolux', code: 'E3', title: 'Sensor da serpentina externa', causes: ['NTC do condensador'], actions: ['Substituir sensor'] },
-  { brand: 'Electrolux', code: 'E4', title: 'Comunicação ou EEPROM', causes: ['Cabo de comunicação', 'Memória corrompida'], actions: ['Verificar fios de interligação', 'Reset 5 min', 'Substituir placa'] },
-  { brand: 'Electrolux', code: 'E5', title: 'Proteção sobrecorrente', causes: ['Compressor sobrecarregado', 'Tensão fora da faixa'], actions: ['Verificar tensão e carga de fluido', 'Limpar condensador'] },
-  { brand: 'Electrolux', code: 'E6', title: 'Falha do motor da evaporadora', causes: ['Motor DC travado', 'Cabo solto'], actions: ['Verificar motor', 'Substituir se necessário'] },
+  { brand:'Electrolux', code:'E1', title:'Sensor temperatura ambiente (interna)', causes:['NTC interno defeituoso','Cabo desconectado da PCB'], actions:['Verificar conector','Medir resistência do NTC','Substituir sensor'] },
+  { brand:'Electrolux', code:'E2', title:'Sensor da serpentina evaporadora', causes:['NTC do evaporador com defeito','Sensor mal fixado na curva'], actions:['Reposicionar com pasta térmica','Substituir sensor'] },
+  { brand:'Electrolux', code:'E3', title:'Sensor da serpentina condensadora', causes:['NTC do condensador (unidade externa)','Cabo rompido'], actions:['Substituir sensor externo','Verificar cabo'] },
+  { brand:'Electrolux', code:'E4', title:'Erro de comunicação ou EEPROM', causes:['Cabo de comunicação com problema','Memória corrompida','PCB com defeito'], actions:['Verificar fios de interligação','Reset por 5 min','Substituir placa se persistir'] },
+  { brand:'Electrolux', code:'E5', title:'Proteção de sobrecorrente', causes:['Compressor sobrecarregado','Tensão de rede fora da faixa','Filtros muito sujos'], actions:['Verificar tensão e corrente','Verificar carga de fluido','Limpar condensador e filtros'] },
+  { brand:'Electrolux', code:'E6', title:'Falha motor evaporadora', causes:['Motor DC travado','Cabo de feedback do motor solto','Hélice presa'], actions:['Verificar movimentação livre da hélice','Verificar conector do motor','Substituir motor'] },
+  { brand:'Electrolux', code:'E7', title:'Sensor de descarga do compressor', causes:['NTC descarga com defeito','Descolado do tubo'], actions:['Reposicionar com pasta térmica','Substituir sensor'] },
+  { brand:'Electrolux', code:'EC', title:'Proteção anticongelamento', causes:['Filtro de ar sujo','Carga de fluido insuficiente','Ventilador interno lento'], actions:['Limpar filtros de ar','Verificar pressão de baixa','Conferir motor do ventilador'] },
 
   // FUJITSU
-  { brand: 'Fujitsu', code: '01', title: 'Sensor de ar (interno)', causes: ['NTC ambiente defeituoso'], actions: ['Substituir sensor', 'Verificar conexão na PCB'] },
-  { brand: 'Fujitsu', code: '02', title: 'Sensor de tubo (entrada)', causes: ['NTC entrada serpentina'], actions: ['Substituir sensor'] },
-  { brand: 'Fujitsu', code: '03', title: 'Sensor de tubo (saída)', causes: ['NTC saída serpentina'], actions: ['Substituir sensor'] },
-  { brand: 'Fujitsu', code: '04', title: 'Falha de comunicação', causes: ['Cabo de comunicação', 'PCB com defeito'], actions: ['Verificar interligação', 'Conferir aterramento'] },
-  { brand: 'Fujitsu', code: '05', title: 'Falha do ventilador interno', causes: ['Motor DC travado', 'Hélice obstruída'], actions: ['Verificar movimentação livre', 'Substituir motor'] },
-  { brand: 'Fujitsu', code: '11', title: 'Sensor da unidade externa', causes: ['NTC da condensadora'], actions: ['Substituir sensor externo'] },
-  { brand: 'Fujitsu', code: '14', title: 'Falha do compressor', causes: ['Compressor travado', 'Tensão de rede', 'IPM'], actions: ['Medir compressor', 'Verificar tensão', 'Inspecionar IPM'] },
-  { brand: 'Fujitsu', code: '15', title: 'Falha do ventilador externo', causes: ['Motor parado', 'Capacitor (em modelos não-DC)'], actions: ['Verificar capacitor', 'Substituir motor'] },
-  { brand: 'Fujitsu', code: '16', title: 'Sobrecorrente', causes: ['Carga térmica excessiva', 'Carga de fluido'], actions: ['Limpar trocadores', 'Verificar carga'] },
+  { brand:'Fujitsu', code:'01', title:'Sensor de ar — temperatura ambiente interna', causes:['NTC ambiente defeituoso ou desconectado'], actions:['Verificar conector na PCB','Medir resistência','Substituir sensor'] },
+  { brand:'Fujitsu', code:'02', title:'Sensor de tubo — entrada serpentina evaporadora', causes:['NTC entrada com defeito'], actions:['Substituir sensor','Verificar fixação com pasta térmica'] },
+  { brand:'Fujitsu', code:'03', title:'Sensor de tubo — saída serpentina evaporadora', causes:['NTC saída com defeito'], actions:['Substituir sensor'] },
+  { brand:'Fujitsu', code:'04', title:'Falha de comunicação interna ↔ externa', causes:['Cabo de comunicação rompido ou invertido','PCB interna ou externa com defeito','Aterramento ausente'], actions:['Verificar cabo de interligação (S1, S2, S3 ou L, N, GND)','Conferir aterramento','Substituir PCB se comunicação impossível'] },
+  { brand:'Fujitsu', code:'05', title:'Falha do ventilador da evaporadora', causes:['Motor DC travado','Hélice obstruída por sujeira ou corpo estranho','Cabo de feedback solto'], actions:['Girar hélice manualmente','Verificar conector do motor','Substituir motor se não gira ou é muito ruidoso'] },
+  { brand:'Fujitsu', code:'11', title:'Sensor da unidade externa (condensadora)', causes:['NTC externo com defeito','Cabo danificado'], actions:['Substituir sensor externo','Verificar cabo'] },
+  { brand:'Fujitsu', code:'12', title:'Sensor de descarga do compressor', causes:['NTC descarga descolado ou com defeito'], actions:['Reposicionar com pasta térmica no tubo de descarga','Substituir sensor'] },
+  { brand:'Fujitsu', code:'14', title:'Falha ou bloqueio do compressor', causes:['Compressor travado ou com enrolamento aberto','Tensão de rede fora da faixa','IPM queimado'], actions:['Medir resistências (U-V, V-W, U-W devem ser ≈ iguais e baixas)','Verificar tensão de rede','Substituir compressor ou placa inverter conforme diagnóstico'] },
+  { brand:'Fujitsu', code:'15', title:'Falha do ventilador externo', causes:['Motor parado ou com capacitor queimado','Rolamento com defeito','Proteção térmica do motor atuou'], actions:['Testar capacitor do motor (não-DC)','Verificar alimentação do motor','Substituir motor'] },
+  { brand:'Fujitsu', code:'16', title:'Proteção de sobrecorrente (compressor)', causes:['Carga térmica excessiva','Carga de fluido alta ou baixa','Tensão fora da faixa'], actions:['Limpar trocadores de calor','Verificar carga com manifold','Medir tensão de rede'] },
 
   // PHILCO
-  { brand: 'Philco', code: 'E1', title: 'Sensor ambiente', causes: ['NTC interno defeituoso'], actions: ['Substituir sensor', 'Verificar conector'] },
-  { brand: 'Philco', code: 'E2', title: 'Sensor da serpentina interna', causes: ['NTC evaporador'], actions: ['Substituir sensor'] },
-  { brand: 'Philco', code: 'E3', title: 'Anticongelamento', causes: ['Filtro sujo', 'Baixa carga', 'Ventilador interno fraco'], actions: ['Limpar filtro', 'Verificar pressões', 'Conferir motor'] },
-  { brand: 'Philco', code: 'E4', title: 'Sobrecorrente / proteção compressor', causes: ['Compressor sobrecarregado', 'Tensão fora da faixa'], actions: ['Medir tensão e corrente', 'Verificar carga de fluido'] },
-  { brand: 'Philco', code: 'E5', title: 'Comunicação interna ↔ externa', causes: ['Cabo rompido', 'PCB defeituosa'], actions: ['Verificar interligação', 'Substituir placa'] },
-  { brand: 'Philco', code: 'F1', title: 'Sensor externo', causes: ['NTC condensador'], actions: ['Substituir sensor externo'] },
-  { brand: 'Philco', code: 'F2', title: 'Sensor descarga', causes: ['NTC descarga'], actions: ['Substituir sensor'] }
+  { brand:'Philco', code:'E1', title:'Sensor temperatura ambiente (interna)', causes:['NTC interno defeituoso','Conector solto'], actions:['Substituir sensor','Verificar conector na PCB'] },
+  { brand:'Philco', code:'E2', title:'Sensor da serpentina evaporadora', causes:['NTC do evaporador com defeito'], actions:['Substituir sensor','Verificar fixação'] },
+  { brand:'Philco', code:'E3', title:'Proteção anticongelamento', causes:['Filtro de ar sujo — restrição de fluxo','Baixa carga de fluido','Ventilador interno fraco'], actions:['Limpar filtro de ar','Verificar pressão de baixa','Conferir motor do ventilador'] },
+  { brand:'Philco', code:'E4', title:'Proteção do compressor (sobrecorrente)', causes:['Compressor sobrecarregado','Tensão fora da faixa'], actions:['Medir tensão e corrente','Verificar carga de fluido','Limpar condensador'] },
+  { brand:'Philco', code:'E5', title:'Falha de comunicação interna ↔ externa', causes:['Cabo de interligação rompido','PCB com defeito'], actions:['Verificar continuidade do cabo','Substituir placa se necessário'] },
+  { brand:'Philco', code:'E6', title:'Falha do motor da evaporadora', causes:['Motor DC travado','Hélice obstruída'], actions:['Girar hélice manualmente','Substituir motor'] },
+  { brand:'Philco', code:'F1', title:'Sensor externo (ambiente condensadora)', causes:['NTC externo com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Philco', code:'F2', title:'Sensor de descarga do compressor', causes:['NTC de descarga com defeito'], actions:['Reposicionar','Substituir sensor'] },
+
+  // CONSUL
+  { brand:'Consul', code:'E1', title:'Sensor de temperatura ambiente', causes:['NTC interno defeituoso ou desconectado','Cabo danificado'], actions:['Verificar conector','Medir resistência (10 kΩ a 25°C)','Substituir sensor'] },
+  { brand:'Consul', code:'E2', title:'Sensor da serpentina evaporadora', causes:['NTC evaporador com defeito','Sensor descolado da serpentina'], actions:['Reposicionar sensor com pasta térmica','Substituir sensor'] },
+  { brand:'Consul', code:'E3', title:'Sensor da serpentina condensadora', causes:['NTC condensador com defeito','Cabo rompido na externa'], actions:['Substituir sensor','Verificar cabo de interligação'] },
+  { brand:'Consul', code:'E4', title:'Falha de comunicação ou EEPROM', causes:['Cabo de comunicação com problema','Memória corrompida','PCB com defeito por surto'], actions:['Verificar fios de interligação','Reset elétrico 5 min','Substituir placa'] },
+  { brand:'Consul', code:'E5', title:'Proteção sobrecorrente / compressor', causes:['Compressor sobrecarregado','Tensão fora da faixa ±10%','Alta pressão por condensador sujo'], actions:['Medir tensão de rede','Verificar carga de fluido','Limpar condensador'] },
+  { brand:'Consul', code:'E6', title:'Falha do motor da evaporadora', causes:['Motor DC travado','Hélice presa por sujeira'], actions:['Girar hélice manualmente','Verificar conector do motor','Substituir motor'] },
+
+  // SPRINGER
+  { brand:'Springer', code:'E1', title:'Sensor temperatura ambiente interna', causes:['NTC ambiente com defeito ou solto'], actions:['Verificar conector','Substituir sensor NTC'] },
+  { brand:'Springer', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor','Reposicionar com pasta térmica'] },
+  { brand:'Springer', code:'E3', title:'Sensor serpentina condensadora', causes:['NTC condensador defeituoso'], actions:['Substituir sensor externo'] },
+  { brand:'Springer', code:'E4', title:'Comunicação interna ↔ externa', causes:['Cabo de interligação com defeito','PCB com problema'], actions:['Verificar fios da régua de bornes','Reset por 5 min','Substituir placa'] },
+  { brand:'Springer', code:'E5', title:'Proteção de sobrecorrente', causes:['Compressor sobrecarregado','Tensão fora da faixa'], actions:['Medir tensão','Verificar carga de fluido','Limpar trocadores'] },
+  { brand:'Springer', code:'E6', title:'Falha ventilador evaporadora', causes:['Motor DC travado','Hélice obstruída'], actions:['Girar hélice manualmente','Substituir motor'] },
+  { brand:'Springer', code:'E7', title:'Sensor descarga compressor', causes:['NTC descarga com defeito'], actions:['Reposicionar com pasta','Substituir sensor'] },
+  { brand:'Springer', code:'EC', title:'Anticongelamento (antifreeze)', causes:['Filtro sujo','Baixa carga de fluido'], actions:['Limpar filtros','Verificar pressão de baixa'] },
+
+  // HITACHI
+  { brand:'Hitachi', code:'01', title:'Sensor NTC — temperatura de retorno (ambiente)', causes:['NTC ambiente defeituoso','Conector solto na PCB interna'], actions:['Verificar conector','Medir resistência do NTC (10 kΩ a 25°C)','Substituir sensor'] },
+  { brand:'Hitachi', code:'02', title:'Sensor NTC — serpentina entrada (evaporadora)', causes:['NTC com defeito','Mal fixado na tubulação'], actions:['Reposicionar com pasta térmica','Substituir sensor'] },
+  { brand:'Hitachi', code:'03', title:'Sensor NTC — serpentina saída (evaporadora)', causes:['NTC saída com defeito'], actions:['Substituir sensor'] },
+  { brand:'Hitachi', code:'04', title:'Falha de comunicação (interna ↔ externa)', causes:['Cabo de comunicação com defeito','Polaridade invertida','PCB defeituosa'], actions:['Verificar cabo de interligação','Conferir aterramento físico do equipamento','Substituir placa se comunicação impossível'] },
+  { brand:'Hitachi', code:'06', title:'Proteção de descarga alta temperatura', causes:['Carga insuficiente de fluido','Filtro secador entupido','Válvula de expansão com defeito'], actions:['Verificar pressões com manifold','Substituir filtro secador','Verificar válvula de expansão'] },
+  { brand:'Hitachi', code:'07', title:'Proteção de alta pressão', causes:['Condensador sujo','Ventilador externo parado','Excesso de fluido no sistema'], actions:['Limpar condensador','Verificar ventilador externo','Verificar carga de fluido'] },
+  { brand:'Hitachi', code:'08', title:'Proteção de baixa pressão / antifreeze', causes:['Filtro de ar sujo','Falta de fluido refrigerante','Temperatura ambiente muito baixa'], actions:['Limpar filtros de ar','Verificar pressão de baixa','Verificar carga'] },
+  { brand:'Hitachi', code:'11', title:'Sensor NTC unidade externa (condensadora)', causes:['NTC externo com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Hitachi', code:'14', title:'Falha ou bloqueio do compressor', causes:['Compressor travado','Módulo IPM queimado','Tensão fora da faixa'], actions:['Medir resistências do compressor (U-V-W)','Inspecionar IPM e pasta térmica','Substituir placa inverter ou compressor'] },
+  { brand:'Hitachi', code:'15', title:'Falha ventilador externo', causes:['Motor parado','Capacitor com defeito','Proteção térmica atuou'], actions:['Testar capacitor','Verificar alimentação','Substituir motor'] },
+
+  // TCL
+  { brand:'TCL', code:'E1', title:'Sensor temperatura ambiente (interna)', causes:['NTC ambiente defeituoso','Cabo solto na PCB'], actions:['Verificar conector','Medir resistência','Substituir sensor'] },
+  { brand:'TCL', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor','Reposicionar na serpentina'] },
+  { brand:'TCL', code:'E3', title:'Sensor serpentina condensadora', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'TCL', code:'E4', title:'Comunicação interna ↔ externa', causes:['Cabo de comunicação rompido','PCB defeituosa'], actions:['Verificar interligação','Substituir placa'] },
+  { brand:'TCL', code:'E5', title:'Proteção sobrecorrente / compressor', causes:['Compressor sobrecarregado','Tensão fora da faixa'], actions:['Verificar tensão','Limpar condensador','Verificar carga de fluido'] },
+  { brand:'TCL', code:'E6', title:'Falha do motor da evaporadora', causes:['Motor travado','Hélice presa'], actions:['Girar hélice manualmente','Substituir motor'] },
+  { brand:'TCL', code:'EE', title:'Erro de EEPROM', causes:['Memória da placa corrompida'], actions:['Reset elétrico 5 min','Substituir placa'] },
+
+  // ELGIN
+  { brand:'Elgin', code:'E1', title:'Sensor de temperatura ambiente', causes:['NTC interno com defeito'], actions:['Verificar conector','Substituir sensor'] },
+  { brand:'Elgin', code:'E2', title:'Sensor da serpentina (evaporadora)', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Elgin', code:'E3', title:'Anticongelamento / baixa pressão', causes:['Filtro de ar sujo','Baixa carga de fluido'], actions:['Limpar filtros','Verificar pressão de baixa'] },
+  { brand:'Elgin', code:'E4', title:'Proteção do compressor', causes:['Sobrecorrente','Tensão fora da faixa'], actions:['Medir tensão e corrente','Verificar carga'] },
+  { brand:'Elgin', code:'E5', title:'Comunicação interna ↔ externa', causes:['Cabo rompido','PCB com defeito'], actions:['Verificar interligação','Substituir placa'] },
+  { brand:'Elgin', code:'E6', title:'Falha ventilador evaporadora', causes:['Motor travado','Hélice obstruída'], actions:['Girar hélice','Substituir motor'] },
+  { brand:'Elgin', code:'F1', title:'Sensor externo', causes:['NTC condensador'], actions:['Substituir sensor externo'] },
+
+  // KOMECO
+  { brand:'Komeco', code:'E1', title:'Sensor temperatura ambiente interna', causes:['NTC defeituoso ou solto'], actions:['Verificar conector','Substituir sensor'] },
+  { brand:'Komeco', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Komeco', code:'E3', title:'Proteção anticongelamento', causes:['Filtro sujo','Baixa carga'], actions:['Limpar filtros','Verificar pressão de baixa'] },
+  { brand:'Komeco', code:'E4', title:'Sobrecorrente / proteção compressor', causes:['Compressor sobrecarregado'], actions:['Verificar tensão e carga'] },
+  { brand:'Komeco', code:'E5', title:'Falha de comunicação', causes:['Cabo rompido','PCB defeituosa'], actions:['Verificar interligação','Substituir placa'] },
+
+  // CARRIER
+  { brand:'Carrier', code:'E1', title:'Sensor temperatura ambiente (interna)', causes:['NTC interno com defeito','Conector solto'], actions:['Verificar conector na PCB','Substituir sensor NTC'] },
+  { brand:'Carrier', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador defeituoso'], actions:['Substituir sensor'] },
+  { brand:'Carrier', code:'E3', title:'Sensor serpentina condensadora', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Carrier', code:'E4', title:'Falha de comunicação', causes:['Cabo de interligação com problema','PCB com defeito'], actions:['Verificar cabo','Reset 5 min','Substituir placa'] },
+  { brand:'Carrier', code:'E5', title:'Proteção de sobrecorrente', causes:['Compressor sobrecarregado','Tensão fora da faixa'], actions:['Medir tensão e corrente','Limpar trocadores'] },
+  { brand:'Carrier', code:'E6', title:'Falha ventilador evaporadora', causes:['Motor DC travado','Hélice obstruída'], actions:['Girar hélice','Substituir motor'] },
+  { brand:'Carrier', code:'HC', title:'Alta pressão de condensação', causes:['Condensador sujo','Ventilador externo parado','Excesso de fluido'], actions:['Limpar condensador','Verificar ventilador','Verificar carga'] },
+  { brand:'Carrier', code:'LC', title:'Baixa pressão de sucção / antifreeze', causes:['Filtro de ar sujo','Falta de fluido'], actions:['Limpar filtros','Verificar carga de fluido'] },
+
+  // PANASONIC
+  { brand:'Panasonic', code:'H00', title:'Funcionamento normal (sem erros)', causes:['Sem falha registrada'], actions:['Nenhuma ação necessária'] },
+  { brand:'Panasonic', code:'H11', title:'Falha de comunicação interna ↔ externa', causes:['Cabo de comunicação rompido ou invertido','PCB com defeito','Aterramento ausente'], actions:['Verificar cabo de interligação','Conferir aterramento','Substituir PCB'] },
+  { brand:'Panasonic', code:'H12', title:'Código diferente entre modelos interna/externa', causes:['Combinação não homologada de unidade interna e externa','Erro de configuração em multi-split'], actions:['Verificar compatibilidade dos modelos','Reconfigurar DIP switches'] },
+  { brand:'Panasonic', code:'H15', title:'Falha do sensor de posição do compressor', causes:['Sensor Hall com defeito','IPM com falha'], actions:['Substituir placa inverter','Medir compressor'] },
+  { brand:'Panasonic', code:'H19', title:'Falha ventilador evaporadora', causes:['Motor DC travado','Feedback desconectado'], actions:['Girar manualmente','Verificar conector','Substituir motor'] },
+  { brand:'Panasonic', code:'H23', title:'Sensor temperatura serpentina interna', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Panasonic', code:'H27', title:'Sensor temperatura serpentina externa', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Panasonic', code:'H28', title:'Sensor temperatura descarga compressor', causes:['NTC descarga descolado ou com defeito'], actions:['Reposicionar com pasta','Substituir sensor'] },
+  { brand:'Panasonic', code:'H33', title:'Combinação de modelos incorreta', causes:['Capacidade da interna incompatível com a externa'], actions:['Verificar tabela de compatibilidade Panasonic','Substituir unidade incompatível'] },
+  { brand:'Panasonic', code:'H36', title:'Alta temperatura de descarga', causes:['Falta de fluido','Filtro secador entupido'], actions:['Verificar pressões','Substituir filtro secador','Recarregar se necessário'] },
+  { brand:'Panasonic', code:'H97', title:'Falha do ventilador externo', causes:['Motor externo parado','Proteção térmica atuou'], actions:['Verificar capacitor (não-DC)','Substituir motor'] },
+  { brand:'Panasonic', code:'H98', title:'Proteção de alta pressão', causes:['Condensador sujo','Ventilador externo parado','Excesso de fluido'], actions:['Limpar condensador','Verificar ventilador','Verificar carga'] },
+  { brand:'Panasonic', code:'H99', title:'Proteção antifreeze — baixa temperatura serpentina', causes:['Filtro sujo','Falta de fluido','Baixa temperatura ambiente'], actions:['Limpar filtros','Verificar carga de fluido'] },
+
+  // YORK
+  { brand:'York', code:'E1', title:'Sensor temperatura ambiente interna', causes:['NTC defeituoso'], actions:['Verificar conector','Substituir sensor'] },
+  { brand:'York', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'York', code:'E3', title:'Sensor serpentina condensadora', causes:['NTC externo com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'York', code:'E4', title:'Falha de comunicação', causes:['Cabo de interligação','PCB com defeito'], actions:['Verificar interligação','Substituir placa'] },
+  { brand:'York', code:'E5', title:'Proteção do compressor', causes:['Sobrecorrente','Tensão fora da faixa'], actions:['Medir tensão e carga'] },
+  { brand:'York', code:'E6', title:'Falha do ventilador interno', causes:['Motor travado','Hélice obstruída'], actions:['Verificar motor','Substituir'] },
+  { brand:'York', code:'EC', title:'Antifreeze / baixa pressão', causes:['Filtro sujo','Falta de fluido'], actions:['Limpar filtros','Verificar carga'] },
+
+  // TRANE
+  { brand:'Trane', code:'E1', title:'Sensor temperatura ambiente', causes:['NTC interno com defeito'], actions:['Verificar conector','Substituir sensor'] },
+  { brand:'Trane', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Trane', code:'E3', title:'Sensor serpentina condensadora', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Trane', code:'E5', title:'Proteção sobrecorrente', causes:['Compressor sobrecarregado'], actions:['Verificar tensão e carga de fluido'] },
+  { brand:'Trane', code:'E6', title:'Comunicação interna ↔ externa', causes:['Cabo rompido','PCB defeituosa'], actions:['Verificar interligação','Substituir placa'] },
+
+  // ARNO
+  { brand:'Arno', code:'E1', title:'Sensor de temperatura ambiente', causes:['NTC interno com defeito ou desconectado'], actions:['Verificar conector na PCB','Medir resistência do NTC','Substituir sensor'] },
+  { brand:'Arno', code:'E2', title:'Sensor da serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor','Reposicionar com pasta térmica'] },
+  { brand:'Arno', code:'E3', title:'Sensor da serpentina condensadora', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Arno', code:'E4', title:'Falha de comunicação', causes:['Cabo de interligação com defeito','PCB com problema'], actions:['Verificar fios de comunicação','Reset 5 min','Substituir placa'] },
+  { brand:'Arno', code:'E5', title:'Proteção do compressor', causes:['Sobrecorrente','Tensão fora da faixa'], actions:['Medir tensão','Verificar carga'] },
+  { brand:'Arno', code:'E6', title:'Falha do motor do ventilador interno', causes:['Motor travado','Hélice obstruída'], actions:['Girar hélice manualmente','Substituir motor'] },
+
+  // AGRATTO
+  { brand:'Agratto', code:'E1', title:'Sensor temperatura ambiente', causes:['NTC interno com defeito'], actions:['Verificar conector','Substituir sensor'] },
+  { brand:'Agratto', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Agratto', code:'E3', title:'Sensor serpentina externa', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Agratto', code:'E4', title:'Falha de comunicação', causes:['Cabo rompido','PCB defeituosa'], actions:['Verificar interligação','Substituir placa'] },
+  { brand:'Agratto', code:'E5', title:'Proteção de sobrecorrente', causes:['Compressor sobrecarregado'], actions:['Verificar tensão e carga'] },
+
+  // WESTINGHOUSE
+  { brand:'Westinghouse', code:'E1', title:'Sensor temperatura ambiente', causes:['NTC interno com defeito'], actions:['Verificar conector','Substituir sensor'] },
+  { brand:'Westinghouse', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Westinghouse', code:'E3', title:'Sensor externo', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Westinghouse', code:'E4', title:'Comunicação / EEPROM', causes:['Cabo com problema','Memória corrompida'], actions:['Verificar interligação','Reset 5 min','Substituir placa'] },
+  { brand:'Westinghouse', code:'E5', title:'Proteção compressor', causes:['Sobrecorrente','Tensão fora da faixa'], actions:['Medir tensão','Verificar carga'] },
+
+  // COMFEE
+  { brand:'Comfee', code:'E2', title:'Sensor temperatura ambiente', causes:['NTC interno com defeito'], actions:['Verificar conector','Substituir sensor'] },
+  { brand:'Comfee', code:'E3', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Comfee', code:'E4', title:'Sensor externo', causes:['NTC condensador com defeito'], actions:['Substituir sensor externo'] },
+  { brand:'Comfee', code:'E5', title:'Comunicação', causes:['Cabo de interligação'], actions:['Verificar fios','Reset 5 min'] },
+  { brand:'Comfee', code:'E6', title:'Proteção do compressor', causes:['Sobrecorrente','Tensão fora da faixa'], actions:['Medir tensão','Verificar carga'] },
+
+  // WANKE
+  { brand:'Wanke', code:'E1', title:'Sensor temperatura ambiente', causes:['NTC interno com defeito'], actions:['Substituir sensor','Verificar conector'] },
+  { brand:'Wanke', code:'E2', title:'Sensor serpentina evaporadora', causes:['NTC evaporador com defeito'], actions:['Substituir sensor'] },
+  { brand:'Wanke', code:'E3', title:'Sensor externo', causes:['NTC condensador'], actions:['Substituir sensor externo'] },
+  { brand:'Wanke', code:'E5', title:'Proteção compressor', causes:['Sobrecorrente','Tensão'], actions:['Verificar tensão e carga'] },
+  { brand:'Wanke', code:'E6', title:'Comunicação / ventilador', causes:['Cabo rompido','Motor travado'], actions:['Verificar interligação','Substituir motor'] },
+
+  // ══════════════════════════════════════════════
+  // GELADEIRAS — CÓDIGOS DE ERRO / SINTOMAS
+  // (na maioria dos refrigeradores domésticos não há display,
+  //  os "erros" se manifestam como piscadas do LED ou sintomas — incluídos aqui)
+  // ══════════════════════════════════════════════
+
+  // ELECTROLUX (geladeiras com display — linha DF/DT/DW/DB)
+  { brand:'Electrolux', code:'Er dF', title:'Falha no ciclo de degelo automático', causes:['Resistência de degelo queimada ou aberta','Termostato de degelo (bimetal) aberto','Timer/placa de degelo com defeito'], actions:['Medir resistência de degelo (deve ter continuidade)','Verificar termostato bimetal (deve fechar abaixo de -10°C)','Verificar timer mecânico ou placa eletrônica de degelo'] },
+  { brand:'Electrolux', code:'Er OP', title:'Falha no sensor de temperatura do freezer', causes:['Sensor NTC do compartimento freezer com defeito','Cabo do sensor rompido','PCB com defeito no canal do sensor'], actions:['Medir resistência do sensor NTC','Verificar conector na placa','Substituir sensor se fora de curva'] },
+  { brand:'Electrolux', code:'Er CF', title:'Falha no sensor de temperatura do refrigerador', causes:['Sensor NTC do compartimento refrigerador com defeito'], actions:['Medir resistência do sensor','Substituir sensor se necessário'] },
+  { brand:'Electrolux', code:'Er CO', title:'Falha na comunicação entre placas', causes:['Cabo flat da placa de display danificado','PCB principal com defeito'], actions:['Verificar cabo de comunicação (flat/conector)','Substituir placa principal se sem comunicação'] },
+  { brand:'Electrolux', code:'Er FF', title:'Falha no ventilador do freezer (Frost Free)', causes:['Motor do ventilador do freezer travado ou queimado','Hélice presa por acúmulo de gelo excessivo','Cabo do motor com problema'], actions:['Verificar se há gelo excessivo (degelo forçado)','Girar hélice manualmente','Substituir motor do ventilador'] },
+  { brand:'Electrolux', code:'🔴 5 piscadas', title:'Resistência de degelo aberta (sem display)', causes:['Resistência de degelo queimada','Termostato de degelo aberto em curto ou aberto fora da faixa'], actions:['Forçar ciclo de degelo (ativar modo de serviço)','Medir resistência de degelo','Substituir resistência ou termostato'] },
+
+  // BRASTEMP / CONSUL (Whirlpool)
+  { brand:'Brastemp', code:'Er dF', title:'Falha no degelo automático', causes:['Resistência de degelo queimada','Termostato de degelo (klixon) aberto','Timer de degelo com defeito'], actions:['Medir resistência de degelo (±20–50 Ω dependendo do modelo)','Verificar klixon/bimetal de degelo','Verificar timer mecânico ou placa de controle'] },
+  { brand:'Brastemp', code:'Er tH', title:'Falha no sensor de temperatura (thermistor)', causes:['NTC de temperatura com defeito','Cabo do sensor cortado','Conector solto na PCB'], actions:['Medir resistência do NTC','Verificar conector','Substituir sensor'] },
+  { brand:'Brastemp', code:'Er Co', title:'Falha de comunicação entre módulos', causes:['Cabo de comunicação danificado','PCB com defeito'], actions:['Verificar cabo flat entre módulos','Substituir placa se comunicação impossível'] },
+  { brand:'Brastemp', code:'Er FF', title:'Falha no motor do ventilador do freezer', causes:['Motor do ventilador travado','Gelo excessivo na câmara','Cabo do motor com defeito'], actions:['Forçar degelo manual (5 min com portas fechadas e desligado)','Verificar motor (deve girar livre)','Substituir motor'] },
+
+  { brand:'Consul', code:'Er dF', title:'Falha no degelo automático', causes:['Resistência de degelo queimada ou aberta','Termostato bimetal travado aberto','Timer ou placa de controle com defeito'], actions:['Medir resistência de degelo','Verificar termostato bimetal','Verificar timer/placa de controle'] },
+  { brand:'Consul', code:'Er tH', title:'Falha no sensor de temperatura', causes:['NTC com defeito','Cabo rompido ou conector solto'], actions:['Medir resistência do sensor','Verificar conexão','Substituir sensor'] },
+  { brand:'Consul', code:'Er FF', title:'Falha no ventilador do freezer', causes:['Motor travado por gelo excessivo','Motor com defeito'], actions:['Forçar degelo','Girar manualmente','Substituir motor se necessário'] },
+
+  // SAMSUNG (geladeiras)
+  { brand:'Samsung', code:'88 88', title:'Erro geral / reset necessário (geladeira)', causes:['Queda de energia ou surto','Placa de controle com falha transitória'], actions:['Manter ENTRAR + CONGELAR pressionados por 8s para resetar','Se persistir, verificar placa de controle'] },
+  { brand:'Samsung', code:'OF OF', title:'Modo demonstração ativado (modo loja)', causes:['Modo demo ativado acidentalmente'], actions:['Pressionar ENTRAR + CONGELAR ou VACATION por 5s para desativar modo demo'] },
+  { brand:'Samsung', code:'Er 1F', title:'Sensor do freezer com defeito', causes:['NTC do freezer com circuito aberto ou curto','Cabo do sensor rompido'], actions:['Medir resistência do NTC do freezer','Substituir sensor se fora de curva','Verificar conector na PCB'] },
+  { brand:'Samsung', code:'Er 2F', title:'Sensor do refrigerador com defeito', causes:['NTC do refrigerador com defeito','Cabo rompido'], actions:['Medir NTC do refrigerador','Substituir sensor','Verificar conector'] },
+  { brand:'Samsung', code:'Er 8E', title:'Falha no sensor da serpentina do freezer', causes:['NTC da serpentina do freezer com defeito'], actions:['Verificar e substituir sensor'] },
+  { brand:'Samsung', code:'Er 14E', title:'Falha no ventilador do freezer', causes:['Motor do ventilador do freezer com defeito','Gelo no eixo do motor'], actions:['Forçar degelo (desligar 24h com portas abertas)','Substituir motor do ventilador'] },
+  { brand:'Samsung', code:'Er 21E', title:'Falha de degelo — aquecedor', causes:['Aquecedor (resistência) de degelo aberto','Sensor térmico de degelo (fuse) aberto'], actions:['Medir aquecedor (deve ter baixa resistência)','Verificar fuse térmico','Substituir peça com defeito'] },
+
+  // LG (geladeiras)
+  { brand:'LG', code:'Er FF', title:'Falha no ventilador do freezer', causes:['Motor do ventilador com defeito','Gelo excessivo bloqueando a hélice','Sensor Hall do motor com falha'], actions:['Forçar degelo manual (desligar 24h)','Verificar motor (continuidade e tensão de alimentação)','Substituir motor'] },
+  { brand:'LG', code:'Er rF', title:'Falha no sensor do refrigerador', causes:['NTC do compartimento refrigerador com defeito'], actions:['Medir resistência do sensor','Substituir sensor se fora de curva'] },
+  { brand:'LG', code:'Er dH', title:'Falha no degelo — aquecedor / sensor', causes:['Resistência de degelo queimada','Sensor de degelo (bimetal) aberto','Placa de controle com falha no ciclo de degelo'], actions:['Medir resistência do aquecedor','Verificar sensor bimetal','Verificar placa se as peças estiverem OK'] },
+  { brand:'LG', code:'Er IS', title:'Falha no sensor de temperatura interna', causes:['NTC interno com defeito'], actions:['Substituir sensor','Verificar conector'] },
+
+  // ══════════════════════════════════════════════
+  // BEBEDOUROS / PURIFICADORES
+  // ══════════════════════════════════════════════
+
+  // ESMALTEC — bebedouros domésticos e industriais
+  { brand:'Esmaltec', code:'FRIO NÃO RESFRIA', title:'Bebedouro não está gelando a água', causes:['Compressor não part e — PTC de partida com defeito','Termostato ajustado muito alto (mínimo resfriamento)','Carga de fluido insuficiente (vazamento)','Condensador sujo — dissipação insuficiente'], actions:['Verificar PTC de partida (medir resistência: PTC frio ≈ 15–40 Ω; se aberto, substituir)','Ajustar termostato para posição mais fria','Verificar pressão de operação (R-134a: baixa ≈ 0,5–1,5 bar no evaporador)','Limpar condensador com ar comprimido ou pincel'] },
+  { brand:'Esmaltec', code:'ÁGUA MUITO FRIA / GELA', title:'Água congela no serpentinado', causes:['Termostato regulado muito baixo ou travado fechado','Sensor do termostato posicionado incorretamente','Termostato com defeito (não desliga compressor)'], actions:['Ajustar termostato para posição menos fria','Verificar posicionamento do bulbo do termostato na câmara','Substituir termostato se não desliga com temperatura baixa'] },
+  { brand:'Esmaltec', code:'COMPRESSOR NÃO PART E', title:'Compressor não liga', causes:['PTC ou relé de partida com defeito','Protetor térmico (overload) desarmado por superaquecimento','Capacitor de partida com defeito (modelos com capacitor)','Compressor travado mecanicamente'], actions:['Aguardar 15–30 min e tentar religar (overload pode estar armado)','Medir PTC: ≈15–40 Ω frio; substituir se aberto','Medir overload: deve ter continuidade a temperatura ambiente','Testar capacitor se presente; substituir compressor se travado'] },
+  { brand:'Esmaltec', code:'RUÍDO EXCESSIVO', title:'Bebedouro faz muito barulho', causes:['Vibração excessiva por parafusos soltos ou superfície irregular','Compressor com amortecedores desgastados','Hélice do condensador desequilibrada ou solta','Tubulação vibra contra a carcaça'], actions:['Verificar nivelamento do equipamento','Apertar parafusos de fixação do compressor','Inspecionar hélice (condensador) — limpar e verificar fixação','Isolar tubulações que tocam a carcaça com espuma'] },
+  { brand:'Esmaltec', code:'VAZAMENTO DE ÁGUA', title:'Água escorrendo pelo bebedouro', causes:['Cuba de condensação (bandeja) cheia ou transbordando','Torneira com vedação desgastada','Tubo de silicone interno solto ou rompido','Vedação da tampa do tanque deteriorada'], actions:['Esvaziar e limpar bandeja de condensação','Substituir O-ring ou anel de vedação da torneira','Verificar e trocar tubos internos de silicone','Substituir vedação da tampa do reservatório'] },
+  { brand:'Esmaltec', code:'COLUNA — NÃO DESCE ÁGUA', title:'Bebedouro de coluna sem fluxo de água (pressão)', causes:['Filtro interno obstruído por incrustação ou limo','Tubo de entrada dobrado ou pinçado','Boia do reservatório travada — não abre entrada de água'], actions:['Remover e limpar ou substituir filtro interno','Verificar trajetória do tubo de entrada de água','Inspecionar e liberar boia do reservatório'] },
+
+  // LATINA
+  { brand:'Latina', code:'NÃO REFRIGERA', title:'Purificador/bebedouro não resfria', causes:['Compressor não partindo (PTC/overload)','Termostato defeituoso','Carga de fluido insuficiente'], actions:['Verificar PTC de partida','Testar termostato','Verificar pressão de operação com manifold'] },
+  { brand:'Latina', code:'FILTRO SATURADO', title:'Fluxo de água muito baixo', causes:['Filtro de carvão ativado saturado após vida útil','Pressão de rede muito baixa (< 1 bar)','Vedações internas com incrustação'], actions:['Substituir filtro (vida útil: 3.000–6.000 L ou 6 meses)','Verificar pressão da rede hidráulica','Limpar ou substituir vedações'] },
+  { brand:'Latina', code:'GOSTO RUIM NA ÁGUA', title:'Água com gosto ou odor estranho', causes:['Filtro expirado — não retém mais contaminantes','Reservatório interno com limo ou biofilme','Tempo longo sem uso (água estagnada)'], actions:['Substituir filtro imediatamente','Higienizar reservatório com solução de hipoclorito (1 gota/litro)','Descartar primeiros 3 litros após período sem uso'] },
+
+  // IBBL
+  { brand:'IBBL', code:'NENHUMA REFRIGERAÇÃO', title:'Purificador IBBL não resfria', causes:['Compressor não liga (PTC ou overload)','Termostato travado na posição aberta (não chama compressor)','Vazamento de fluido R-134a'], actions:['Verificar PTC (≈20–40 Ω frio; substituir se aberto)','Testar e substituir termostato','Verificar pressão com manifold'] },
+  { brand:'IBBL', code:'INDICA TROCAR FILTRO', title:'LED de troca de filtro aceso', causes:['Contador de litros atingiu o limite (3.500–6.000 L conforme modelo)','Sensor de fluxo com defeito'], actions:['Substituir filtro e fazer reset do contador (segurar botão por 5s)','Se resetou mas LED volta: verificar sensor de fluxo'] },
+  { brand:'IBBL', code:'SEM FLUXO', title:'Água não passa pelo purificador', causes:['Filtro saturado por entupimento','Pressão de rede insuficiente (< 0,5 bar)','Válvula de entrada com depósito calcário'], actions:['Substituir filtro','Verificar pressão de rede (ideal 0,5–3 bar)','Limpar ou substituir válvula de entrada'] },
+
+  // POLAR
+  { brand:'Polar', code:'NÃO REFRIGERA', title:'Bebedouro Polar não está gelando', causes:['PTC de partida com defeito','Overload atuado por superaquecimento','Termostato em posição mínima ou defeituoso'], actions:['Aguardar resfriamento e tentar religar','Medir PTC e overload','Ajustar ou substituir termostato'] },
+  { brand:'Polar', code:'CONGELA', title:'Água congela no serpentinado', causes:['Termostato travado — não desliga compressor','Bulbo do termostato mal posicionado'], actions:['Substituir termostato','Verificar posicionamento do bulbo'] },
+
+  // SOFT
+  { brand:'Soft', code:'NÃO REFRIGERA', title:'Bebedouro Soft não resfria', causes:['Compressor com falha de partida','Termostato com defeito','Falta de fluido refrigerante'], actions:['Verificar PTC/overload','Testar termostato','Verificar carga de fluido'] },
+  { brand:'Soft', code:'BARULHO NO COMPRESSOR', title:'Ruído excessivo no compressor', causes:['Amortecedores do compressor desgastados','Superfície de instalação irregular'], actions:['Nivelar o equipamento','Substituir amortecedores do compressor'] }
+
 ];
 
 /* Mapeia marca → códigos */
@@ -4494,17 +4775,8 @@ function renderModels() {
   `).join('');
 }
 
-function filterByBrand(el, brand) {
-  document.querySelectorAll('#chipRow .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  currentBrandFilter = brand;
-  renderModels();
-}
-
-function filterModels() {
-  currentSearch = document.getElementById('resSearch').value;
-  renderModels();
-}
+function filterByBrand(el, brand) { /* legado */ }
+function filterModels()           { /* legado */ }
 
 /* ============================================
    DETALHE DO MODELO
@@ -6341,31 +6613,52 @@ function closeTroubleshoot() {
    ============================================ */
 const fridges = [
   // BRASTEMP
-  { id: 'f1', brand: 'Brastemp', model: 'Frost Free Inverse BRE57AK 443L', cap: 443, type: 'Frost Free Inverse', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'EM2X1116', power: 100, current: '0.9 A (220V)' },
-  { id: 'f2', brand: 'Brastemp', model: 'Frost Free Duplex BRM44 375L', cap: 375, type: 'Frost Free Duplex', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EMU45HER', power: 90, current: '0.8 A (220V)' },
-  { id: 'f3', brand: 'Brastemp', model: 'Side by Side BRS62 540L', cap: 540, type: 'Side by Side', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'NEU2168Y', power: 130, current: '1.1 A (220V)' },
-  { id: 'f4', brand: 'Brastemp', model: 'Frost Free Top Mount BRM39 352L', cap: 352, type: 'Top Mount', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EMI65CLP', power: 85, current: '0.7 A (220V)' },
+  { id:'f1',  brand:'Brastemp', model:'Frost Free Inverse BRE57AK 443L', cap:443, type:'Frost Free Inverse', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'EM2X1116', power:100, current:'0.9 A (220V)' },
+  { id:'f2',  brand:'Brastemp', model:'Frost Free Duplex BRM44 375L', cap:375, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EMU45HER', power:90, current:'0.8 A (220V)' },
+  { id:'f3',  brand:'Brastemp', model:'Side by Side BRS62 540L', cap:540, type:'Side by Side', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'NEU2168Y', power:130, current:'1.1 A (220V)' },
+  { id:'f4',  brand:'Brastemp', model:'Frost Free Top Mount BRM39 352L', cap:352, type:'Top Mount', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EMI65CLP', power:85, current:'0.7 A (220V)' },
+  { id:'f21', brand:'Brastemp', model:'Frost Free Duplex BRM48 435L', cap:435, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EGZS100HLP', power:98, current:'0.9 A (220V)' },
+  { id:'f22', brand:'Brastemp', model:'Frost Free Inverse BRV55 488L', cap:488, type:'Frost Free Inverse', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'NEAI6212Z', power:105, current:'0.9 A (220V)' },
+
   // CONSUL
-  { id: 'f5', brand: 'Consul', model: 'Frost Free CRM44 386L', cap: 386, type: 'Frost Free Duplex', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EMU45HER', power: 88, current: '0.8 A (220V)' },
-  { id: 'f6', brand: 'Consul', model: 'Frost Free CRM50 410L', cap: 410, type: 'Frost Free Duplex', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EMU60HER', power: 95, current: '0.9 A (220V)' },
-  { id: 'f7', brand: 'Consul', model: 'Cycle Defrost CRP24 240L', cap: 240, type: 'Cycle Defrost', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EM3R09HKP', power: 70, current: '0.6 A (220V)' },
-  { id: 'f8', brand: 'Consul', model: 'Frost Free CRM39 340L', cap: 340, type: 'Top Mount', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EMI65CLP', power: 82, current: '0.7 A (220V)' },
+  { id:'f5',  brand:'Consul', model:'Frost Free CRM44 386L', cap:386, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EMU45HER', power:88, current:'0.8 A (220V)' },
+  { id:'f6',  brand:'Consul', model:'Frost Free CRM50 410L', cap:410, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EMU60HER', power:95, current:'0.9 A (220V)' },
+  { id:'f7',  brand:'Consul', model:'Cycle Defrost CRP24 240L', cap:240, type:'Cycle Defrost', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EM3R09HKP', power:70, current:'0.6 A (220V)' },
+  { id:'f8',  brand:'Consul', model:'Frost Free CRM39 340L', cap:340, type:'Top Mount', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EMI65CLP', power:82, current:'0.7 A (220V)' },
+  { id:'f23', brand:'Consul', model:'Cycle Defrost CRC28 261L', cap:261, type:'Cycle Defrost', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EMI40CLP', power:72, current:'0.6 A (220V)' },
+
   // ELECTROLUX
-  { id: 'f9', brand: 'Electrolux', model: 'Inverter IB7 552L', cap: 552, type: 'Frost Free Inverse', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'NLE13KK', power: 120, current: '1.0 A (220V)' },
-  { id: 'f10', brand: 'Electrolux', model: 'IF55S 553L', cap: 553, type: 'Side by Side', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'NLE15KK', power: 135, current: '1.2 A (220V)' },
-  { id: 'f11', brand: 'Electrolux', model: 'DF54 459L', cap: 459, type: 'Frost Free Duplex', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EMU60HER', power: 100, current: '0.9 A (220V)' },
-  { id: 'f12', brand: 'Electrolux', model: 'DC35 268L', cap: 268, type: 'Cycle Defrost', fluid: 'R-600a', tension: '127V/220V', tech: 'Convencional', compressor: 'EM3R12HKP', power: 75, current: '0.6 A (220V)' },
+  { id:'f9',  brand:'Electrolux', model:'Inverter IB7 552L', cap:552, type:'Frost Free Inverse', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'NLE13KK', power:120, current:'1.0 A (220V)' },
+  { id:'f10', brand:'Electrolux', model:'Side by Side IF55S 553L', cap:553, type:'Side by Side', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'NLE15KK', power:135, current:'1.2 A (220V)' },
+  { id:'f11', brand:'Electrolux', model:'Frost Free Duplex DF54 459L', cap:459, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EMU60HER', power:100, current:'0.9 A (220V)' },
+  { id:'f12', brand:'Electrolux', model:'Cycle Defrost DC35 268L', cap:268, type:'Cycle Defrost', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'EM3R12HKP', power:75, current:'0.6 A (220V)' },
+  { id:'f24', brand:'Electrolux', model:'Frost Free Duplex DF36 310L', cap:310, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'NE37M', power:82, current:'0.7 A (220V)' },
+  { id:'f25', brand:'Electrolux', model:'Frost Free Duplex DF50 435L', cap:435, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'NE50M', power:98, current:'0.9 A (220V)' },
+  { id:'f26', brand:'Electrolux', model:'Frost Free Inverter IT60 540L', cap:540, type:'Frost Free Inverse', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'VCE16M', power:110, current:'0.9 A (220V)' },
+
   // SAMSUNG
-  { id: 'f13', brand: 'Samsung', model: 'French Door RF60 580L', cap: 580, type: 'French Door', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'BLDC Linear', power: 140, current: '1.2 A (220V)' },
-  { id: 'f14', brand: 'Samsung', model: 'Side by Side RS65 602L', cap: 602, type: 'Side by Side', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'BLDC Linear', power: 145, current: '1.3 A (220V)' },
-  { id: 'f15', brand: 'Samsung', model: 'Top Mount RT38 385L', cap: 385, type: 'Top Mount', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'BLDC Linear', power: 95, current: '0.8 A (220V)' },
+  { id:'f13', brand:'Samsung', model:'French Door RF60 580L', cap:580, type:'French Door', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'BLDC Linear', power:140, current:'1.2 A (220V)' },
+  { id:'f14', brand:'Samsung', model:'Side by Side RS65 602L', cap:602, type:'Side by Side', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'BLDC Linear', power:145, current:'1.3 A (220V)' },
+  { id:'f15', brand:'Samsung', model:'Top Mount RT38 385L', cap:385, type:'Top Mount', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'BLDC Linear', power:95, current:'0.8 A (220V)' },
+  { id:'f27', brand:'Samsung', model:'Top Mount RT46 460L', cap:460, type:'Top Mount', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'BLDC Linear', power:110, current:'0.9 A (220V)' },
+  { id:'f28', brand:'Samsung', model:'Frost Free RF22 536L', cap:536, type:'French Door', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'BLDC Linear', power:135, current:'1.1 A (220V)' },
+
   // LG
-  { id: 'f16', brand: 'LG', model: 'Door-in-Door GR-X247 601L', cap: 601, type: 'Side by Side', fluid: 'R-600a', tension: '127V/220V', tech: 'Linear Inverter', compressor: 'Linear LBP', power: 130, current: '1.1 A (220V)' },
-  { id: 'f17', brand: 'LG', model: 'Smart Inverse GC-B247 451L', cap: 451, type: 'Frost Free Inverse', fluid: 'R-600a', tension: '127V/220V', tech: 'Linear Inverter', compressor: 'Linear LBP', power: 110, current: '0.9 A (220V)' },
-  { id: 'f18', brand: 'LG', model: 'Top Freezer GT-31 312L', cap: 312, type: 'Top Mount', fluid: 'R-600a', tension: '127V/220V', tech: 'Linear Inverter', compressor: 'Linear LBP', power: 90, current: '0.7 A (220V)' },
+  { id:'f16', brand:'LG', model:'Side by Side GR-X247 601L', cap:601, type:'Side by Side', fluid:'R-600a', tension:'127V/220V', tech:'Linear Inverter', compressor:'Linear LBP', power:130, current:'1.1 A (220V)' },
+  { id:'f17', brand:'LG', model:'Frost Free Inverse GC-B247 451L', cap:451, type:'Frost Free Inverse', fluid:'R-600a', tension:'127V/220V', tech:'Linear Inverter', compressor:'Linear LBP', power:110, current:'0.9 A (220V)' },
+  { id:'f18', brand:'LG', model:'Top Freezer GT-31 312L', cap:312, type:'Top Mount', fluid:'R-600a', tension:'127V/220V', tech:'Linear Inverter', compressor:'Linear LBP', power:90, current:'0.7 A (220V)' },
+  { id:'f29', brand:'LG', model:'Frost Free Inverse GC-L257 493L', cap:493, type:'Frost Free Inverse', fluid:'R-600a', tension:'127V/220V', tech:'Linear Inverter', compressor:'Linear LBP', power:120, current:'1.0 A (220V)' },
+  { id:'f30', brand:'LG', model:'French Door GSJ961 638L', cap:638, type:'French Door', fluid:'R-600a', tension:'127V/220V', tech:'Linear Inverter', compressor:'Linear LBP', power:150, current:'1.3 A (220V)' },
+
   // PANASONIC
-  { id: 'f19', brand: 'Panasonic', model: 'Inverter NR-BB71 480L', cap: 480, type: 'Frost Free Duplex', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'Inverter Hermético', power: 105, current: '0.9 A (220V)' },
-  { id: 'f20', brand: 'Panasonic', model: 'Top Freezer NR-BB52 425L', cap: 425, type: 'Top Mount', fluid: 'R-600a', tension: '127V/220V', tech: 'Inverter', compressor: 'Inverter Hermético', power: 100, current: '0.8 A (220V)' }
+  { id:'f19', brand:'Panasonic', model:'Frost Free Duplex NR-BB71 480L', cap:480, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'Inverter Hermético', power:105, current:'0.9 A (220V)' },
+  { id:'f20', brand:'Panasonic', model:'Top Freezer NR-BB52 425L', cap:425, type:'Top Mount', fluid:'R-600a', tension:'127V/220V', tech:'Inverter', compressor:'Inverter Hermético', power:100, current:'0.8 A (220V)' },
+  { id:'f31', brand:'Panasonic', model:'Frost Free NR-BT41 387L', cap:387, type:'Frost Free Duplex', fluid:'R-600a', tension:'127V/220V', tech:'Convencional', compressor:'Hermético', power:90, current:'0.8 A (220V)' },
+
+  // BOSCH
+  { id:'f32', brand:'Bosch', model:'Frost Free Inverse KAD99 591L', cap:591, type:'Side by Side', fluid:'R-600a', tension:'220V', tech:'Inverter', compressor:'Hermético Inverter', power:140, current:'1.2 A (220V)' },
+  { id:'f33', brand:'Bosch', model:'Frost Free Duplex KDN56 490L', cap:490, type:'Frost Free Duplex', fluid:'R-600a', tension:'220V', tech:'Inverter', compressor:'Hermético Inverter', power:115, current:'1.0 A (220V)' },
+  { id:'f34', brand:'Bosch', model:'Frost Free KSV36 346L', cap:346, type:'1 Porta', fluid:'R-600a', tension:'220V', tech:'Convencional', compressor:'Hermético', power:82, current:'0.7 A (220V)' }
 ];
 
 let fridgeBrandFilter = 'all';
@@ -6396,17 +6689,8 @@ function renderFridges() {
   `).join('');
 }
 
-function filterFridgeByBrand(el, brand) {
-  document.querySelectorAll('#fridgeChips .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  fridgeBrandFilter = brand;
-  renderFridges();
-}
-
-function filterFridges() {
-  fridgeSearchQuery = document.getElementById('fridgeSearch').value;
-  renderFridges();
-}
+function filterFridgeByBrand(el, brand) { /* legado — substituído */ }
+function filterFridges()               { /* legado — substituído */ }
 
 function showFridge(id) {
   const f = fridges.find(x => x.id === id);
@@ -6573,23 +6857,37 @@ function renderFridgeProblems() {
    BEBEDOUROS / PURIFICADORES
    ============================================ */
 const drinkers = [
-  // ESMALTEC
-  { id: 'd1', brand: 'Esmaltec', model: 'EGC35B 35L Coluna', cap: 35, type: 'Coluna · 2 temp', fluid: 'R-134a', tension: '127V/220V', power: 90, current: '0.8 A (220V)', system: 'Banho de gelo' },
-  { id: 'd2', brand: 'Esmaltec', model: 'EGC25B 25L Coluna', cap: 25, type: 'Coluna · 2 temp', fluid: 'R-134a', tension: '127V/220V', power: 80, current: '0.7 A (220V)', system: 'Banho de gelo' },
-  { id: 'd3', brand: 'Esmaltec', model: 'EBI400 Industrial 4 torneiras', cap: 100, type: 'Industrial · pressão', fluid: 'R-134a', tension: '220V', power: 220, current: '1.5 A', system: 'Compacto' },
+  // ESMALTEC — mais popular no Nordeste
+  { id:'d1',  brand:'Esmaltec', model:'EGC35B Coluna 35L · 2 torneiras', cap:35, type:'Coluna · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:90, current:'0.8 A', system:'Banho de gelo' },
+  { id:'d2',  brand:'Esmaltec', model:'EGC25B Coluna 25L · 2 torneiras', cap:25, type:'Coluna · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:80, current:'0.7 A', system:'Banho de gelo' },
+  { id:'d13', brand:'Esmaltec', model:'EGC10B Coluna 10L · 1 torneira', cap:10, type:'Coluna · gelado', fluid:'R-134a', tension:'127V', power:65, current:'0.6 A', system:'Banho de gelo' },
+  { id:'d14', brand:'Esmaltec', model:'ECE3 Pressão 3L/h · sem coluna', cap:0, type:'Pressão · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:55, current:'0.5 A', system:'Compacto' },
+  { id:'d15', brand:'Esmaltec', model:'ECE5 Pressão 5L/h · sem coluna', cap:0, type:'Pressão · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:65, current:'0.6 A', system:'Compacto' },
+  { id:'d3',  brand:'Esmaltec', model:'EBI400 Industrial 4 torneiras', cap:100, type:'Industrial · pressão', fluid:'R-134a', tension:'220V', power:220, current:'1.5 A', system:'Compacto' },
+  { id:'d16', brand:'Esmaltec', model:'EBCA10 Industrial 10L/h', cap:0, type:'Industrial · coluna', fluid:'R-134a', tension:'127V/220V', power:120, current:'1.0 A', system:'Compacto' },
+
   // LATINA
-  { id: 'd4', brand: 'Latina', model: 'BBR353 Geladinho 35L', cap: 35, type: 'Coluna · 2 temp', fluid: 'R-134a', tension: '127V/220V', power: 95, current: '0.8 A (220V)', system: 'Compacto/serpentina' },
-  { id: 'd5', brand: 'Latina', model: 'PA335 Purificador', cap: 0, type: 'Purificador · pressão', fluid: 'R-134a', tension: '127V/220V', power: 70, current: '0.6 A (220V)', system: 'Compacto' },
+  { id:'d4',  brand:'Latina', model:'BBR353 Geladinho 35L · coluna', cap:35, type:'Coluna · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:95, current:'0.8 A', system:'Compacto/serpentina' },
+  { id:'d5',  brand:'Latina', model:'PA335 Purificador · pressão', cap:0, type:'Purificador · pressão', fluid:'R-134a', tension:'127V/220V', power:70, current:'0.6 A', system:'Compacto' },
+  { id:'d17', brand:'Latina', model:'PA395 Purificador Plus · quente+gelado', cap:0, type:'Purificador · gelado + quente', fluid:'R-134a', tension:'127V/220V', power:85, current:'0.7 A', system:'Compacto' },
+  { id:'d18', brand:'Latina', model:'PB003 Bebedouro Pressão Compacto', cap:0, type:'Pressão · gelado + natural', fluid:'R-134a', tension:'127V', power:60, current:'0.5 A', system:'Compacto' },
+
   // IBBL
-  { id: 'd6', brand: 'IBBL', model: 'PFN2000 Purificador', cap: 2, type: 'Purificador · pressão', fluid: 'R-134a', tension: '127V/220V', power: 75, current: '0.7 A (220V)', system: 'Compacto' },
-  { id: 'd7', brand: 'IBBL', model: 'BDF100 Industrial', cap: 100, type: 'Industrial · 4 torn.', fluid: 'R-134a', tension: '220V', power: 250, current: '1.6 A', system: 'Banco de gelo' },
-  { id: 'd8', brand: 'IBBL', model: 'GFN2000 Garrafão', cap: 20, type: 'Garrafão · 2 temp', fluid: 'R-134a', tension: '127V/220V', power: 85, current: '0.7 A (220V)', system: 'Compacto' },
+  { id:'d6',  brand:'IBBL', model:'FR600 Immaginare · purificador refrigerado', cap:0, type:'Purificador · pressão', fluid:'R-134a', tension:'127V/220V', power:75, current:'0.7 A', system:'Compacto' },
+  { id:'d7',  brand:'IBBL', model:'BDF100 Industrial 4 torneiras', cap:100, type:'Industrial · 4 torneiras', fluid:'R-134a', tension:'220V', power:250, current:'1.6 A', system:'Banco de gelo' },
+  { id:'d8',  brand:'IBBL', model:'GFN2000 Garrafão 20L · 2 temp', cap:20, type:'Garrafão · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:85, current:'0.7 A', system:'Compacto' },
+  { id:'d19', brand:'IBBL', model:'IMATIC Purificador · auto-higienizante', cap:0, type:'Purificador · pressão', fluid:'R-134a', tension:'127/220V', power:70, current:'0.6 A', system:'Compacto' },
+  { id:'d20', brand:'IBBL', model:'IBBL Due Inox · 2 torneiras pressão', cap:0, type:'Pressão · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:80, current:'0.7 A', system:'Compacto' },
+
   // POLAR
-  { id: 'd9', brand: 'Polar', model: 'BPS100 Pressão Eletrônico', cap: 0, type: 'Pressão · 2 temp', fluid: 'R-134a', tension: '127V/220V', power: 90, current: '0.8 A (220V)', system: 'Compacto' },
-  { id: 'd10', brand: 'Polar', model: 'BPN100 Garrafão', cap: 20, type: 'Garrafão · 2 temp', fluid: 'R-134a', tension: '127V/220V', power: 80, current: '0.7 A (220V)', system: 'Compacto' },
+  { id:'d9',  brand:'Polar', model:'BPS100 Pressão Eletrônico · 2 temp', cap:0, type:'Pressão · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:90, current:'0.8 A', system:'Compacto' },
+  { id:'d10', brand:'Polar', model:'BPN100 Garrafão 20L · 2 temp', cap:20, type:'Garrafão · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:80, current:'0.7 A', system:'Compacto' },
+  { id:'d21', brand:'Polar', model:'BPC20 Coluna 20L · 2 torneiras', cap:20, type:'Coluna · gelado + natural', fluid:'R-134a', tension:'127V', power:75, current:'0.7 A', system:'Banho de gelo' },
+
   // SOFT
-  { id: 'd11', brand: 'Soft', model: 'Star Plus Purificador', cap: 0, type: 'Purificador · 3 temp', fluid: 'R-134a', tension: '127V/220V', power: 85, current: '0.7 A (220V)', system: 'Compacto/serpentina' },
-  { id: 'd12', brand: 'Soft', model: 'Slim Garrafão 20L', cap: 20, type: 'Garrafão · 2 temp', fluid: 'R-134a', tension: '127V/220V', power: 80, current: '0.7 A (220V)', system: 'Compacto' }
+  { id:'d11', brand:'Soft', model:'Star Plus Purificador · 3 temp', cap:0, type:'Purificador · gelado + natural + quente', fluid:'R-134a', tension:'127V/220V', power:85, current:'0.7 A', system:'Compacto/serpentina' },
+  { id:'d12', brand:'Soft', model:'Slim Garrafão 20L · 2 temp', cap:20, type:'Garrafão · gelado + natural', fluid:'R-134a', tension:'127V/220V', power:80, current:'0.7 A', system:'Compacto' },
+  { id:'d22', brand:'Soft', model:'Coluna 35L · 2 torneiras', cap:35, type:'Coluna · gelado + natural', fluid:'R-134a', tension:'127V', power:85, current:'0.7 A', system:'Banho de gelo' }
 ];
 
 let drinkerBrandFilter = 'all';
@@ -6620,17 +6918,8 @@ function renderDrinkers() {
   `).join('');
 }
 
-function filterDrinkerByBrand(el, brand) {
-  document.querySelectorAll('#drinkerChips .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  drinkerBrandFilter = brand;
-  renderDrinkers();
-}
-
-function filterDrinkers() {
-  drinkerSearchQuery = document.getElementById('drinkerSearch').value;
-  renderDrinkers();
-}
+function filterDrinkerByBrand(el, brand) { /* legado — substituído */ }
+function filterDrinkers()               { /* legado — substituído */ }
 
 function showDrinker(id) {
   const d = drinkers.find(x => x.id === id);
@@ -9580,8 +9869,42 @@ const compressorsDB = [
   // Panasonic geladeira
   { id:'c217', brand:'Panasonic', model:'2DS360E1AS', type:'fridge', subtype:'Hermético alternativo', application:'Geladeira Panasonic 300–400 L', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,5 A', power:'155 W', hp:0.21, btu:1250, cop:2.1, displacement:'–', startType:'PTC', oil:'Mineral', weight:'4,6 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'OEM Panasonic' },
 
+  // Mais geladeiras — Brastemp/Consul/Electrolux
+  { id:'c220', brand:'Embraco', model:'EGZS60HLP', type:'fridge', subtype:'Hermético alternativo', application:'Brastemp/Consul 250–300 L', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'0,9 A', power:'70 W', hp:0.09, btu:590, cop:2.0, displacement:'6,0 cm³', startType:'PTC', oil:'Mineral', weight:'3,2 kg', protector:'Interno PTC', temp:'-30 a -5 °C evap.', obs:'Frost Free pequeno' },
+  { id:'c221', brand:'Embraco', model:'EGZS80HLP', type:'fridge', subtype:'Hermético alternativo', application:'Brastemp/Consul 350–400 L', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,1 A', power:'90 W', hp:0.12, btu:750, cop:2.0, displacement:'8,0 cm³', startType:'PTC', oil:'Mineral', weight:'3,8 kg', protector:'Interno PTC', temp:'-30 a -5 °C evap.', obs:'Frost Free médio' },
+  { id:'c222', brand:'Embraco', model:'EGZS100HLP', type:'fridge', subtype:'Hermético alternativo', application:'Brastemp/Consul 450–500 L', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,3 A', power:'110 W', hp:0.15, btu:900, cop:2.0, displacement:'9,8 cm³', startType:'PTC', oil:'Mineral', weight:'4,2 kg', protector:'Interno PTC', temp:'-30 a -5 °C evap.', obs:'Frost Free grande' },
+  { id:'c223', brand:'Embraco', model:'NEAI6212Z', type:'fridge', subtype:'Hermético inverter', application:'Brastemp/Consul 450–600 L inverter', fluid:'R-600a', voltage:'127/220V/1F/60Hz', current:'0,8 A', power:'75 W', hp:0.10, btu:800, cop:3.2, displacement:'6,2 cm³', startType:'Inversor BLDC', oil:'Mineral', weight:'3,5 kg', protector:'Interno NTC', temp:'-35 a -5 °C evap.', obs:'Inverter Next Gen' },
+  { id:'c224', brand:'Tecumseh', model:'CAJ4517Z', type:'fridge', subtype:'Hermético alternativo', application:'Electrolux 300–400 L Frost Free', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,0 A', power:'85 W', hp:0.11, btu:680, cop:2.0, displacement:'4,5 cm³', startType:'PTC', oil:'Mineral', weight:'3,6 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'Electrolux OEM' },
+  { id:'c225', brand:'Tecumseh', model:'CAJ9480Z', type:'fridge', subtype:'Hermético alternativo', application:'Electrolux 450–550 L Side by Side', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,5 A', power:'155 W', hp:0.21, btu:1200, cop:2.0, displacement:'9,4 cm³', startType:'PTC', oil:'Mineral', weight:'5,0 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'Side by Side compressor' },
+  { id:'c226', brand:'Danfoss', model:'SC10CN', type:'fridge', subtype:'Hermético alternativo', application:'Geladeira 200–300 L genérico', fluid:'R-600a', voltage:'115–240V/1F/60Hz', current:'0,8 A', power:'65 W', hp:0.09, btu:520, cop:2.1, displacement:'10,0 cm³', startType:'PTC', oil:'Mineral/POE', weight:'3,1 kg', protector:'Interno', temp:'-35 a -5 °C evap.', obs:'Universal · bi-volt' },
+  { id:'c227', brand:'Danfoss', model:'SC15CN', type:'fridge', subtype:'Hermético alternativo', application:'Geladeira 300–450 L genérico', fluid:'R-600a', voltage:'115–240V/1F/60Hz', current:'1,2 A', power:'100 W', hp:0.13, btu:800, cop:2.1, displacement:'15,0 cm³', startType:'PTC', oil:'Mineral/POE', weight:'4,0 kg', protector:'Interno', temp:'-35 a -5 °C evap.', obs:'Universal · bi-volt' },
+  { id:'c228', brand:'Danfoss', model:'BD35F', type:'fridge', subtype:'Hermético inverter', application:'Geladeira 12/24V · naval/camping', fluid:'R-134a', voltage:'12–24V DC', current:'3,5–8 A', power:'35 W max', hp:0.05, btu:350, cop:2.5, displacement:'1,0 cm³', startType:'Inversor BLDC', oil:'POE', weight:'1,8 kg', protector:'Interno', temp:'-40 a +10 °C evap.', obs:'DC inverter naval/automotivo' },
+
+  // GELADEIRAS — Electrolux (muito popular no Nordeste)
+  { id:'c230', brand:'Electrolux', model:'NE37M', type:'fridge', subtype:'Hermético alternativo', application:'Electrolux Frost Free 305 L (DF35)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,0 A', power:'82 W', hp:0.11, btu:680, cop:2.0, displacement:'–', startType:'PTC', oil:'Mineral', weight:'3,6 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'OEM Electrolux DC35/DF35' },
+  { id:'c231', brand:'Electrolux', model:'NE50M', type:'fridge', subtype:'Hermético alternativo', application:'Electrolux Frost Free 427 L (DF50/DW50)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,4 A', power:'130 W', hp:0.17, btu:1050, cop:2.0, displacement:'–', startType:'PTC', oil:'Mineral', weight:'4,5 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'OEM Electrolux DF50/DW50' },
+  { id:'c232', brand:'Electrolux', model:'NE60M', type:'fridge', subtype:'Hermético alternativo', application:'Electrolux Frost Free 521 L (DT60/DB60)', fluid:'R-600a', voltage:'220V/1F/60Hz', current:'1,6 A', power:'160 W', hp:0.21, btu:1300, cop:2.0, displacement:'–', startType:'PTC', oil:'Mineral', weight:'5,2 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'OEM Electrolux DB60/DT60' },
+  { id:'c233', brand:'Electrolux', model:'VCE16M', type:'fridge', subtype:'Hermético inverter', application:'Electrolux Frost Free Inverter 435 L', fluid:'R-600a', voltage:'127/220V', current:'0,9 A', power:'80 W', hp:0.10, btu:750, cop:3.0, displacement:'–', startType:'Inversor BLDC', oil:'Mineral', weight:'3,8 kg', protector:'Interno NTC', temp:'-35 a -5 °C evap.', obs:'Inverter Electrolux Multi-Air Flow' },
+  { id:'c234', brand:'Electrolux', model:'VCC09', type:'fridge', subtype:'Hermético alternativo', application:'Electrolux Cycle Defrost 240 L (DC35)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'0,8 A', power:'68 W', hp:0.09, btu:560, cop:2.0, displacement:'–', startType:'PTC', oil:'Mineral', weight:'3,2 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'Cycle defrost 2 portas' },
+
+  // GELADEIRAS — Brastemp / Consul
+  { id:'c235', brand:'Brastemp', model:'EGZS80HLP-C', type:'fridge', subtype:'Hermético alternativo', application:'Brastemp Frost Free 378 L (BRM50)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,1 A', power:'95 W', hp:0.13, btu:780, cop:2.0, displacement:'8,0 cm³', startType:'PTC', oil:'Mineral', weight:'3,8 kg', protector:'Interno PTC', temp:'-30 a -5 °C evap.', obs:'OEM Whirlpool/Embraco' },
+  { id:'c236', brand:'Brastemp', model:'EGZS100HLP-C', type:'fridge', subtype:'Hermético alternativo', application:'Brastemp Frost Free 448 L (BRM48/BRM50)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,3 A', power:'115 W', hp:0.15, btu:920, cop:2.0, displacement:'9,8 cm³', startType:'PTC', oil:'Mineral', weight:'4,2 kg', protector:'Interno PTC', temp:'-30 a -5 °C evap.', obs:'BRM48 / BRM50' },
+  { id:'c237', brand:'Brastemp', model:'NEAI6212Z-C', type:'fridge', subtype:'Hermético inverter', application:'Brastemp Frost Free Inverter 462 L', fluid:'R-600a', voltage:'127/220V', current:'0,8 A', power:'72 W', hp:0.10, btu:800, cop:3.2, displacement:'6,2 cm³', startType:'Inversor BLDC', oil:'Mineral', weight:'3,5 kg', protector:'Interno NTC', temp:'-35 a -5 °C evap.', obs:'Inverter Brastemp' },
+  { id:'c238', brand:'Consul', model:'EGZS60HLP-C', type:'fridge', subtype:'Hermético alternativo', application:'Consul Frost Free 300 L (CRM35/CRM37)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'0,9 A', power:'72 W', hp:0.09, btu:600, cop:2.0, displacement:'6,0 cm³', startType:'PTC', oil:'Mineral', weight:'3,2 kg', protector:'Interno PTC', temp:'-30 a -5 °C evap.', obs:'CRM35 / CRM37' },
+  { id:'c239', brand:'Consul', model:'EGZS80HLP-C2', type:'fridge', subtype:'Hermético alternativo', application:'Consul Frost Free 386 L (CRM42/CRM43)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,1 A', power:'92 W', hp:0.12, btu:750, cop:2.0, displacement:'8,0 cm³', startType:'PTC', oil:'Mineral', weight:'3,8 kg', protector:'Interno PTC', temp:'-30 a -5 °C evap.', obs:'CRM42 / CRM43' },
+  { id:'c240', brand:'Consul', model:'AHC0006X', type:'fridge', subtype:'Hermético alternativo', application:'Consul Cycle Defrost 261 L (CRC28)', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'0,8 A', power:'65 W', hp:0.09, btu:540, cop:2.0, displacement:'–', startType:'PTC', oil:'Mineral', weight:'3,0 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'2 portas cycle defrost' },
+
+  // GELADEIRAS — Bosch
+  { id:'c241', brand:'Bosch', model:'K21R46', type:'fridge', subtype:'Hermético alternativo', application:'Bosch Frost Free 440 L', fluid:'R-600a', voltage:'127/220V', current:'1,2 A', power:'105 W', hp:0.14, btu:850, cop:2.1, displacement:'–', startType:'PTC', oil:'Mineral', weight:'4,0 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'OEM Bosch · bi-volt' },
+  { id:'c242', brand:'Bosch', model:'K21R56', type:'fridge', subtype:'Hermético alternativo', application:'Bosch Frost Free 552 L', fluid:'R-600a', voltage:'220V/1F/60Hz', current:'1,5 A', power:'140 W', hp:0.19, btu:1100, cop:2.1, displacement:'–', startType:'PTC', oil:'Mineral', weight:'5,0 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'OEM Bosch' },
+
+  // GELADEIRAS — Mabe / GE
+  { id:'c243', brand:'Mabe', model:'ENM22JGXFSS', type:'fridge', subtype:'Hermético alternativo', application:'Mabe Frost Free 422 L', fluid:'R-600a', voltage:'127V/1F/60Hz', current:'1,2 A', power:'100 W', hp:0.13, btu:800, cop:2.0, displacement:'–', startType:'PTC', oil:'Mineral', weight:'4,0 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'OEM Mabe' },
+  { id:'c244', brand:'Mabe', model:'RMP400FHBU0', type:'fridge', subtype:'Hermético alternativo', application:'Mabe Side by Side 521 L', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'2,0 A', power:'200 W', hp:0.27, btu:1600, cop:2.0, displacement:'–', startType:'PTC', oil:'Mineral', weight:'6,5 kg', protector:'Interno', temp:'-30 a -5 °C evap.', obs:'Side by Side Mabe' },
+
   // ══════════════════════════════════════════
-  // BEBEDOUROS / PURIFICADORES
+  // BEBEDOUROS / PURIFICADORES — banco expandido
   // ══════════════════════════════════════════
   { id:'c301', brand:'Embraco', model:'EMI15HER',   type:'drinker', subtype:'Hermético alternativo', application:'Bebedouro / frigobar leve', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,6 A', power:'50 W',  hp:0.07, btu:400,  cop:1.6, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'1,8 kg', protector:'Interno', temp:'-20 a +5 °C evap.', obs:'Menor compressor Embraco' },
   { id:'c302', brand:'Embraco', model:'EMI25HER',   type:'drinker', subtype:'Hermético alternativo', application:'Bebedouro coluna / pressão', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,8 A', power:'65 W',  hp:0.09, btu:500,  cop:1.7, displacement:'2,5 cm³', startType:'PTC', oil:'Mineral', weight:'2,1 kg', protector:'Interno', temp:'-20 a +5 °C evap.', obs:'' },
@@ -9590,6 +9913,33 @@ const compressorsDB = [
   { id:'c305', brand:'Tecumseh', model:'AE2390Y',   type:'drinker', subtype:'Hermético alternativo', application:'Bebedouro médio',           fluid:'R-134a', voltage:'127V/1F/60Hz', current:'1,0 A', power:'90 W',  hp:0.12, btu:680,  cop:1.7, displacement:'2,3 cm³', startType:'PTC', oil:'Mineral', weight:'2,5 kg', protector:'Interno', temp:'-20 a +5 °C evap.', obs:'Série AE' },
   { id:'c306', brand:'Tecumseh', model:'AE4460Y',   type:'drinker', subtype:'Hermético alternativo', application:'Bebedouro industrial / escritório', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'1,6 A', power:'165 W', hp:0.22, btu:1100, cop:1.8, displacement:'4,4 cm³', startType:'PTC', oil:'Mineral', weight:'4,2 kg', protector:'Interno', temp:'-25 a 0 °C evap.', obs:'Escritório grande' },
   { id:'c307', brand:'Samsung', model:'DS0U003-SER', type:'drinker', subtype:'Hermético alternativo', application:'Purificador Samsung', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,8 A', power:'68 W', hp:0.09, btu:500, cop:1.7, displacement:'–', startType:'PTC', oil:'Mineral', weight:'2,0 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'OEM Samsung purificador' },
+  { id:'c308', brand:'Embraco', model:'EGZS60HLP',  type:'drinker', subtype:'Hermético alternativo', application:'Bebedouro / purificador médio', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,9 A', power:'72 W', hp:0.09, btu:600, cop:1.8, displacement:'6,0 cm³', startType:'PTC', oil:'Mineral', weight:'3,2 kg', protector:'Interno PTC', temp:'-25 a 0 °C evap.', obs:'Versatile Embraco' },
+  { id:'c309', brand:'Danfoss',  model:'TL3G',       type:'drinker', subtype:'Hermético alternativo', application:'Bebedouro coluna / pressão', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,7 A', power:'55 W', hp:0.07, btu:440, cop:1.7, displacement:'3,0 cm³', startType:'PTC', oil:'Mineral', weight:'2,2 kg', protector:'Interno', temp:'-25 a 0 °C evap.', obs:'Série TL Danfoss' },
+  { id:'c310', brand:'Danfoss',  model:'TL4G',       type:'drinker', subtype:'Hermético alternativo', application:'Bebedouro industrial / escritório', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'1,0 A', power:'85 W', hp:0.11, btu:680, cop:1.8, displacement:'4,0 cm³', startType:'PTC', oil:'Mineral', weight:'3,0 kg', protector:'Interno', temp:'-25 a 0 °C evap.', obs:'Série TL Danfoss' },
+  { id:'c311', brand:'Tecumseh', model:'AE1390Y-AA1A', type:'drinker', subtype:'Hermético alternativo', application:'Purificador Consul/Brastemp', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,7 A', power:'58 W', hp:0.08, btu:460, cop:1.7, displacement:'1,3 cm³', startType:'PTC', oil:'Mineral', weight:'1,9 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'OEM Consul/Brastemp' },
+
+  // ESMALTEC — bebedouros de coluna e sem coluna (Nordeste / popular)
+  { id:'c312', brand:'Esmaltec', model:'ECG3', type:'drinker', subtype:'Hermético alternativo', application:'Esmaltec Bebedouro Coluna 3 L/h', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,7 A', power:'55 W', hp:0.07, btu:440, cop:1.6, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'1,9 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Bebedouro de coluna · 3 litros/hora' },
+  { id:'c313', brand:'Esmaltec', model:'ECG5', type:'drinker', subtype:'Hermético alternativo', application:'Esmaltec Bebedouro Coluna 5 L/h', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,9 A', power:'72 W', hp:0.09, btu:560, cop:1.7, displacement:'2,5 cm³', startType:'PTC', oil:'Mineral', weight:'2,2 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Bebedouro de coluna · 5 litros/hora' },
+  { id:'c314', brand:'Esmaltec', model:'ECE3', type:'drinker', subtype:'Hermético alternativo', application:'Esmaltec Bebedouro Mesa / Pressão 3 L/h', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,6 A', power:'50 W', hp:0.07, btu:400, cop:1.6, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'1,8 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Bebedouro pressão / mesa' },
+  { id:'c315', brand:'Esmaltec', model:'ECE5', type:'drinker', subtype:'Hermético alternativo', application:'Esmaltec Bebedouro Mesa / Pressão 5 L/h', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,8 A', power:'65 W', hp:0.09, btu:500, cop:1.7, displacement:'2,0 cm³', startType:'PTC', oil:'Mineral', weight:'2,0 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Bebedouro pressão 5 L/h' },
+  { id:'c316', brand:'Esmaltec', model:'EBCA10', type:'drinker', subtype:'Hermético alternativo', application:'Esmaltec Bebedouro Industrial 10 L/h', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'1,4 A', power:'120 W', hp:0.16, btu:900, cop:1.7, displacement:'4,4 cm³', startType:'PTC', oil:'Mineral', weight:'4,0 kg', protector:'Interno', temp:'-25 a 0 °C evap.', obs:'Industrial coluna 10 L/h' },
+
+  // LATINA — purificadores e bebedouros
+  { id:'c320', brand:'Latina', model:'PA335', type:'drinker', subtype:'Hermético alternativo', application:'Latina Purificador com Refrigeração', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,7 A', power:'58 W', hp:0.08, btu:450, cop:1.7, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'1,9 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Purificador refrigerado Latina' },
+  { id:'c321', brand:'Latina', model:'PA395', type:'drinker', subtype:'Hermético alternativo', application:'Latina Bebedouro/Purificador Plus', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,9 A', power:'72 W', hp:0.09, btu:560, cop:1.7, displacement:'2,0 cm³', startType:'PTC', oil:'Mineral', weight:'2,1 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Latina com aquecimento' },
+
+  // IBBL — referência em purificadores refrigerados
+  { id:'c325', brand:'IBBL', model:'FR600 Immaginare', type:'drinker', subtype:'Hermético alternativo', application:'IBBL Purificador Refrigerado', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,8 A', power:'68 W', hp:0.09, btu:500, cop:1.7, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'2,0 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'IBBL linha Immaginare' },
+  { id:'c326', brand:'IBBL', model:'IMATIC', type:'drinker', subtype:'Hermético alternativo', application:'IBBL Purificador I-Magic', fluid:'R-134a', voltage:'127/220V', current:'0,7 A', power:'58 W', hp:0.08, btu:450, cop:1.7, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'1,9 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'IBBL I-Magic bi-volt' },
+
+  // POLAR — popular no Sul/Sudeste
+  { id:'c330', brand:'Polar', model:'PB1F', type:'drinker', subtype:'Hermético alternativo', application:'Polar Bebedouro 1 Torneira', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,7 A', power:'55 W', hp:0.07, btu:440, cop:1.6, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'1,8 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Bebedouro simples Polar' },
+  { id:'c331', brand:'Polar', model:'PB2F', type:'drinker', subtype:'Hermético alternativo', application:'Polar Bebedouro 2 Torneiras (gel+natural)', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,9 A', power:'72 W', hp:0.09, btu:560, cop:1.7, displacement:'2,0 cm³', startType:'PTC', oil:'Mineral', weight:'2,0 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Gel e natural' },
+
+  // SOFT — linha doméstica
+  { id:'c335', brand:'Soft', model:'SB1C', type:'drinker', subtype:'Hermético alternativo', application:'Soft Bebedouro Coluna 1 torneira', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,7 A', power:'55 W', hp:0.07, btu:440, cop:1.6, displacement:'1,5 cm³', startType:'PTC', oil:'Mineral', weight:'1,8 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Bebedouro coluna doméstico' },
+  { id:'c336', brand:'Soft', model:'SB2C', type:'drinker', subtype:'Hermético alternativo', application:'Soft Bebedouro Coluna 2 torneiras', fluid:'R-134a', voltage:'127V/1F/60Hz', current:'0,9 A', power:'70 W', hp:0.09, btu:550, cop:1.7, displacement:'2,0 cm³', startType:'PTC', oil:'Mineral', weight:'2,0 kg', protector:'Interno', temp:'-20 a 0 °C evap.', obs:'Coluna com quente e gelado' },
 
   // ══════════════════════════════════════════
   // FREEZERS COMERCIAIS
@@ -9645,6 +9995,384 @@ const compTypeLabels = {
   fridge: 'Refrigeradores', drinker: 'Bebedouros', freezer: 'Freezers',
   island: 'Ilhas de Refrigeração', auto: 'Automotivo'
 };
+
+/* ============================================
+   RENDER RESIDENCIAL — chips de marca + BTU + acordeões fechados
+   ============================================ */
+const resState = {
+  fridgesContent:  { btu: 0, brand: 'all' },
+  drinkersContent: { btu: 0, brand: 'all' },
+};
+
+function renderResidentialList(containerId, dbType, accentColor) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+
+  const state  = resState[containerId] || { btu: 0, brand: 'all' };
+  const btuVal = state.btu;
+  const brandF = state.brand || 'all';
+
+  let list = compressorsDB.filter(c => c.type === dbType);
+  if (btuVal > 0) { const m = btuVal*0.20; list = list.filter(c => Math.abs(c.btu-btuVal) <= m); }
+  if (brandF !== 'all') list = list.filter(c => c.brand === brandF);
+
+  const allList   = compressorsDB.filter(c => c.type === dbType);
+  const btuOpts   = [...new Set(allList.map(c=>c.btu))].sort((a,b)=>a-b);
+  const allBrands = [...new Set(allList.map(c=>c.brand))].sort();
+
+  const byBrand = {};
+  list.forEach(c => { if (!byBrand[c.brand]) byBrand[c.brand]=[]; byBrand[c.brand].push(c); });
+  Object.values(byBrand).forEach(a => a.sort((a,b)=>a.btu-b.btu));
+  const brands = Object.keys(byBrand).sort();
+
+  const brandChips = [
+    `<div class="chip ${brandF==='all'?'active':''}" onclick="setResBrand('${containerId}','${dbType}','${accentColor}','all')">Todas</div>`,
+    ...allBrands.map(b => `<div class="chip ${brandF===b?'active':''}" onclick="setResBrand('${containerId}','${dbType}','${accentColor}','${b}')">${b}</div>`)
+  ].join('');
+
+  const acordeoes = brands.map(brand => {
+    const ms = byBrand[brand];
+    const range = ms.length>1
+      ? `${ms[0].btu.toLocaleString('pt-BR')} – ${ms[ms.length-1].btu.toLocaleString('pt-BR')} BTU/h`
+      : `${ms[0].btu.toLocaleString('pt-BR')} BTU/h`;
+    const cards = ms.map(c => `
+      <div class="list-card" onclick="showCompressorDetail('${c.id}')" style="margin-bottom:8px">
+        <div class="list-card-icon" style="background:${accentColor}22;color:${accentColor};font-size:10px;font-weight:800;line-height:1.2;text-align:center">
+          ${c.hp>=1?c.hp+'<br>HP':Math.round(c.hp*746)+'<br>W'}
+        </div>
+        <div class="list-card-content">
+          <div class="list-card-title" style="font-family:monospace;font-weight:700">${c.model}</div>
+          <div class="list-card-sub">${c.subtype}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">
+            <span style="font-size:10px;background:${accentColor}22;color:${accentColor};border-radius:4px;padding:2px 6px;font-weight:700">${c.btu.toLocaleString('pt-BR')} BTU/h</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${c.fluid}</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${c.voltage}</span>
+          </div>
+        </div>
+        <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>`).join('');
+    return `
+      <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-icon" style="background:${accentColor}22;color:${accentColor};font-size:14px;font-weight:800;text-align:center">${ms.length}</div>
+          <div class="accordion-title">
+            <div class="accordion-title-main">${brand}</div>
+            <div class="accordion-title-sub">${range}</div>
+          </div>
+          <div class="accordion-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner" style="padding:6px 10px 12px">${cards}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const empty = brands.length===0
+    ? '<div class="note-text" style="text-align:center;padding:24px">Nenhum modelo encontrado.</div>' : '';
+  const dlId = containerId+'Datalist';
+
+  el.innerHTML = `
+    <div class="chip-row" style="margin-bottom:12px">${brandChips}</div>
+    <div style="margin-bottom:14px">
+      <label class="form-label" style="margin-bottom:6px">
+        Filtrar por capacidade
+        ${btuVal>0?`<span style="color:${accentColor};font-weight:700;margin-left:6px">${btuVal.toLocaleString('pt-BR')} BTU/h</span>`:''}
+      </label>
+      <datalist id="${dlId}">${btuOpts.map(v=>`<option value="${v}">${v.toLocaleString('pt-BR')} BTU/h</option>`).join('')}</datalist>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="${containerId}BtuInput" type="number" list="${dlId}" class="form-input" style="flex:1;font-size:14px"
+               placeholder="Ex: 9000 (±20%)" value="${btuVal>0?btuVal:''}"
+               onchange="resState['${containerId}'].btu=parseInt(this.value)||0; renderResidentialList('${containerId}','${dbType}','${accentColor}')">
+        ${btuVal>0?`<button onclick="resState['${containerId}'].btu=0; document.getElementById('${containerId}BtuInput').value=''; renderResidentialList('${containerId}','${dbType}','${accentColor}')"
+          style="padding:8px 14px;background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">✕</button>`:''}
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-mute);margin-bottom:10px">${list.length} modelos · ${brands.length} marcas</div>
+    ${empty}${acordeoes}`;
+}
+
+function setResBrand(containerId, dbType, accentColor, brand) {
+  if (!resState[containerId]) resState[containerId] = { btu:0, brand:'all' };
+  resState[containerId].brand = brand;
+  renderResidentialList(containerId, dbType, accentColor);
+}
+
+/* Estado dos filtros */
+let fridgeCurrentBrand = 'all', fridgeCurrentCap = 0;
+let drinkerCurrentBrand = 'all';
+
+function renderFridges() {
+  const el = document.getElementById('fridgesContent');
+  if (!el) return;
+
+  const brandF = fridgeCurrentBrand;
+  const capV   = fridgeCurrentCap;
+
+  let list = fridges.slice();
+  if (capV > 0) list = list.filter(f => Math.abs(f.cap - capV) <= capV * 0.25);
+  if (brandF !== 'all') list = list.filter(f => f.brand === brandF);
+
+  const allBrands = [...new Set(fridges.map(f => f.brand))].sort();
+  const capOpts   = [...new Set(fridges.map(f => f.cap))].filter(c => c > 0).sort((a,b)=>a-b);
+
+  const byBrand = {};
+  list.forEach(f => { if (!byBrand[f.brand]) byBrand[f.brand]=[]; byBrand[f.brand].push(f); });
+  Object.values(byBrand).forEach(a => a.sort((a,b)=>a.cap-b.cap));
+  const brands = Object.keys(byBrand).sort();
+
+  const chips = ['<div class="chip '+(brandF==='all'?'active':'')+'" onclick="fridgeCurrentBrand=\'all\'; renderFridges()">Todas</div>',
+    ...allBrands.map(b=>`<div class="chip ${brandF===b?'active':''}" onclick="fridgeCurrentBrand='${b}'; renderFridges()">${b}</div>`)
+  ].join('');
+
+  const acordeoes = brands.map(brand => {
+    const ms = byBrand[brand];
+    const capRange = ms.length > 1
+      ? `${ms[0].cap} – ${ms[ms.length-1].cap} L`
+      : `${ms[0].cap} L`;
+    const types = [...new Set(ms.map(m=>m.type))].join(' · ');
+
+    const cards = ms.map(f=>`
+      <div class="list-card" onclick="showFridge('${f.id}')" style="margin-bottom:8px">
+        <div class="list-card-icon" style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:800;text-align:center;line-height:1.1">
+          ${f.cap > 0 ? f.cap+'<br><span style=\'font-size:9px\'>L</span>' : 'PR'}
+        </div>
+        <div class="list-card-content">
+          <div class="list-card-title">${f.model}</div>
+          <div class="list-card-sub">${f.type}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">
+            <span style="font-size:10px;background:#e8f5e9;color:#2e7d32;border-radius:4px;padding:2px 6px;font-weight:700">${f.cap > 0 ? f.cap+' L' : 'Purificador'}</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${f.fluid}</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${f.tech}</span>
+          </div>
+        </div>
+        <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>`).join('');
+
+    return `
+      <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-icon" style="background:#e8f5e9;color:#2e7d32;font-size:14px;font-weight:800;text-align:center">${ms.length}</div>
+          <div class="accordion-title">
+            <div class="accordion-title-main">${brand}</div>
+            <div class="accordion-title-sub">${capRange} · ${types}</div>
+          </div>
+          <div class="accordion-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner" style="padding:6px 10px 12px">${cards}</div></div>
+      </div>`;
+  }).join('');
+
+  const empty = brands.length===0 ? '<div class="note-text" style="text-align:center;padding:24px">Nenhum modelo encontrado.</div>' : '';
+
+  el.innerHTML = `
+    <div class="chip-row" style="margin-bottom:12px">${chips}</div>
+    <div style="margin-bottom:14px">
+      <label class="form-label" style="margin-bottom:6px">
+        Filtrar por capacidade${capV>0?` <span style="color:#2e7d32;font-weight:700">${capV} L</span>`:''}
+      </label>
+      <datalist id="fridgeCapDatalist">${capOpts.map(v=>`<option value="${v}">${v} L</option>`).join('')}</datalist>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="fridgeCapInput" type="number" list="fridgeCapDatalist" class="form-input" style="flex:1;font-size:14px"
+               placeholder="Ex: 400 (±25%)" value="${capV>0?capV:''}"
+               onchange="fridgeCurrentCap=parseInt(this.value)||0; renderFridges()">
+        ${capV>0?`<button onclick="fridgeCurrentCap=0; document.getElementById('fridgeCapInput').value=''; renderFridges()"
+          style="padding:8px 14px;background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">✕</button>`:''}
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-mute);margin-bottom:10px">${list.length} modelo${list.length!==1?'s':''} · ${brands.length} marca${brands.length!==1?'s':''}</div>
+    ${empty}${acordeoes}
+    <div class="section-title" style="margin-top:20px">Solução de problemas</div>
+    <div class="list-card" onclick="openTroubleshoot('fridge')">
+      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="list-card-content">
+        <div class="list-card-title">Solucionador de Geladeiras</div>
+        <div class="list-card-sub">Diagnóstico de defeitos comuns em refrigeradores domésticos</div>
+      </div>
+      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`;
+}
+
+function renderDrinkers() {
+  const el = document.getElementById('drinkersContent');
+  if (!el) return;
+
+  const brandF = drinkerCurrentBrand;
+  let list = brandF === 'all' ? drinkers.slice() : drinkers.filter(d => d.brand === brandF);
+  const allBrands = [...new Set(drinkers.map(d => d.brand))].sort();
+
+  const byBrand = {};
+  list.forEach(d => { if (!byBrand[d.brand]) byBrand[d.brand]=[]; byBrand[d.brand].push(d); });
+  const brands = Object.keys(byBrand).sort();
+
+  const chips = ['<div class="chip '+(brandF==='all'?'active':'')+'" onclick="drinkerCurrentBrand=\'all\'; renderDrinkers()">Todas</div>',
+    ...allBrands.map(b=>`<div class="chip ${brandF===b?'active':''}" onclick="drinkerCurrentBrand='${b}'; renderDrinkers()">${b}</div>`)
+  ].join('');
+
+  const acordeoes = brands.map(brand => {
+    const ms = byBrand[brand];
+    const types = [...new Set(ms.map(m=>m.type))].join(' · ');
+    const cards = ms.map(d=>`
+      <div class="list-card" onclick="showDrinker('${d.id}')" style="margin-bottom:8px">
+        <div class="list-card-icon" style="background:#e3f2fd;color:#0288d1;font-size:10px;font-weight:800;text-align:center;line-height:1.2">
+          ${d.cap > 0 ? d.cap+'<br><span style=\'font-size:9px\'>L</span>' : 'PR'}
+        </div>
+        <div class="list-card-content">
+          <div class="list-card-title">${d.model}</div>
+          <div class="list-card-sub">${d.type}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">
+            <span style="font-size:10px;background:#e3f2fd;color:#0288d1;border-radius:4px;padding:2px 6px;font-weight:700">${d.type.split('·')[0].trim()}</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${d.fluid}</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${d.tension}</span>
+          </div>
+        </div>
+        <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>`).join('');
+
+    return `
+      <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-icon" style="background:#e3f2fd;color:#0288d1;font-size:14px;font-weight:800;text-align:center">${ms.length}</div>
+          <div class="accordion-title">
+            <div class="accordion-title-main">${brand}</div>
+            <div class="accordion-title-sub">${ms.length} modelo${ms.length!==1?'s':''} · ${types}</div>
+          </div>
+          <div class="accordion-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner" style="padding:6px 10px 12px">${cards}</div></div>
+      </div>`;
+  }).join('');
+
+  const empty = brands.length===0 ? '<div class="note-text" style="text-align:center;padding:24px">Nenhum modelo encontrado.</div>' : '';
+
+  el.innerHTML = `
+    <div class="chip-row" style="margin-bottom:12px">${chips}</div>
+    <div style="font-size:12px;color:var(--text-mute);margin-bottom:10px">${list.length} modelo${list.length!==1?'s':''} · ${brands.length} marca${brands.length!==1?'s':''}</div>
+    ${empty}${acordeoes}
+    <div class="section-title" style="margin-top:20px">Solução de problemas</div>
+    <div class="list-card" onclick="openTroubleshoot('drinker')">
+      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="list-card-content">
+        <div class="list-card-title">Solucionador de Bebedouros</div>
+        <div class="list-card-sub">Diagnóstico de defeitos em bebedouros e purificadores</div>
+      </div>
+      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`;
+}
+
+/* ============================================
+   AR CONDICIONADO — chips de marca + BTU + acordeões fechados
+   ============================================ */
+let acCurrentBtu  = 0;
+let acCurrentBrand = 'all';
+
+function renderAC() {
+  const el = document.getElementById('acContent');
+  if (!el) return;
+
+  const btuVal = acCurrentBtu;
+  const brandF = acCurrentBrand;
+
+  let list = models.slice();
+  if (btuVal > 0) { const m = btuVal*0.20; list = list.filter(x => Math.abs(x.cap-btuVal) <= m); }
+  if (brandF !== 'all') list = list.filter(x => x.brand === brandF);
+
+  const btuOpts   = [...new Set(models.map(m=>m.cap))].sort((a,b)=>a-b);
+  const allBrands = [...new Set(models.map(m=>m.brand))].sort();
+
+  const byBrand = {};
+  list.forEach(m => { if (!byBrand[m.brand]) byBrand[m.brand]=[]; byBrand[m.brand].push(m); });
+  Object.values(byBrand).forEach(a => a.sort((a,b)=>a.cap-b.cap));
+  const brands = Object.keys(byBrand).sort();
+
+  const brandChips = [
+    `<div class="chip ${brandF==='all'?'active':''}" onclick="acCurrentBrand='all'; renderAC()">Todas</div>`,
+    ...allBrands.map(b=>`<div class="chip ${brandF===b?'active':''}" onclick="acCurrentBrand='${b}'; renderAC()">${b}</div>`)
+  ].join('');
+
+  const acordeoes = brands.map(brand => {
+    const ms = byBrand[brand];
+    const range = ms.length>1
+      ? `${(ms[0].cap/1000).toFixed(0)}.000 \u2013 ${(ms[ms.length-1].cap/1000).toFixed(0)}.000 BTU/h`
+      : `${ms[0].cap.toLocaleString('pt-BR')} BTU/h`;
+    const types = [...new Set(ms.map(m=>m.type))].join(' \u00b7 ');
+
+    const cards = ms.map(m=>`
+      <div class="list-card" onclick="showModel(${m.id})" style="margin-bottom:8px">
+        <div class="list-card-icon" style="background:#e3f2fd;color:#1976d2;font-size:11px;font-weight:800;text-align:center;line-height:1.1">
+          ${(m.cap/1000).toFixed(0)}K<br><span style="font-size:9px">BTU</span>
+        </div>
+        <div class="list-card-content">
+          <div class="list-card-title">${m.model}</div>
+          <div class="list-card-sub">${m.type}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">
+            <span style="font-size:10px;background:#e3f2fd;color:#1976d2;border-radius:4px;padding:2px 6px;font-weight:700">${m.cap.toLocaleString('pt-BR')} BTU/h</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${m.fluid}</span>
+            <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${m.tension}</span>
+          </div>
+        </div>
+        <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>`).join('');
+
+    // Sem "open" → fechado por padrão
+    return `
+      <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-icon" style="background:#e3f2fd;color:#1976d2;font-size:14px;font-weight:800;text-align:center">${ms.length}</div>
+          <div class="accordion-title">
+            <div class="accordion-title-main">${brand}</div>
+            <div class="accordion-title-sub">${range} \u00b7 ${types}</div>
+          </div>
+          <div class="accordion-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-body-inner" style="padding:6px 10px 12px">${cards}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const empty = brands.length===0
+    ? '<div class="note-text" style="text-align:center;padding:24px">Nenhum modelo encontrado.</div>' : '';
+
+  el.innerHTML = `
+    <div class="chip-row" style="margin-bottom:12px">${brandChips}</div>
+    <div style="margin-bottom:14px">
+      <label class="form-label" style="margin-bottom:6px">
+        Filtrar por capacidade
+        ${btuVal>0?`<span style="color:#1976d2;font-weight:700;margin-left:6px">${btuVal.toLocaleString('pt-BR')} BTU/h</span>`:''}
+      </label>
+      <datalist id="acBtuDatalist">${btuOpts.map(v=>`<option value="${v}">${v.toLocaleString('pt-BR')} BTU/h</option>`).join('')}</datalist>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="acBtuInput" type="number" list="acBtuDatalist" class="form-input" style="flex:1;font-size:14px"
+               placeholder="Ex: 9000 (\u00b120%)" value="${btuVal>0?btuVal:''}"
+               onchange="acCurrentBtu=parseInt(this.value)||0; renderAC()">
+        ${btuVal>0?`<button onclick="acCurrentBtu=0; document.getElementById('acBtuInput').value=''; renderAC()"
+          style="padding:8px 14px;background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">\u2715</button>`:''}
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--text-mute);margin-bottom:10px">${list.length} modelos \u00b7 ${brands.length} marcas</div>
+    ${empty}${acordeoes}
+    <div class="section-title" style="margin-top:20px">Solução de problemas</div>
+    <div class="list-card" onclick="openTroubleshoot('residential')">
+      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <div class="list-card-content">
+        <div class="list-card-title">Solucionador de Ar Condicionado</div>
+        <div class="list-card-sub">Defeitos comuns em splits e ACJs</div>
+      </div>
+      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`;
+}
 
 function renderCompressors(btuOverride) {
   const el = document.getElementById('compressorsContent');
@@ -9710,7 +10438,7 @@ function renderCompressors(btuOverride) {
       </div>`).join('');
 
     return `
-      <div class="accordion open">
+      <div class="accordion">
         <div class="accordion-header" onclick="toggleAccordion(this)">
           <div class="accordion-icon" style="background:#e8f5e9;color:#2e7d32;font-size:14px;font-weight:800;text-align:center">
             ${models.length}
@@ -10582,7 +11310,6 @@ function renderFluidsList() {
    INIT
    ============================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  renderModels();
   renderDiag();
   renderErrorList();
   applySettings();
@@ -10590,7 +11317,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Para garantir, inicializa imediatamente também
-renderModels();
 renderDiag();
 renderErrorList();
 applySettings();
