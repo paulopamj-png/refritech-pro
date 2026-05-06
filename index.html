@@ -2609,16 +2609,32 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
       </div>
 
       <div class="hub-card" onclick="goTo('freezers')">
-        <div class="hub-card-icon" style="background:linear-gradient(135deg, #00b4d8 0%, #0077b6 100%)">
+        <div class="hub-card-icon" style="background:linear-gradient(135deg, #1976d2 0%, #0d47a1 100%)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <path d="M3 12h18M12 3v18"/>
+            <rect x="3" y="6" width="18" height="14" rx="2"/>
+            <path d="M3 10h18M7 6V3M17 6V3M7 14h.01M12 14h.01M17 14h.01"/>
           </svg>
         </div>
         <div class="hub-card-text">
-          <div class="hub-card-title">Freezers e Ilhas</div>
-          <div class="hub-card-sub">Horizontais, verticais, ilhas e expositores comerciais</div>
-          <div class="hub-card-meta">18 modelos · Solucionador</div>
+          <div class="hub-card-title">Freezers Comerciais</div>
+          <div class="hub-card-sub">Horizontais, verticais e cervejeiras</div>
+          <div class="hub-card-meta">36 modelos · 10 marcas</div>
+        </div>
+        <div class="hub-card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div class="hub-card" onclick="goTo('islands')">
+        <div class="hub-card-icon" style="background:linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18h18M3 12h18M7 6h10M5 9h14M5 15h14"/>
+          </svg>
+        </div>
+        <div class="hub-card-text">
+          <div class="hub-card-title">Ilhas e Expositores</div>
+          <div class="hub-card-sub">Sorvetes, frios e multideck</div>
+          <div class="hub-card-meta">22 modelos · 7 marcas</div>
         </div>
         <div class="hub-card-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
@@ -3903,46 +3919,31 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
     <div>
-      <div class="header-title">Freezers e Ilhas</div>
-      <div class="header-subtitle">Comerciais e expositores</div>
+      <div class="header-title">Freezers Comerciais</div>
+      <div class="header-subtitle">Horizontais e verticais</div>
     </div>
   </div>
-  <div class="scroll-area">
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <input type="text" id="freezerSearch" placeholder="Buscar tipo ou marca..." oninput="filterFreezers()">
-    </div>
-
-    <div class="chip-row">
-      <div class="chip active" onclick="filterFreezerByType(this, 'all')">Todos</div>
-      <div class="chip" onclick="filterFreezerByType(this, 'horizontal')">Horizontal</div>
-      <div class="chip" onclick="filterFreezerByType(this, 'vertical')">Vertical</div>
-      <div class="chip" onclick="filterFreezerByType(this, 'ilha')">Ilha</div>
-      <div class="chip" onclick="filterFreezerByType(this, 'expositor')">Expositor</div>
-    </div>
-
-    <div id="freezerList"></div>
-
-    <div class="section-title" style="margin-top:24px">Solução de problemas</div>
-    <div class="list-card" onclick="openTroubleshoot('freezer')">
-      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-        </svg>
-      </div>
-      <div class="list-card-content">
-        <div class="list-card-title">Solucionador de Freezers e Ilhas</div>
-        <div class="list-card-sub">Defeitos comuns em equipamentos comerciais</div>
-      </div>
-      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-    </div>
-  </div>
+  <div class="scroll-area" id="freezersContent"></div>
 </div>
 
 <!-- ============================================
-     DETALHE FREEZER/ILHA
+     ILHAS E EXPOSITORES
+     ============================================ -->
+<div id="islands" class="screen">
+  <div class="header">
+    <button class="header-back" onclick="goTo('commercial')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div>
+      <div class="header-title">Ilhas e Expositores</div>
+      <div class="header-subtitle">Sorvetes, frios e bebidas</div>
+    </div>
+  </div>
+  <div class="scroll-area" id="islandsContent"></div>
+</div>
+
+<!-- ============================================
+     DETALHE FREEZER
      ============================================ -->
 <div id="freezerDetail" class="screen">
   <div class="header">
@@ -3951,10 +3952,26 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
     </button>
     <div>
       <div class="header-title">Dados Técnicos</div>
-      <div class="header-subtitle">Equipamento comercial</div>
+      <div class="header-subtitle">Freezer comercial</div>
     </div>
   </div>
   <div class="scroll-area" id="freezerDetailContent"></div>
+</div>
+
+<!-- ============================================
+     DETALHE ILHA/EXPOSITOR
+     ============================================ -->
+<div id="islandDetail" class="screen">
+  <div class="header">
+    <button class="header-back" onclick="goTo('islands')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div>
+      <div class="header-title">Dados Técnicos</div>
+      <div class="header-subtitle">Ilha / Expositor</div>
+    </div>
+  </div>
+  <div class="scroll-area" id="islandDetailContent"></div>
 </div>
 
 <!-- ============================================
@@ -4073,6 +4090,7 @@ function goTo(id) {
   else if (id === 'refrigerators') renderFridges();
   else if (id === 'drinkers') renderDrinkers();
   else if (id === 'freezers') renderFreezers();
+  else if (id === 'islands') renderIslands();
   else if (id === 'errorCodes') renderErrorList();
   else if (id === 'troubleshoot') renderTroubleshootList();
   else if (id === 'installation') renderInstallation();
@@ -7156,116 +7174,316 @@ function showDrinker(id) {
    FREEZERS E ILHAS COMERCIAIS
    ============================================ */
 const freezers = [
-  // HORIZONTAIS
-  { id: 'fr1', brand: 'Metalfrio', model: 'DA420 Horizontal 411L', cap: 411, fType: 'horizontal', use: 'Dual (frio/conservação)', fluid: 'R-290', power: 200, current: '1.5 A', tension: '127V/220V', defrost: 'Manual' },
-  { id: 'fr2', brand: 'Metalfrio', model: 'DA550 Horizontal 519L', cap: 519, fType: 'horizontal', use: 'Dual', fluid: 'R-290', power: 240, current: '1.8 A', tension: '127V/220V', defrost: 'Manual' },
-  { id: 'fr3', brand: 'Fricon', model: 'HCED 503L Horizontal', cap: 503, fType: 'horizontal', use: 'Congelador comercial', fluid: 'R-134a', tension: '127V/220V', power: 230, current: '1.7 A', defrost: 'Manual' },
-  { id: 'fr4', brand: 'Esmaltec', model: 'ECH500 Horizontal 477L', cap: 477, fType: 'horizontal', use: 'Dual', fluid: 'R-290', power: 215, current: '1.6 A', tension: '127V/220V', defrost: 'Manual' },
-  { id: 'fr5', brand: 'Consul', model: 'CHA31 Horizontal 309L', cap: 309, fType: 'horizontal', use: 'Dual', fluid: 'R-600a', tension: '127V/220V', power: 180, current: '1.3 A', defrost: 'Manual' },
-  { id: 'fr6', brand: 'Brastemp', model: 'BHD41 Horizontal 411L', cap: 411, fType: 'horizontal', use: 'Dual', fluid: 'R-600a', tension: '127V/220V', power: 195, current: '1.5 A', defrost: 'Manual' },
+  // ── METALFRIO ──────────────────────────────────────────
+  { id:'fr1',  brand:'Metalfrio', model:'DA420 Dupla Ação 411L', cap:411, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-290',   tension:'127V/220V', power:200, current:'1.5 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr2',  brand:'Metalfrio', model:'DA550 Dupla Ação 519L', cap:519, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-290',   tension:'127V/220V', power:240, current:'1.8 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr3',  brand:'Metalfrio', model:'DA570 Dupla Ação 565L', cap:565, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-290',   tension:'127V/220V', power:260, current:'1.9 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr4',  brand:'Metalfrio', model:'VF55 Vertical 539L',    cap:539, fType:'vertical',   use:'Congelados -18 °C',    fluid:'R-290',   tension:'220V',       power:350, current:'2.3 A', defrost:'Automático', temp:'-18 °C' },
+  { id:'fr5',  brand:'Metalfrio', model:'VF75 Vertical 730L',    cap:730, fType:'vertical',   use:'Congelados -18 °C',    fluid:'R-404A',  tension:'220V',       power:480, current:'3.2 A', defrost:'Automático', temp:'-18 °C' },
+  { id:'fr6',  brand:'Metalfrio', model:'VC50 Cervejeira 488L',  cap:488, fType:'expositor',  use:'Bebidas 0–7 °C',       fluid:'R-290',   tension:'127V/220V', power:280, current:'1.9 A', defrost:'Automático', temp:'0–7 °C' },
+  { id:'fr7',  brand:'Metalfrio', model:'VB52 Cervejeira 480L',  cap:480, fType:'expositor',  use:'Bebidas 0–7 °C',       fluid:'R-290',   tension:'127V/220V', power:275, current:'1.9 A', defrost:'Automático', temp:'0–7 °C' },
 
-  // VERTICAIS
-  { id: 'fr7', brand: 'Metalfrio', model: 'VF55 Vertical 539L', cap: 539, fType: 'vertical', use: 'Congelados (-18 °C)', fluid: 'R-290', power: 350, current: '2.3 A', tension: '127V/220V', defrost: 'Automático' },
-  { id: 'fr8', brand: 'Fricon', model: 'VCFG 503L Vertical', cap: 503, fType: 'vertical', use: 'Congelados expositor', fluid: 'R-290', power: 380, current: '2.5 A', tension: '220V', defrost: 'Automático' },
-  { id: 'fr9', brand: 'Klimaquip', model: 'VFK500 Vertical', cap: 500, fType: 'vertical', use: 'Resfriados (2 °C)', fluid: 'R-134a', tension: '127V/220V', power: 280, current: '2.0 A', defrost: 'Automático' },
-  { id: 'fr10', brand: 'Refrimate', model: 'CSV 600L Vertical Inox', cap: 600, fType: 'vertical', use: 'Conservador inox', fluid: 'R-404A', tension: '220V', power: 420, current: '2.8 A', defrost: 'Automático' },
+  // ── FRICON ─────────────────────────────────────────────
+  { id:'fr8',  brand:'Fricon',    model:'HCED 503 Horizontal',   cap:503, fType:'horizontal', use:'Congelados -18 °C',    fluid:'R-134a',  tension:'127V/220V', power:230, current:'1.7 A', defrost:'Manual', temp:'-18 °C' },
+  { id:'fr9',  brand:'Fricon',    model:'HCED 700 Horizontal',   cap:700, fType:'horizontal', use:'Congelados -18 °C',    fluid:'R-134a',  tension:'220V',       power:320, current:'2.1 A', defrost:'Manual', temp:'-18 °C' },
+  { id:'fr10', brand:'Fricon',    model:'VCFG 503 Vertical',     cap:503, fType:'vertical',   use:'Congelados expositor', fluid:'R-290',   tension:'220V',       power:380, current:'2.5 A', defrost:'Automático', temp:'-18 °C' },
+  { id:'fr11', brand:'Fricon',    model:'VCFG 700 Vertical',     cap:700, fType:'vertical',   use:'Congelados expositor', fluid:'R-404A',  tension:'220V',       power:520, current:'3.4 A', defrost:'Automático', temp:'-18 °C' },
+  { id:'fr12', brand:'Fricon',    model:'VCFM 503 Expositor',    cap:503, fType:'expositor',  use:'Resfriados expositor', fluid:'R-290',   tension:'127V/220V', power:300, current:'2.0 A', defrost:'Automático', temp:'2–8 °C' },
+  { id:'fr13', brand:'Fricon',    model:'VCMM 450 Bebidas',      cap:450, fType:'expositor',  use:'Bebidas 0–7 °C',       fluid:'R-290',   tension:'127V/220V', power:260, current:'1.8 A', defrost:'Automático', temp:'0–7 °C' },
 
-  // ILHAS
-  { id: 'fr11', brand: 'Metalfrio', model: 'NF50 Ilha 1.500mm', cap: 460, fType: 'ilha', use: 'Sorvetes/congelados (-22 °C)', fluid: 'R-404A', tension: '220V', power: 420, current: '2.8 A', defrost: 'Automático' },
-  { id: 'fr12', brand: 'Fricon', model: 'IFC 1500 Ilha', cap: 470, fType: 'ilha', use: 'Sorvetes', fluid: 'R-404A', tension: '220V', power: 450, current: '3.0 A', defrost: 'Automático' },
-  { id: 'fr13', brand: 'Klimaquip', model: 'IK2000 Ilha 2m', cap: 600, fType: 'ilha', use: 'Sorvetes/congelados', fluid: 'R-404A', tension: '220V', power: 510, current: '3.4 A', defrost: 'Automático' },
+  // ── ESMALTEC ───────────────────────────────────────────
+  { id:'fr14', brand:'Esmaltec',  model:'ECH500 Horizontal 477L', cap:477, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-290', tension:'127V/220V', power:215, current:'1.6 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr15', brand:'Esmaltec',  model:'ECH350 Horizontal 332L', cap:332, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-290', tension:'127V/220V', power:165, current:'1.2 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr16', brand:'Esmaltec',  model:'EVB300 Expositor Bebidas', cap:300, fType:'expositor', use:'Bebidas 2–8 °C', fluid:'R-290',       tension:'127V/220V', power:190, current:'1.4 A', defrost:'Automático', temp:'2–8 °C' },
+  { id:'fr17', brand:'Esmaltec',  model:'EVB450 Expositor Bebidas', cap:450, fType:'expositor', use:'Bebidas 2–8 °C', fluid:'R-290',       tension:'127V/220V', power:240, current:'1.7 A', defrost:'Automático', temp:'2–8 °C' },
 
-  // EXPOSITORES
-  { id: 'fr14', brand: 'Metalfrio', model: 'VB52 Cervejeira 480L', cap: 480, fType: 'expositor', use: 'Bebidas (0–7 °C)', fluid: 'R-290', power: 280, current: '1.9 A', tension: '127V/220V', defrost: 'Automático' },
-  { id: 'fr15', brand: 'Fricon', model: 'VCFM Expositor 503L', cap: 503, fType: 'expositor', use: 'Resfriados expositor', fluid: 'R-290', power: 300, current: '2.0 A', tension: '127V/220V', defrost: 'Automático' },
-  { id: 'fr16', brand: 'Refrimate', model: 'CRV600 Expositor Vertical', cap: 600, fType: 'expositor', use: 'Frios/laticínios', fluid: 'R-134a', tension: '220V', power: 350, current: '2.3 A', defrost: 'Automático' },
-  { id: 'fr17', brand: 'Polo Frio', model: 'VC400 Expositor 400L', cap: 400, fType: 'expositor', use: 'Bebidas', fluid: 'R-290', power: 240, current: '1.7 A', tension: '127V/220V', defrost: 'Automático' },
-  { id: 'fr18', brand: 'Gelopar', model: 'GELP-450 Expositor', cap: 450, fType: 'expositor', use: 'Cervejeira', fluid: 'R-290', power: 270, current: '1.8 A', tension: '127V/220V', defrost: 'Automático' }
+  // ── CONSUL / BRASTEMP ──────────────────────────────────
+  { id:'fr18', brand:'Consul',    model:'CHA31 Horizontal 309L', cap:309, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-600a', tension:'127V/220V', power:180, current:'1.3 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr19', brand:'Consul',    model:'CHA22 Horizontal 216L', cap:216, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-600a', tension:'127V/220V', power:140, current:'1.0 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr20', brand:'Brastemp',  model:'BHD41 Horizontal 411L', cap:411, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-600a', tension:'127V/220V', power:195, current:'1.5 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr21', brand:'Brastemp',  model:'BHD56 Horizontal 519L', cap:519, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-600a', tension:'127V/220V', power:235, current:'1.7 A', defrost:'Manual', temp:'0 / -18 °C' },
+
+  // ── KLIMAQUIP ──────────────────────────────────────────
+  { id:'fr22', brand:'Klimaquip', model:'VFK500 Vertical Frios',  cap:500, fType:'vertical',  use:'Resfriados 2 °C',      fluid:'R-134a',  tension:'127V/220V', power:280, current:'2.0 A', defrost:'Automático', temp:'2–8 °C' },
+  { id:'fr23', brand:'Klimaquip', model:'VFK700 Vertical Frios',  cap:700, fType:'vertical',  use:'Resfriados 2 °C',      fluid:'R-134a',  tension:'220V',       power:380, current:'2.5 A', defrost:'Automático', temp:'2–8 °C' },
+  { id:'fr24', brand:'Klimaquip', model:'HFG400 Horizontal',      cap:400, fType:'horizontal', use:'Congelados -18 °C',   fluid:'R-290',   tension:'127V/220V', power:190, current:'1.4 A', defrost:'Manual', temp:'-18 °C' },
+
+  // ── REFRIMATE ──────────────────────────────────────────
+  { id:'fr25', brand:'Refrimate', model:'CSV600 Vertical Inox',   cap:600, fType:'vertical',  use:'Conservador inox',     fluid:'R-404A',  tension:'220V',       power:420, current:'2.8 A', defrost:'Automático', temp:'2–8 °C' },
+  { id:'fr26', brand:'Refrimate', model:'CRV450 Expositor',       cap:450, fType:'expositor', use:'Frios/laticínios',     fluid:'R-134a',  tension:'220V',       power:320, current:'2.1 A', defrost:'Automático', temp:'2–8 °C' },
+  { id:'fr27', brand:'Refrimate', model:'CRH550 Horizontal',      cap:550, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-134a', tension:'220V',      power:270, current:'1.9 A', defrost:'Manual', temp:'0 / -18 °C' },
+
+  // ── POLO FRIO ──────────────────────────────────────────
+  { id:'fr28', brand:'Polo Frio', model:'VC400 Expositor Bebidas', cap:400, fType:'expositor', use:'Bebidas 0–7 °C',     fluid:'R-290',   tension:'127V/220V', power:240, current:'1.7 A', defrost:'Automático', temp:'0–7 °C' },
+  { id:'fr29', brand:'Polo Frio', model:'HC550 Horizontal',        cap:550, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-290', tension:'127V/220V', power:250, current:'1.8 A', defrost:'Manual', temp:'0 / -18 °C' },
+
+  // ── GELOPAR ────────────────────────────────────────────
+  { id:'fr30', brand:'Gelopar',   model:'GELP-450 Cervejeira',    cap:450, fType:'expositor', use:'Bebidas 0–7 °C',       fluid:'R-290',   tension:'127V/220V', power:270, current:'1.8 A', defrost:'Automático', temp:'0–7 °C' },
+  { id:'fr31', brand:'Gelopar',   model:'GRBA-400GW Horizontal',  cap:400, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-600a', tension:'127V/220V', power:185, current:'1.4 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr32', brand:'Gelopar',   model:'GEFR-300 Vertical',      cap:300, fType:'vertical',  use:'Congelados -18 °C',    fluid:'R-134a',  tension:'127V/220V', power:240, current:'1.6 A', defrost:'Automático', temp:'-18 °C' },
+
+  // ── INDREL ─────────────────────────────────────────────
+  { id:'fr33', brand:'Indrel',    model:'INDB600 Horizontal',     cap:600, fType:'horizontal', use:'Dual · frio/congelado', fluid:'R-290', tension:'127V/220V', power:280, current:'2.0 A', defrost:'Manual', temp:'0 / -18 °C' },
+  { id:'fr34', brand:'Indrel',    model:'INVC500 Vertical',       cap:500, fType:'vertical',  use:'Congelados -18 °C',    fluid:'R-290',   tension:'220V',       power:360, current:'2.4 A', defrost:'Automático', temp:'-18 °C' },
+
+  // ── HUSSMANN ───────────────────────────────────────────
+  { id:'fr35', brand:'Hussmann',  model:'LGD Vertical Multideck', cap:800, fType:'vertical',  use:'Laticínios/frios',     fluid:'R-404A',  tension:'220V/3F',    power:800, current:'3.5 A', defrost:'Automático', temp:'2–4 °C' },
+  { id:'fr36', brand:'Hussmann',  model:'ITH Horizontal Inox',    cap:620, fType:'horizontal', use:'Sorvetes -22 °C',     fluid:'R-404A',  tension:'220V',       power:520, current:'3.5 A', defrost:'Manual', temp:'-22 °C' }
 ];
 
-let freezerTypeFilter = 'all';
-let freezerSearchQuery = '';
+/* ── DB de Ilhas e Expositores (separado) ─── */
+const islands = [
+  // ── METALFRIO ──────────────────────────────────────────
+  { id:'il1',  brand:'Metalfrio', model:'NF50 Ilha Sorvetes 1,5m', cap:460, iType:'ilha',      use:'Sorvetes/congelados -22 °C', fluid:'R-404A',  tension:'220V',       power:420, current:'2.8 A', defrost:'Automático', temp:'-22 °C', length:'1500 mm' },
+  { id:'il2',  brand:'Metalfrio', model:'NF75 Ilha Sorvetes 2,2m', cap:680, iType:'ilha',      use:'Sorvetes/congelados -22 °C', fluid:'R-404A',  tension:'220V',       power:560, current:'3.7 A', defrost:'Automático', temp:'-22 °C', length:'2200 mm' },
+  { id:'il3',  brand:'Metalfrio', model:'VC50 Expositor Frios 1,5m', cap:480, iType:'expositor', use:'Frios/laticínios 2–6 °C', fluid:'R-404A',  tension:'220V',       power:480, current:'3.2 A', defrost:'Automático', temp:'2–6 °C', length:'1500 mm' },
+  { id:'il4',  brand:'Metalfrio', model:'VC75 Expositor Frios 2,2m', cap:720, iType:'expositor', use:'Frios/laticínios 2–6 °C', fluid:'R-404A',  tension:'220V',       power:650, current:'4.3 A', defrost:'Automático', temp:'2–6 °C', length:'2200 mm' },
 
-function renderFreezers() {
-  const list = document.getElementById('freezerList');
-  if (!list) return;
-  const filtered = freezers.filter(f => {
-    const typeOk = freezerTypeFilter === 'all' || f.fType === freezerTypeFilter;
-    const q = freezerSearchQuery.toLowerCase();
-    const searchOk = !q || f.brand.toLowerCase().includes(q) || f.model.toLowerCase().includes(q) || f.use.toLowerCase().includes(q);
-    return typeOk && searchOk;
-  });
-  if (filtered.length === 0) {
-    list.innerHTML = '<div class="note-text" style="text-align:center;padding:24px">Nenhum equipamento encontrado.</div>';
-    return;
-  }
-  const typeLabels = { horizontal: 'Horizontais', vertical: 'Verticais', ilha: 'Ilhas', expositor: 'Expositores' };
-  list.innerHTML = `
-    <div class="alert-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <div class="alert-box-text">${filtered.length} equipamentos comerciais. Toque para ver dados técnicos completos, esquema elétrico e instalação.</div>
-    </div>
-  ` + filtered.map(f => `
-    <div class="list-card" onclick="showFreezer('${f.id}')">
-      <div class="list-card-icon">${f.cap}L</div>
+  // ── FRICON ─────────────────────────────────────────────
+  { id:'il5',  brand:'Fricon',    model:'IFC 1500 Ilha Sorvetes',  cap:470, iType:'ilha',      use:'Sorvetes -22 °C',          fluid:'R-404A',  tension:'220V',       power:450, current:'3.0 A', defrost:'Automático', temp:'-22 °C', length:'1500 mm' },
+  { id:'il6',  brand:'Fricon',    model:'IFC 2000 Ilha Sorvetes',  cap:640, iType:'ilha',      use:'Sorvetes -22 °C',          fluid:'R-404A',  tension:'220V',       power:580, current:'3.8 A', defrost:'Automático', temp:'-22 °C', length:'2000 mm' },
+  { id:'il7',  brand:'Fricon',    model:'IFC 2500 Ilha Sorvetes',  cap:800, iType:'ilha',      use:'Sorvetes -22 °C',          fluid:'R-404A',  tension:'220V/3F',    power:720, current:'4.8 A', defrost:'Automático', temp:'-22 °C', length:'2500 mm' },
+  { id:'il8',  brand:'Fricon',    model:'EFC 1500 Expositor Frios', cap:450, iType:'expositor', use:'Frios/laticínios 2–4 °C', fluid:'R-404A',  tension:'220V',       power:460, current:'3.1 A', defrost:'Automático', temp:'2–4 °C', length:'1500 mm' },
+  { id:'il9',  brand:'Fricon',    model:'EFC 2000 Expositor Frios', cap:620, iType:'expositor', use:'Frios/laticínios 2–4 °C', fluid:'R-404A',  tension:'220V',       power:600, current:'4.0 A', defrost:'Automático', temp:'2–4 °C', length:'2000 mm' },
+
+  // ── KLIMAQUIP ──────────────────────────────────────────
+  { id:'il10', brand:'Klimaquip', model:'IK2000 Ilha 2m Sorvetes', cap:600, iType:'ilha',      use:'Sorvetes/congelados -22 °C', fluid:'R-404A', tension:'220V',       power:510, current:'3.4 A', defrost:'Automático', temp:'-22 °C', length:'2000 mm' },
+  { id:'il11', brand:'Klimaquip', model:'IK3000 Ilha 3m Sorvetes', cap:900, iType:'ilha',      use:'Sorvetes/congelados -22 °C', fluid:'R-404A', tension:'220V/3F',    power:720, current:'4.8 A', defrost:'Automático', temp:'-22 °C', length:'3000 mm' },
+  { id:'il12', brand:'Klimaquip', model:'EK2000 Expositor 2m',     cap:580, iType:'expositor', use:'Frios/laticínios 2–6 °C',   fluid:'R-134a', tension:'220V',       power:480, current:'3.2 A', defrost:'Automático', temp:'2–6 °C', length:'2000 mm' },
+
+  // ── HUSSMANN ───────────────────────────────────────────
+  { id:'il13', brand:'Hussmann',  model:'Ozti Ilha 1,5m',          cap:500, iType:'ilha',      use:'Congelados -22 °C',         fluid:'R-404A',  tension:'220V',       power:480, current:'3.2 A', defrost:'Automático', temp:'-22 °C', length:'1500 mm' },
+  { id:'il14', brand:'Hussmann',  model:'Ozti Ilha 2m',            cap:680, iType:'ilha',      use:'Congelados -22 °C',         fluid:'R-404A',  tension:'220V',       power:600, current:'4.0 A', defrost:'Automático', temp:'-22 °C', length:'2000 mm' },
+  { id:'il15', brand:'Hussmann',  model:'Multideck 1,8m Frios',    cap:540, iType:'expositor', use:'Laticínios/frios 2–4 °C',   fluid:'R-404A',  tension:'220V',       power:560, current:'3.7 A', defrost:'Automático', temp:'2–4 °C', length:'1800 mm' },
+  { id:'il16', brand:'Hussmann',  model:'Multideck 2,5m Frios',    cap:750, iType:'expositor', use:'Laticínios/frios 2–4 °C',   fluid:'R-404A',  tension:'220V/3F',    power:750, current:'5.0 A', defrost:'Automático', temp:'2–4 °C', length:'2500 mm' },
+
+  // ── REFRIMATE ──────────────────────────────────────────
+  { id:'il17', brand:'Refrimate', model:'IL1500 Ilha Sorvetes',    cap:470, iType:'ilha',      use:'Sorvetes -22 °C',           fluid:'R-404A',  tension:'220V',       power:440, current:'2.9 A', defrost:'Automático', temp:'-22 °C', length:'1500 mm' },
+  { id:'il18', brand:'Refrimate', model:'IL2000 Ilha Sorvetes',    cap:640, iType:'ilha',      use:'Sorvetes -22 °C',           fluid:'R-404A',  tension:'220V',       power:570, current:'3.8 A', defrost:'Automático', temp:'-22 °C', length:'2000 mm' },
+  { id:'il19', brand:'Refrimate', model:'EX1500 Expositor Frios',  cap:450, iType:'expositor', use:'Frios/laticínios 2–6 °C',   fluid:'R-134a',  tension:'220V',       power:430, current:'2.9 A', defrost:'Automático', temp:'2–6 °C', length:'1500 mm' },
+
+  // ── GELOPAR ────────────────────────────────────────────
+  { id:'il20', brand:'Gelopar',   model:'GIL1500 Ilha 1,5m',       cap:460, iType:'ilha',      use:'Sorvetes/congelados -22 °C', fluid:'R-404A', tension:'220V',       power:430, current:'2.8 A', defrost:'Automático', temp:'-22 °C', length:'1500 mm' },
+  { id:'il21', brand:'Gelopar',   model:'GEX1500 Expositor 1,5m',  cap:440, iType:'expositor', use:'Frios/laticínios 2–6 °C',   fluid:'R-134a', tension:'220V',       power:410, current:'2.7 A', defrost:'Automático', temp:'2–6 °C', length:'1500 mm' },
+  { id:'il22', brand:'Gelopar',   model:'GEX2000 Expositor 2m',    cap:600, iType:'expositor', use:'Frios/laticínios 2–6 °C',   fluid:'R-134a', tension:'220V',       power:550, current:'3.6 A', defrost:'Automático', temp:'2–6 °C', length:'2000 mm' }
+];
+
+/* ─────────────────────────────────────────────────────────
+   Estado dos filtros
+   ───────────────────────────────────────────────────────── */
+let freezerCurrentBrand = 'all', freezerCurrentType = 'all', freezerCurrentCap = 0;
+let islandCurrentBrand  = 'all', islandCurrentType  = 'all';
+
+/* ─────────────────────────────────────────────────────────
+   Helper: gera card de equipamento comercial
+   ───────────────────────────────────────────────────────── */
+function makeCommCard(item, onclick, accentColor) {
+  return `
+    <div class="list-card" onclick="${onclick}" style="margin-bottom:8px">
+      <div class="list-card-icon" style="background:${accentColor}22;color:${accentColor};font-size:11px;font-weight:800;text-align:center;line-height:1.1">
+        ${item.cap}<br><span style="font-size:9px">L</span>
+      </div>
       <div class="list-card-content">
-        <div class="list-card-title">${f.brand} · ${f.model.replace(f.brand,'').trim()}</div>
-        <div class="list-card-sub">${f.use} · ${f.fluid}</div>
+        <div class="list-card-title">${item.model}</div>
+        <div class="list-card-sub">${item.use}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:3px">
+          <span style="font-size:10px;background:${accentColor}22;color:${accentColor};border-radius:4px;padding:2px 6px;font-weight:700">${item.fluid}</span>
+          <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${item.tension}</span>
+          <span style="font-size:10px;background:var(--bg-soft);border-radius:4px;padding:2px 5px;color:var(--text-mute)">${item.temp}</span>
+        </div>
       </div>
       <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`;
+}
+
+/* Helper: gera acordeão por marca */
+function makeCommAcordeon(byBrand, brands, onclick, accentColor) {
+  return brands.map(brand => {
+    const ms = byBrand[brand];
+    const capRange = ms.length > 1
+      ? `${ms[0].cap} – ${ms[ms.length-1].cap} L`
+      : `${ms[0].cap} L`;
+    const cards = ms.map(m => makeCommCard(m, `${onclick}('${m.id}')`, accentColor)).join('');
+    return `
+      <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-icon" style="background:${accentColor}22;color:${accentColor};font-size:14px;font-weight:800;text-align:center">${ms.length}</div>
+          <div class="accordion-title">
+            <div class="accordion-title-main">${brand}</div>
+            <div class="accordion-title-sub">${capRange} · ${[...new Set(ms.map(m=>m.use.split('·')[0].trim()))].join(' · ')}</div>
+          </div>
+          <div class="accordion-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+        </div>
+        <div class="accordion-body"><div class="accordion-body-inner" style="padding:6px 10px 12px">${cards}</div></div>
+      </div>`;
+  }).join('');
+}
+
+/* ─────────────────────────────────────────────────────────
+   renderFreezers — padrão residencial
+   ───────────────────────────────────────────────────────── */
+function renderFreezers() {
+  const el = document.getElementById('freezersContent');
+  if (!el) return;
+
+  const accentColor = '#1565c0';
+  const typeMap = { horizontal:'Horizontal', vertical:'Vertical', expositor:'Expositor/Cervejeira' };
+
+  let list = freezers.slice();
+  if (freezerCurrentBrand !== 'all') list = list.filter(f => f.brand === freezerCurrentBrand);
+  if (freezerCurrentType  !== 'all') list = list.filter(f => f.fType === freezerCurrentType);
+  if (freezerCurrentCap   > 0) { const m = freezerCurrentCap*0.25; list = list.filter(f => Math.abs(f.cap-freezerCurrentCap) <= m); }
+
+  const allBrands = [...new Set(freezers.map(f=>f.brand))].sort();
+  const allTypes  = ['horizontal','vertical','expositor'];
+  const capOpts   = [...new Set(freezers.map(f=>f.cap))].sort((a,b)=>a-b);
+
+  const byBrand = {};
+  list.forEach(f => { if(!byBrand[f.brand]) byBrand[f.brand]=[]; byBrand[f.brand].push(f); });
+  Object.values(byBrand).forEach(a => a.sort((a,b)=>a.cap-b.cap));
+  const brands = Object.keys(byBrand).sort();
+
+  const brandChips = ['<div class="chip '+(freezerCurrentBrand==='all'?'active':'')+'" onclick="freezerCurrentBrand=\'all\'; renderFreezers()">Todas</div>',
+    ...allBrands.map(b=>`<div class="chip ${freezerCurrentBrand===b?'active':''}" onclick="freezerCurrentBrand='${b}'; renderFreezers()">${b}</div>`)
+  ].join('');
+
+  const typeChips = ['<div class="chip '+(freezerCurrentType==='all'?'active':'')+'" onclick="freezerCurrentType=\'all\'; renderFreezers()">Todos</div>',
+    ...allTypes.map(t=>`<div class="chip ${freezerCurrentType===t?'active':''}" onclick="freezerCurrentType='${t}'; renderFreezers()">${typeMap[t]}</div>`)
+  ].join('');
+
+  const acordeoes = makeCommAcordeon(byBrand, brands, 'showFreezer', accentColor);
+  const empty = brands.length===0 ? '<div class="note-text" style="text-align:center;padding:24px">Nenhum modelo encontrado.</div>' : '';
+
+  el.innerHTML = `
+    <div class="chip-row" style="margin-bottom:6px">${brandChips}</div>
+    <div class="chip-row" style="margin-bottom:12px">${typeChips}</div>
+    <div style="margin-bottom:14px">
+      <label class="form-label" style="margin-bottom:6px">Filtrar por capacidade${freezerCurrentCap>0?` <span style="color:${accentColor};font-weight:700">${freezerCurrentCap} L</span>`:''}</label>
+      <datalist id="freezerCapDL">${capOpts.map(v=>`<option value="${v}">${v} L</option>`).join('')}</datalist>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="freezerCapInput" type="number" list="freezerCapDL" class="form-input" style="flex:1;font-size:14px"
+               placeholder="Ex: 500 (±25%)" value="${freezerCurrentCap>0?freezerCurrentCap:''}"
+               onchange="freezerCurrentCap=parseInt(this.value)||0; renderFreezers()">
+        ${freezerCurrentCap>0?`<button onclick="freezerCurrentCap=0; document.getElementById('freezerCapInput').value=''; renderFreezers()"
+          style="padding:8px 14px;background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">✕</button>`:''}
+      </div>
     </div>
-  `).join('');
+    <div style="font-size:12px;color:var(--text-mute);margin-bottom:10px">${list.length} modelo${list.length!==1?'s':''} · ${brands.length} marca${brands.length!==1?'s':''}</div>
+    ${empty}${acordeoes}
+    <div class="section-title" style="margin-top:20px">Solução de problemas</div>
+    <div class="list-card" onclick="openTroubleshoot('freezer')">
+      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="list-card-content">
+        <div class="list-card-title">Solucionador de Freezers</div>
+        <div class="list-card-sub">Defeitos comuns em congeladores e cervejeiras</div>
+      </div>
+      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`;
 }
 
-function filterFreezerByType(el, type) {
-  document.querySelectorAll('#freezers .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  freezerTypeFilter = type;
-  renderFreezers();
+/* ─────────────────────────────────────────────────────────
+   renderIslands — ilhas e expositores
+   ───────────────────────────────────────────────────────── */
+function renderIslands() {
+  const el = document.getElementById('islandsContent');
+  if (!el) return;
+
+  const accentColor = '#6a1b9a';
+  const typeMap = { ilha:'Ilha de sorvetes', expositor:'Expositor/Multideck' };
+
+  let list = islands.slice();
+  if (islandCurrentBrand !== 'all') list = list.filter(i => i.brand === islandCurrentBrand);
+  if (islandCurrentType  !== 'all') list = list.filter(i => i.iType === islandCurrentType);
+
+  const allBrands = [...new Set(islands.map(i=>i.brand))].sort();
+  const allTypes  = ['ilha','expositor'];
+
+  const byBrand = {};
+  list.forEach(i => { if(!byBrand[i.brand]) byBrand[i.brand]=[]; byBrand[i.brand].push(i); });
+  Object.values(byBrand).forEach(a => a.sort((a,b)=>a.cap-b.cap));
+  const brands = Object.keys(byBrand).sort();
+
+  const brandChips = ['<div class="chip '+(islandCurrentBrand==='all'?'active':'')+'" onclick="islandCurrentBrand=\'all\'; renderIslands()">Todas</div>',
+    ...allBrands.map(b=>`<div class="chip ${islandCurrentBrand===b?'active':''}" onclick="islandCurrentBrand='${b}'; renderIslands()">${b}</div>`)
+  ].join('');
+
+  const typeChips = ['<div class="chip '+(islandCurrentType==='all'?'active':'')+'" onclick="islandCurrentType=\'all\'; renderIslands()">Todos</div>',
+    ...allTypes.map(t=>`<div class="chip ${islandCurrentType===t?'active':''}" onclick="islandCurrentType='${t}'; renderIslands()">${typeMap[t]}</div>`)
+  ].join('');
+
+  const acordeoes = makeCommAcordeon(byBrand, brands, 'showIsland', accentColor);
+  const empty = brands.length===0 ? '<div class="note-text" style="text-align:center;padding:24px">Nenhum modelo encontrado.</div>' : '';
+
+  el.innerHTML = `
+    <div class="chip-row" style="margin-bottom:6px">${brandChips}</div>
+    <div class="chip-row" style="margin-bottom:12px">${typeChips}</div>
+    <div style="font-size:12px;color:var(--text-mute);margin-bottom:10px">${list.length} modelo${list.length!==1?'s':''} · ${brands.length} marca${brands.length!==1?'s':''}</div>
+    ${empty}${acordeoes}
+    <div style="background:#f3e5f5;border:1px solid #ce93d8;border-radius:10px;padding:12px 14px;margin-top:4px;margin-bottom:12px;font-size:12px;color:#4a148c;line-height:1.5">
+      ⚠️ <strong>Atenção:</strong> em ilhas de sorvete, respeite a <strong>linha de carga</strong> marcada no equipamento. Ultrapassar reduz drasticamente a refrigeração e danifica o produto. Cortinas plásticas devem estar íntegras e sobrepostas.
+    </div>
+    <div class="section-title" style="margin-top:8px">Solução de problemas</div>
+    <div class="list-card" onclick="openTroubleshoot('freezer')">
+      <div class="list-card-icon" style="background:#fff5e6;color:#f4a261">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="list-card-content">
+        <div class="list-card-title">Solucionador de Ilhas e Expositores</div>
+        <div class="list-card-sub">Defeitos comuns em equipamentos comerciais</div>
+      </div>
+      <div class="list-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`;
 }
 
-function filterFreezers() {
-  freezerSearchQuery = document.getElementById('freezerSearch').value;
-  renderFreezers();
-}
-
+/* ─────────────────────────────────────────────────────────
+   showIsland — ficha técnica de ilha/expositor
+   ───────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────
+   showFreezer — ficha técnica de freezer comercial
+   ───────────────────────────────────────────────────────── */
 function showFreezer(id) {
   const f = freezers.find(x => x.id === id);
   if (!f) return;
   const current = parseFloat(f.current);
   const breaker = current < 5 ? '10 A' : (current < 10 ? '16 A' : (current < 16 ? '20 A' : '25 A'));
-  const cable = current < 8 ? '2,5 mm²' : (current < 16 ? '4,0 mm²' : '6,0 mm²');
-  const isCongel = f.use.includes('-18') || f.use.includes('-22') || f.use.includes('Sorvetes') || f.use.includes('Congel');
+  const cable   = current < 8 ? '2,5 mm²' : (current < 16 ? '4,0 mm²' : '6,0 mm²');
+  const isCongelado = f.use.includes('-18') || f.use.includes('-22') || f.use.includes('Sorv') || f.use.includes('Cong');
 
-  // Recomendações baseadas no tipo
-  let installNotes = '';
-  if (f.fType === 'horizontal') {
-    installNotes = 'Distância mínima da parede: 10 cm nos lados, 15 cm no fundo. Local ventilado, longe de fontes de calor (forno, fritadeira, sol direto). Nivelamento obrigatório.';
-  } else if (f.fType === 'vertical') {
-    installNotes = 'Distância mínima: 10 cm dos lados e fundo, 30 cm em cima (para troca térmica). Verificar carga máxima por prateleira. Cortinas/portas devem fechar perfeitamente.';
-  } else if (f.fType === 'ilha') {
-    installNotes = 'Carga até a linha indicada (acima reduz drasticamente a refrigeração). Cortinas plásticas sobrepostas. Não posicionar próximo a entradas de ar quente, portas externas ou fritadeiras.';
-  } else {
-    installNotes = 'Local ventilado para o condensador. Distância mínima 15 cm nas laterais. Cuidado com luz solar direta na vitrine (carga térmica adicional). Verificar drenagem do condensado.';
-  }
+  let installNote = '';
+  if (f.fType === 'horizontal') installNote = 'Mín. 10 cm nos lados e 15 cm no fundo. Local ventilado, longe de fornos e fritadeiras. Nivelamento obrigatório.';
+  else if (f.fType === 'vertical') installNote = 'Mín. 10 cm dos lados/fundo, 30 cm em cima. Portas/cortinas devem fechar perfeitamente. Verificar carga por prateleira.';
+  else installNote = 'Local ventilado para o condensador. Mín. 15 cm nas laterais. Evitar sol direto na vitrine. Verificar drenagem do condensado.';
+
+  const errors = getErrorsForBrand(f.brand);
+  const errHtml = errors.length
+    ? errors.map(e => `
+        <div class="error-code-card">
+          <div class="error-code-badge">${e.code}</div>
+          <div class="error-code-content">
+            <div class="error-code-title">${e.title}</div>
+            <div class="error-code-causes"><strong>Causas:</strong> ${e.causes.join(' · ')}</div>
+            <div class="error-code-actions"><strong>Ações:</strong> ${e.actions.join(' · ')}</div>
+          </div>
+        </div>`).join('')
+    : '<div class="note-text">Sem códigos de erro registrados para esta marca.</div>';
 
   document.getElementById('freezerDetailContent').innerHTML = `
     <div class="detail-hero">
       <div class="detail-hero-brand">${f.brand}</div>
-      <div class="detail-hero-model">${f.model.replace(f.brand,'').trim()}</div>
+      <div class="detail-hero-model">${f.model}</div>
       <div class="detail-hero-cap">${f.cap} L · ${f.use}</div>
       <div class="detail-hero-tags">
         <span class="detail-hero-tag">${f.fluid}</span>
         <span class="detail-hero-tag">${f.tension}</span>
         <span class="detail-hero-tag">Degelo ${f.defrost}</span>
+        <span class="detail-hero-tag">${f.temp}</span>
       </div>
     </div>
 
     <div class="spec-card">
-      <div class="spec-card-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Instalação Elétrica
-      </div>
+      <div class="spec-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Instalação Elétrica</div>
       <div class="spec-row"><span class="spec-row-label">Tensão</span><span class="spec-row-value">${f.tension}</span></div>
       <div class="spec-row"><span class="spec-row-label">Potência</span><span class="spec-row-value">${f.power} W</span></div>
       <div class="spec-row"><span class="spec-row-label">Corrente</span><span class="spec-row-value">${f.current}</span></div>
@@ -7277,159 +7495,111 @@ function showFreezer(id) {
 
     <div class="alert-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-      <div class="alert-box-text"><strong>Circuito exclusivo</strong> conforme NBR 5410. Aterramento obrigatório. Em supermercados, usar quadro de força específico para refrigeração com seletora bypass (manutenção sem desligar tudo).</div>
+      <div class="alert-box-text"><strong>Circuito exclusivo</strong> conforme NBR 5410. Aterramento obrigatório. ${installNote}</div>
     </div>
 
     <div class="spec-card">
-      <div class="spec-card-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4 4 0 105 0z"/></svg>
-        Sistema Frigorífico
-      </div>
-      <div class="spec-row"><span class="spec-row-label">Compressor</span><span class="spec-row-value">${isCongel ? 'Hermético LBP' : 'Hermético MBP/HBP'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Tipo</span><span class="spec-row-value">${f.power > 350 ? 'Scroll/alternativo' : 'Alternativo'}</span></div>
+      <div class="spec-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4 4 0 105 0z"/></svg> Sistema Frigorífico</div>
       <div class="spec-row"><span class="spec-row-label">Fluido</span><span class="spec-row-value">${f.fluid}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Carga típica</span><span class="spec-row-value">${f.fluid === 'R-290' ? '50–150 g' : (f.fluid === 'R-600a' ? '40–100 g' : '200–600 g')}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Capilar/expansão</span><span class="spec-row-value">${f.power > 350 ? 'VET ou capilar' : 'Capilar'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Filtro secador</span><span class="spec-row-value">XH-7/9 (1/4"–3/8")</span></div>
-      <div class="spec-row"><span class="spec-row-label">Pressão sucção</span><span class="spec-row-value">${isCongel ? '2–10 PSI' : '15–35 PSI'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Pressão descarga</span><span class="spec-row-value">${f.fluid === 'R-404A' ? '220–280 PSI' : '120–180 PSI'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Evaporador</span><span class="spec-row-value">${f.fType === 'expositor' || f.fType === 'vertical' ? 'Cubic forçado' : 'Serpentina natural'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Condensador</span><span class="spec-row-value">${f.power > 300 ? 'Forçado' : 'Estático/forçado'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Carga típica</span><span class="spec-row-value">${f.fluid==='R-290'?'50–150 g':(f.fluid==='R-600a'?'40–100 g':'200–600 g')}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Compressor</span><span class="spec-row-value">${isCongelado?'Hermético LBP':'Hermético MBP/HBP'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Pressão sucção</span><span class="spec-row-value">${isCongelado?'2–10 PSI':'15–35 PSI'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Pressão descarga</span><span class="spec-row-value">${f.fluid==='R-404A'?'220–280 PSI':'120–180 PSI'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Filtro secador</span><span class="spec-row-value">XH-7 / XH-9 (1/4" – 3/8")</span></div>
+      <div class="spec-row"><span class="spec-row-label">Degelo</span><span class="spec-row-value">${f.defrost} · ${isCongelado?'2–4 ciclos/dia · 20 min':'conforme uso'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Evaporador</span><span class="spec-row-value">${f.fType==='vertical'||f.fType==='expositor'?'Cúbico forçado':'Serpentina estática'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Condensador</span><span class="spec-row-value">${f.power>300?'Forçado (ventilador)':'Estático ou forçado'}</span></div>
     </div>
 
-    ${f.fluid === 'R-290' ? `
+    ${f.fluid==='R-290'?`
     <div class="alert-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-      <div class="alert-box-text"><strong>R-290 (Propano)</strong> é A3 — altamente inflamável. Carga limitada a 150 g por circuito. Não solde com gás presente, ventilar local antes de qualquer intervenção, usar detector específico.</div>
-    </div>` : ''}
+      <div class="alert-box-text"><strong>R-290 (Propano)</strong> — Classe A3, <strong>altamente inflamável</strong>. Não soldar com gás presente. Sem faíscas ou chamas abertas na área. Ventilação obrigatória durante serviço.</div>
+    </div>`:''}
 
     <div class="spec-card">
-      <div class="spec-card-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        Componentes Elétricos
-      </div>
-      <div class="spec-row"><span class="spec-row-label">Termostato/controlador</span><span class="spec-row-value">${f.defrost === 'Automático' ? 'Full Gauge MT-512Ri' : 'Termostato eletromecânico'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Sensor</span><span class="spec-row-value">NTC 10 kΩ a 25 °C</span></div>
-      <div class="spec-row"><span class="spec-row-label">Relé partida</span><span class="spec-row-value">PTC ou amperométrico</span></div>
-      <div class="spec-row"><span class="spec-row-label">Capacitor</span><span class="spec-row-value">${f.power > 250 ? '15–25 µF / 250V' : '8–15 µF / 250V'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Protetor térmico</span><span class="spec-row-value">Klixon interno</span></div>
-      ${f.defrost === 'Automático' ? `
-      <div class="spec-row"><span class="spec-row-label">Resistência degelo</span><span class="spec-row-value">${isCongel ? '500–1000 W' : '300–500 W'}</span></div>
-      <div class="spec-row"><span class="spec-row-label">Resistência dreno</span><span class="spec-row-value">50–100 W</span></div>
-      <div class="spec-row"><span class="spec-row-label">Termostato fim degelo</span><span class="spec-row-value">KSD-301 (10 °C)</span></div>
-      <div class="spec-row"><span class="spec-row-label">Ventilador evap.</span><span class="spec-row-value">Axial 220V (10–25 W)</span></div>
-      ` : ''}
-      ${f.fType === 'expositor' || f.fType === 'vertical' ? `
-      <div class="spec-row"><span class="spec-row-label">Resistência moldura/vidro</span><span class="spec-row-value">100–250 W</span></div>
-      <div class="spec-row"><span class="spec-row-label">Iluminação</span><span class="spec-row-value">LED 24V (15–30 W)</span></div>
-      ` : ''}
+      <div class="spec-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg> Manutenção Preventiva</div>
+      <div class="spec-row"><span class="spec-row-label">Condensador</span><span class="spec-row-value">Limpar a cada 3 meses (mensal em açougue/padaria)</span></div>
+      <div class="spec-row"><span class="spec-row-label">Dreno</span><span class="spec-row-value">Verificar/desentupir mensalmente</span></div>
+      <div class="spec-row"><span class="spec-row-label">Vedações/gaxetas</span><span class="spec-row-value">Testar papel — deve prender na porta fechada</span></div>
+      <div class="spec-row"><span class="spec-row-label">Temperatura produto</span><span class="spec-row-value">Conferir com termômetro de espeto no produto</span></div>
+      <div class="spec-row"><span class="spec-row-label">Degelo manual</span><span class="spec-row-value">${f.defrost==='Manual'?'Sempre que gelo ultrapassar 5 mm':'Automático — verificar ciclo periodicamente'}</span></div>
     </div>
 
-    <div class="diagram-box">
-      <div class="spec-card-title" style="margin-bottom:8px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-        Esquema elétrico simplificado
-      </div>
-      <svg viewBox="0 0 360 280" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5">
-        <!-- Rede -->
-        <text x="10" y="18" font-size="10" fill="#4a5d72" font-family="monospace">${f.tension.includes('220') ? '220V' : '127V'} ~</text>
-        <line x1="20" y1="25" x2="20" y2="260" stroke="#e63946" stroke-width="2"/>
-        <line x1="50" y1="25" x2="50" y2="260" stroke="#1976d2" stroke-width="2"/>
-        <line x1="80" y1="25" x2="80" y2="260" stroke="#06a77d" stroke-width="2"/>
-        <text x="14" y="35" font-size="8" fill="#e63946" font-family="monospace">F</text>
-        <text x="46" y="35" font-size="8" fill="#1976d2" font-family="monospace">N</text>
-        <text x="74" y="35" font-size="8" fill="#06a77d" font-family="monospace">PE</text>
+    <div class="section-title">Códigos de erro — ${f.brand}</div>
+    ${errHtml}`;
 
-        <!-- Disjuntor -->
-        <rect x="100" y="40" width="50" height="30" fill="none" stroke="#0a4d8c" rx="3"/>
-        <text x="125" y="58" text-anchor="middle" font-size="9" fill="#0a4d8c" font-weight="700">DJ ${breaker}</text>
-        <line x1="20" y1="55" x2="100" y2="55" stroke="#e63946"/>
-
-        <!-- Controlador -->
-        <rect x="170" y="35" width="80" height="40" fill="#eaf2fa" stroke="#0a4d8c" rx="4"/>
-        <text x="210" y="52" text-anchor="middle" font-size="9" fill="#0a4d8c" font-weight="700">CONTROLADOR</text>
-        <text x="210" y="65" text-anchor="middle" font-size="8" fill="#4a5d72" font-family="monospace">${f.defrost === 'Automático' ? 'MT-512Ri' : 'Termostato'}</text>
-        <line x1="150" y1="55" x2="170" y2="55" stroke="#e63946"/>
-        <line x1="50" y1="65" x2="170" y2="65" stroke="#1976d2"/>
-
-        <!-- Relé/PTC -->
-        <rect x="270" y="40" width="40" height="30" fill="none" stroke="#0a4d8c" rx="3"/>
-        <text x="290" y="58" text-anchor="middle" font-size="9" fill="#0a4d8c" font-family="monospace">PTC</text>
-        <line x1="250" y1="55" x2="270" y2="55" stroke="#e63946"/>
-
-        <!-- Compressor -->
-        <circle cx="310" cy="115" r="22" fill="none" stroke="#1976d2" stroke-width="2"/>
-        <text x="310" y="113" text-anchor="middle" font-size="10" fill="#1976d2" font-weight="700">CP</text>
-        <text x="310" y="124" text-anchor="middle" font-size="7" fill="#4a5d72" font-family="monospace">${f.power}W</text>
-        <line x1="290" y1="70" x2="305" y2="95" stroke="#1976d2"/>
-        <line x1="50" y1="115" x2="288" y2="115" stroke="#1976d2"/>
-        <line x1="80" y1="135" x2="310" y2="135" stroke="#06a77d"/>
-
-        ${f.defrost === 'Automático' ? `
-        <!-- Resistência degelo -->
-        <rect x="100" y="160" width="100" height="25" fill="none" stroke="#f57c00" rx="3"/>
-        <text x="150" y="177" text-anchor="middle" font-size="9" fill="#f57c00" font-family="monospace">RES. DEGELO</text>
-        <line x1="20" y1="172" x2="100" y2="172" stroke="#e63946"/>
-        <line x1="200" y1="172" x2="220" y2="172" stroke="#e63946"/>
-        <text x="220" y="170" font-size="8" fill="#0a4d8c">→ via DEF</text>
-
-        <!-- Ventilador evaporador -->
-        <circle cx="150" cy="215" r="14" fill="none" stroke="#06a77d"/>
-        <text x="150" y="218" text-anchor="middle" font-size="8" fill="#06a77d">VENT</text>
-        <line x1="20" y1="215" x2="135" y2="215" stroke="#e63946"/>
-        <line x1="50" y1="225" x2="150" y2="225" stroke="#1976d2"/>
-        ` : ''}
-
-        ${f.fType === 'expositor' || f.fType === 'vertical' ? `
-        <!-- Iluminação -->
-        <rect x="240" y="200" width="80" height="20" fill="none" stroke="#f57c00" rx="3"/>
-        <text x="280" y="214" text-anchor="middle" font-size="8" fill="#f57c00" font-family="monospace">LED 24V</text>
-        ` : ''}
-
-        <!-- Aterramento -->
-        <line x1="80" y1="250" x2="100" y2="250" stroke="#06a77d" stroke-width="2"/>
-        <line x1="92" y1="250" x2="92" y2="265" stroke="#06a77d" stroke-width="2"/>
-        <line x1="85" y1="265" x2="100" y2="265" stroke="#06a77d" stroke-width="2"/>
-        <line x1="88" y1="270" x2="97" y2="270" stroke="#06a77d" stroke-width="2"/>
-        <text x="120" y="265" font-size="8" fill="#06a77d" font-family="monospace">aterramento</text>
-      </svg>
-      <div class="diagram-caption">Esquema simplificado · sempre confronte com manual técnico do fabricante</div>
-    </div>
-
-    <div class="spec-card">
-      <div class="spec-card-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-        Recomendações de Instalação
-      </div>
-      <div style="font-size:13px; color:var(--text); line-height:1.6; padding:4px 0">
-        ${installNotes}
-      </div>
-    </div>
-
-    <div class="spec-card">
-      <div class="spec-card-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-        Problemas frequentes
-      </div>
-      <div class="spec-row"><span class="spec-row-label">Não atinge temperatura</span><span class="spec-row-value">Carga gás / sujeira / gaxetas</span></div>
-      <div class="spec-row"><span class="spec-row-label">Forma muito gelo</span><span class="spec-row-value">Degelo / vedação / umidade</span></div>
-      <div class="spec-row"><span class="spec-row-label">Compressor desliga (alta P)</span><span class="spec-row-value">Condensador sujo</span></div>
-      <div class="spec-row"><span class="spec-row-label">Compressor desliga (baixa P)</span><span class="spec-row-value">Vazamento / filtro entupido</span></div>
-      <div class="spec-row"><span class="spec-row-label">Vidros embaçados</span><span class="spec-row-value">Resist. moldura / umidade</span></div>
-      <div class="spec-row"><span class="spec-row-label">Acumula água</span><span class="spec-row-value">Dreno / resist. dreno</span></div>
-    </div>
-
-    <div class="note-text" style="margin-top:14px">Para diagnóstico passo a passo, use o <strong>Solucionador Comercial</strong>. Para dimensionamento de quadro elétrico de múltiplos equipamentos, consulte <strong>Instalação e Materiais</strong>.</div>
-  `;
   goTo('freezerDetail');
 }
 
+function showIsland(id) {
+  const f = islands.find(x => x.id === id);
+  if (!f) return;
+  const current = parseFloat(f.current);
+  const breaker = current < 5 ? '10 A' : (current < 10 ? '16 A' : (current < 16 ? '20 A' : '25 A'));
+  const cable   = current < 8 ? '2,5 mm²' : (current < 16 ? '4,0 mm²' : '6,0 mm²');
+  const isCongelado = f.use.includes('-18') || f.use.includes('-22') || f.use.includes('Sorv') || f.use.includes('Cong');
 
+  document.getElementById('islandDetailContent').innerHTML = `
+    <div class="detail-hero">
+      <div class="detail-hero-brand">${f.brand}</div>
+      <div class="detail-hero-model">${f.model}</div>
+      <div class="detail-hero-cap">${f.cap} L · ${f.use}</div>
+      <div class="detail-hero-tags">
+        <span class="detail-hero-tag">${f.fluid}</span>
+        <span class="detail-hero-tag">${f.tension}</span>
+        <span class="detail-hero-tag">${f.temp}</span>
+        ${f.length ? `<span class="detail-hero-tag">${f.length}</span>` : ''}
+      </div>
+    </div>
 
+    <div class="spec-card">
+      <div class="spec-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Instalação Elétrica</div>
+      <div class="spec-row"><span class="spec-row-label">Tensão</span><span class="spec-row-value">${f.tension}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Potência</span><span class="spec-row-value">${f.power} W</span></div>
+      <div class="spec-row"><span class="spec-row-label">Corrente</span><span class="spec-row-value">${f.current}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Disjuntor (curva C)</span><span class="spec-row-value">${breaker}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Cabo (cobre)</span><span class="spec-row-value">${cable}</span></div>
+      <div class="spec-row"><span class="spec-row-label">DR</span><span class="spec-row-value">25 A / 30 mA</span></div>
+    </div>
 
-/* ============================================
-   CALCULADORA BTU
-   ============================================ */
+    <div class="alert-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+      <div class="alert-box-text"><strong>Circuito exclusivo</strong> por NBR 5410. Em supermercados, usar quadro de força dedicado para refrigeração. Aterramento obrigatório. Equipamentos trifásicos (220V/3F) exigem DPS trifásico.</div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4 4 0 105 0z"/></svg> Sistema Frigorífico</div>
+      <div class="spec-row"><span class="spec-row-label">Fluido</span><span class="spec-row-value">${f.fluid}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Carga típica</span><span class="spec-row-value">${f.fluid==='R-404A'?'300–800 g':'150–400 g'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Compressor</span><span class="spec-row-value">${isCongelado?'LBP / semi-hermético':'MBP hermético / semi-herm.'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Pressão sucção</span><span class="spec-row-value">${isCongelado?'2–10 PSI (R-404A)':'15–35 PSI'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Pressão descarga</span><span class="spec-row-value">${f.fluid==='R-404A'?'220–280 PSI':'120–180 PSI'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Degelo</span><span class="spec-row-value">${f.defrost} · ${isCongelado?'4–6 ciclos/dia · 20–30 min':'2–4 ciclos/dia · 15–20 min'}</span></div>
+      <div class="spec-row"><span class="spec-row-label">Evaporador</span><span class="spec-row-value">Serpentina estática / forçada</span></div>
+    </div>
+
+    <div class="spec-card">
+      <div class="spec-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg> Instalação e Manutenção</div>
+      ${f.iType==='ilha' ? `
+      <div class="spec-row"><span class="spec-row-label">Linha de carga</span><span class="spec-row-value" style="color:#e63946;font-weight:700">Não ultrapassar!</span></div>
+      <div class="spec-row"><span class="spec-row-label">Cortinas plásticas</span><span class="spec-row-value">Verificar integridade mensalmente</span></div>
+      <div class="spec-row"><span class="spec-row-label">Temperatura produto</span><span class="spec-row-value">Medir no centro e na periferia</span></div>
+      ` : `
+      <div class="spec-row"><span class="spec-row-label">Gaxetas de porta</span><span class="spec-row-value">Verificar vedação — papel deve prender</span></div>
+      <div class="spec-row"><span class="spec-row-label">Iluminação LED</span><span class="spec-row-value">Preferir LED (70% menos calor)</span></div>
+      `}
+      <div class="spec-row"><span class="spec-row-label">Limpeza do condensador</span><span class="spec-row-value">A cada 3 meses (mais frequente em açougue)</span></div>
+      <div class="spec-row"><span class="spec-row-label">Posicionamento</span><span class="spec-row-value">Longe de fritadeiras, portas e sol direto</span></div>
+      <div class="spec-row"><span class="spec-row-label">Temperatura ambiente</span><span class="spec-row-value">Ideal ≤ 24 °C para carga mínima</span></div>
+    </div>`;
+
+  goTo('islandDetail');
+}
+
+function filterFreezerByType(el, type) { /* legado — substituído */ }
+function filterFreezers()              { /* legado — substituído */ }
+
 function calcBTU() {
   const l = parseFloat(document.getElementById('btuLargura').value) || 0;
   const c = parseFloat(document.getElementById('btuComp').value) || 0;
