@@ -2769,6 +2769,19 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
               <div class="module-chip-sub">Ventiladores</div>
             </div>
           </label>
+
+          <label class="module-chip" data-for-module="q7">
+            <input type="checkbox" data-module="q7" checked onchange="syncModules()">
+            <div class="module-chip-icon" style="color:#00796b">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 8V5a2 2 0 00-2-2H5a2 2 0 00-2 2v3"/><path d="M3 8h18v11a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/><path d="M10 12h4"/>
+              </svg>
+            </div>
+            <div class="module-chip-text">
+              <div class="module-chip-name">Embalagens (Q7)</div>
+              <div class="module-chip-sub">Caixa, cartão, metal</div>
+            </div>
+          </label>
         </div>
         <!-- Linha divisória entre chips e campos -->
         <div style="height:1px;background:linear-gradient(90deg,transparent,var(--border-soft),transparent);margin-top:14px;margin-bottom:2px"></div>
@@ -2853,11 +2866,19 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
       <div data-needs="q2">
       <div class="form-row">
         <label class="form-label">Umidade relativa externa (Tab. 3)</label>
-        <select class="form-select" id="chUR">
+        <select class="form-select" id="chUR" onchange="toggleURCustom()">
           <option value="60" selected>60% — Tropical / Brasil (padrão)</option>
           <option value="50">50% — Clima temperado</option>
           <option value="40">40% — Clima seco</option>
+          <option value="outro">Outro valor...</option>
         </select>
+        <div id="chURCustomBlock" style="display:none;margin-top:8px">
+          <div class="form-input-wrap">
+            <input type="number" class="form-input with-suffix" id="chURCustom" placeholder="Ex: 55" min="1" max="100" step="1">
+            <span class="form-input-suffix">%</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-mute);margin-top:4px">O sistema usará o valor imediatamente superior disponível na Tabela 3 (40%, 50% ou 60%).</div>
+        </div>
       </div>
       </div><!-- /ur -->
 
@@ -2988,6 +3009,7 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
             <option value="peixes">Peixes e Frutos do Mar</option>
             <option value="variedades">Variedades</option>
             <option value="verduras">Verduras e Legumes</option>
+            <option value="outros">Outros (Cp Choi &amp; Okos)</option>
           </select>
           <select class="form-select" id="chFoodItem" style="flex:1.2" disabled>
             <option value="">— Alimento —</option>
@@ -3238,6 +3260,59 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
       </div>
       </div><!-- /motores -->
 
+      <!-- ═══ EMBALAGENS (Q7) ═══ -->
+      <div data-needs="q7">
+      <div class="form-row">
+        <label class="form-label" style="margin-bottom:8px">
+          Q7 = m_embalagem × c_embalagem × ΔT
+          <span style="font-size:10px;color:var(--text-mute);font-weight:400;display:block;margin-top:2px">Aplicado quando a embalagem representa &gt;10% do peso bruto que entra na câmara</span>
+        </label>
+
+        <div style="background:var(--bg-soft);border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-size:12px;font-weight:700;color:var(--text)">Itens de embalagem</div>
+            <button type="button" onclick="addEmbalagem()"
+              style="background:var(--success);color:white;border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              Adicionar
+            </button>
+          </div>
+          <div id="chEmbalagemList"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--border-soft)">
+            <div style="font-size:12px;color:var(--text-mute)">Massa total de embalagem:</div>
+            <div id="chEmbalagemTotal" style="font-size:16px;font-weight:800;color:var(--primary)">0 kg</div>
+          </div>
+        </div>
+
+        <!-- Display Q7 estimado -->
+        <div id="chQ7Display" style="background:linear-gradient(135deg,#e0f2f1,#e8f5e9);border:2px solid #80cbc4;border-radius:10px;padding:12px 14px">
+          <div style="font-size:10px;font-weight:700;color:#00695c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">📦 Q7 calculado</div>
+          <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:4px;text-align:center">
+            <div>
+              <div style="font-size:9px;font-weight:700;color:#00695c;text-transform:uppercase;margin-bottom:3px">Massa</div>
+              <div id="q7MDisplay" style="font-size:16px;font-weight:800;color:#004d40">0<span style="font-size:10px"> kg</span></div>
+            </div>
+            <div style="font-size:16px;color:#26a69a;font-weight:700">×</div>
+            <div>
+              <div style="font-size:9px;font-weight:700;color:#00695c;text-transform:uppercase;margin-bottom:3px">c_emb</div>
+              <div id="q7CDisplay" style="font-size:15px;font-weight:800;color:#004d40">–<span style="font-size:10px"> kcal/kg°C</span></div>
+            </div>
+            <div style="font-size:16px;color:#26a69a;font-weight:700">×</div>
+            <div>
+              <div style="font-size:9px;font-weight:700;color:#00695c;text-transform:uppercase;margin-bottom:3px">ΔT</div>
+              <div id="q7DTDisplay" style="font-size:16px;font-weight:800;color:#004d40">–<span style="font-size:10px"> °C</span></div>
+            </div>
+            <div style="font-size:16px;color:#26a69a;font-weight:700">=</div>
+            <div style="background:rgba(0,105,92,0.12);border-radius:8px;padding:6px">
+              <div style="font-size:9px;font-weight:700;color:#00695c;text-transform:uppercase;margin-bottom:3px">Q7</div>
+              <div id="q7ResultDisplay" style="font-size:16px;font-weight:800;color:#004d40">0<span style="font-size:10px"> kcal</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div><!-- /embalagens -->
+
       <button class="btn" onclick="calcChamber()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
         <span id="chCalcBtnText">Calcular câmara</span>
@@ -3246,7 +3321,7 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
       <div id="chamberResult" class="hidden"></div>
     </div>
 
-    <div class="note-text">Cálculo conforme método BITZER (Fonte apostila 2008): Q1 transmissão (Tabela 1) + Q2 infiltração porta (Tabelas 2 e 3) + Q3 produto (calor sensível+latente, Tabelas 4A-4E) + Q4 pessoas (Tabela 5) + Q5 iluminação + Q6 motores. Fator de segurança 10%.</div>
+    <div class="note-text">Cálculo conforme método BITZER (Fonte apostila 2008): Q1 transmissão (Tabela 1) + Q2 infiltração porta (Tabelas 2 e 3) + Q3 produto (calor sensível+latente, Tabelas 4A-4E) + Q4 pessoas (Tabela 5) + Q5 iluminação + Q6 motores + Q7 embalagens. Fator de segurança 10%. Todos os fatores tabelados usam o valor imediatamente superior (a favor da segurança), conforme orientação do professor — exceto Tabela 2 que usa N maior.</div>
 
     <div class="section-title" style="margin-top:24px">Ferramentas da câmara</div>
 
@@ -3298,6 +3373,18 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
           <div class="suspended-tool-sub">Defeitos câmaras frias</div>
         </div>
       </div>
+
+      <div class="suspended-tool" onclick="goTo('choiOkos')">
+        <div class="suspended-tool-icon" style="background:linear-gradient(135deg, #00897b 0%, #00695c 100%)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/>
+          </svg>
+        </div>
+        <div class="suspended-tool-text">
+          <div class="suspended-tool-title">Cp Alimento</div>
+          <div class="suspended-tool-sub">Choi &amp; Okos (1986)</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -3316,6 +3403,202 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
     </div>
   </div>
   <div class="scroll-area" id="foodTableContent"></div>
+</div>
+
+<!-- ============================================
+     CALOR ESPECÍFICO — MÉTODO CHOI & OKOS (1986)
+     ============================================ -->
+<div id="choiOkos" class="screen">
+  <div class="header">
+    <button class="header-back" onclick="goTo('chamberCalc')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div>
+      <div class="header-title">Cp Alimento</div>
+      <div class="header-subtitle">Método Choi &amp; Okos (1986)</div>
+    </div>
+  </div>
+  <div class="scroll-area">
+    <div class="tool-card">
+      <div class="tool-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/>
+        </svg>
+        Calor Específico pelo Método Choi &amp; Okos
+      </div>
+
+      <!-- Info metodologia -->
+      <div style="background:linear-gradient(135deg,#e0f2f1,#e8f5e9);border-left:3px solid #00897b;border-radius:8px;padding:10px 12px;margin-bottom:14px">
+        <div style="font-size:10px;font-weight:700;color:#00695c;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Metodologia</div>
+        <div style="font-size:12px;color:#004d40;line-height:1.6">
+          Calcula o calor específico (cp) de alimentos como função da temperatura e composição centesimal,
+          usando equações polinomiais de <strong>Choi &amp; Okos (1986)</strong>. Aplicável acima do ponto de congelamento.
+        </div>
+        <div style="font-size:11px;color:#00695c;margin-top:6px;font-style:italic">
+          cp = Xw·cpw + Xp·cpp + Xf·cpf + Xa·cpa &nbsp;[kJ/kg·°C]
+        </div>
+      </div>
+
+      <!-- Seletor de alimento predefinido -->
+      <div class="form-row">
+        <label class="form-label">Alimento predefinido (ou insira composição manual)</label>
+        <select class="form-select" id="coAlimento" onchange="loadCoAlimento()">
+          <option value="">— Selecionar alimento —</option>
+          <optgroup label="Carnes e Aves">
+            <option value="frango_magro">Frango (peito, magro)</option>
+            <option value="carne_bovina_magra">Carne bovina (magra)</option>
+            <option value="carne_bovina_gorda">Carne bovina (gorda)</option>
+            <option value="suino_magro">Suíno (lombo, magro)</option>
+            <option value="suino_gordo">Suíno (pernil, gordo)</option>
+            <option value="presunto_cozido">Presunto cozido</option>
+            <option value="linguica">Linguiça fresca</option>
+            <option value="aves_congeladas">Aves congeladas</option>
+          </optgroup>
+          <optgroup label="Peixes e Frutos do Mar">
+            <option value="peixe_magro">Peixe magro (tilápia/pescada)</option>
+            <option value="peixe_gordo">Peixe gordo (salmão/sardinha)</option>
+            <option value="camarao">Camarão</option>
+            <option value="atum_fresco">Atum fresco</option>
+            <option value="bacalhau_salgado">Bacalhau salgado</option>
+            <option value="lula_polvo">Lula / Polvo</option>
+          </optgroup>
+          <optgroup label="Laticínios e Derivados">
+            <option value="queijo_mussarela">Queijo mussarela</option>
+            <option value="queijo_prato">Queijo prato</option>
+            <option value="queijo_parmesao">Queijo parmesão</option>
+            <option value="manteiga">Manteiga</option>
+            <option value="leite_integral">Leite integral</option>
+            <option value="leite_desnatado">Leite desnatado</option>
+            <option value="iogurte">Iogurte natural</option>
+            <option value="creme_leite">Creme de leite</option>
+            <option value="sorvete">Sorvete (industrial)</option>
+          </optgroup>
+          <optgroup label="Frutas">
+            <option value="maca">Maçã</option>
+            <option value="banana">Banana</option>
+            <option value="morango">Morango</option>
+            <option value="laranja">Laranja</option>
+            <option value="manga">Manga</option>
+            <option value="uva">Uva</option>
+            <option value="melancia">Melancia</option>
+            <option value="abacaxi">Abacaxi (ananás)</option>
+          </optgroup>
+          <optgroup label="Hortaliças e Legumes">
+            <option value="tomate">Tomate</option>
+            <option value="alface">Alface</option>
+            <option value="cenoura">Cenoura</option>
+            <option value="batata">Batata</option>
+            <option value="cebola">Cebola</option>
+            <option value="brocolis">Brócolis</option>
+            <option value="milho_verde">Milho verde</option>
+          </optgroup>
+          <optgroup label="Bebidas">
+            <option value="cerveja_lata">Cerveja (lata / garrafa)</option>
+            <option value="refrigerante_cola">Refrigerante cola</option>
+            <option value="refrigerante_diet">Refrigerante diet / zero</option>
+            <option value="agua_mineral">Água mineral</option>
+            <option value="suco_laranja">Suco de laranja natural</option>
+            <option value="vinho">Vinho tinto / branco</option>
+            <option value="suco_caixa">Suco de caixa (néctar)</option>
+            <option value="agua_coco">Água de coco natural</option>
+            <option value="energetico">Energético (lata)</option>
+          </optgroup>
+          <optgroup label="Pães e Farináceos">
+            <option value="pao_frances">Pão francês</option>
+            <option value="arroz_cozido">Arroz cozido</option>
+            <option value="ovo_inteiro">Ovo inteiro (fresco)</option>
+          </optgroup>
+          <optgroup label="Personalizado">
+            <option value="personalizado">⚙ Composição manual</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- Composição centesimal -->
+      <div style="background:var(--bg-soft);border-radius:12px;padding:14px;margin-bottom:12px">
+        <div style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px">
+          Composição centesimal (frações decimais — soma deve ser = 1,0000)
+        </div>
+        <div class="form-row split" style="margin-bottom:10px">
+          <div>
+            <label class="form-label">
+              Fração Água (Xw)
+              <span style="font-size:10px;color:var(--text-mute);font-weight:400;display:block">ex: 0,78 = 78%</span>
+            </label>
+            <input type="number" class="form-input" id="coXw" placeholder="0,000" step="0.001" min="0" max="1" oninput="updateCoSoma()">
+          </div>
+          <div>
+            <label class="form-label">
+              Fração Proteína (Xp)
+              <span style="font-size:10px;color:var(--text-mute);font-weight:400;display:block">ex: 0,19 = 19%</span>
+            </label>
+            <input type="number" class="form-input" id="coXp" placeholder="0,000" step="0.001" min="0" max="1" oninput="updateCoSoma()">
+          </div>
+        </div>
+        <div class="form-row split" style="margin-bottom:10px">
+          <div>
+            <label class="form-label">
+              Fração Gordura (Xf)
+              <span style="font-size:10px;color:var(--text-mute);font-weight:400;display:block">Lipídios totais</span>
+            </label>
+            <input type="number" class="form-input" id="coXf" placeholder="0,000" step="0.001" min="0" max="1" oninput="updateCoSoma()">
+          </div>
+          <div>
+            <label class="form-label">
+              Fração Cinzas (Xa)
+              <span style="font-size:10px;color:var(--text-mute);font-weight:400;display:block">Minerais totais</span>
+            </label>
+            <input type="number" class="form-input" id="coXa" placeholder="0,000" step="0.001" min="0" max="1" oninput="updateCoSoma()">
+          </div>
+        </div>
+        <div class="form-row split" style="margin-bottom:0">
+          <div>
+            <label class="form-label">
+              Fração Carboidrato (Xc)
+              <span style="font-size:10px;color:var(--text-mute);font-weight:400;display:block">incluindo fibras</span>
+            </label>
+            <input type="number" class="form-input" id="coXc" placeholder="0,000" step="0.001" min="0" max="1" oninput="updateCoSoma()">
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:flex-end">
+            <label class="form-label">Soma das frações</label>
+            <div id="coSomaDisplay" style="background:var(--success);color:white;border-radius:8px;padding:8px 12px;font-size:15px;font-weight:800;text-align:center">
+              0,0000
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Temperatura -->
+      <div class="form-row">
+        <label class="form-label">
+          Temperatura do produto na câmara
+          <span style="font-size:10px;color:var(--text-mute);font-weight:400;display:block">Acima do ponto de congelamento</span>
+        </label>
+        <div class="form-input-wrap">
+          <input type="number" class="form-input with-suffix" id="coTemp" value="5" step="0.5">
+          <span class="form-input-suffix">°C</span>
+        </div>
+      </div>
+
+      <button class="btn" onclick="calcChoiOkos()" style="background:linear-gradient(135deg,#00897b,#00695c)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Calcular calor específico
+      </button>
+
+      <div id="choiOkosResult" class="hidden" style="margin-top:12px"></div>
+    </div>
+
+    <!-- Tabela de referência dos alimentos -->
+    <div class="tool-card" style="margin-top:12px">
+      <div class="tool-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        Referência de composição — TACO / Literatura
+      </div>
+      <div id="coTabelaRef" style="overflow-x:auto"></div>
+    </div>
+
+    <div class="note-text">Equações de Choi &amp; Okos (1986): cp de cada fração como função polinomial da temperatura T (°C). Válido acima do ponto de congelamento. Resultado em kJ/(kg·°C). Para converter para kcal/(kg·°C), divida por 4,186. Fontes: TACO (UNICAMP), USDA e literatura de transferência de calor em alimentos.</div>
+  </div>
 </div>
 
 <!-- ============================================
@@ -3428,6 +3711,10 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
           <label class="form-label">Fahrenheit (°F)</label>
           <input type="number" class="form-input" id="fIn" oninput="convF(this)" step="0.1" placeholder="32">
         </div>
+      </div>
+      <div class="form-row" style="margin-top:4px">
+        <label class="form-label">Kelvin (K)</label>
+        <input type="number" class="form-input" id="kIn" oninput="convK(this)" step="0.1" placeholder="273.15" min="0">
       </div>
     </div>
   </div>
@@ -4102,6 +4389,7 @@ function goTo(id) {
   else if (id === 'vacuum') renderVacuum();
   else if (id === 'compressors') renderCompressors();
   else if (id === 'foodTable') renderFoodTable();
+  else if (id === 'choiOkos') renderChoiOkosRef();
 }
 
 function toast(msg) {
@@ -7686,7 +7974,10 @@ function calcChamber() {
   const _tIntRaw = parseFloat(document.getElementById('chTInt')?.value);
   const tExt = isNaN(_tExtRaw) ? 32 : _tExtRaw;
   const tInt = isNaN(_tIntRaw) ?  2 : _tIntRaw;
-  const ur   = parseFloat(document.getElementById('chUR')?.value) || 60;
+  const urSel = document.getElementById('chUR')?.value || '60';
+  const ur = urSel === 'outro'
+    ? (parseFloat(document.getElementById('chURCustom')?.value) || 60)
+    : (parseFloat(urSel) || 60);
   const solarSup = document.getElementById('chSolarSup')?.value || 'nenhuma';
   const solarOri = document.getElementById('chSolarOri')?.value || 'sul';
   const isoSel   = document.getElementById('chIso')?.value || 'purPainel75';
@@ -7859,16 +8150,44 @@ function calcChamber() {
     : motores; // fallback para campo legado
   const q6_kcal24  = nTotalCV * 632.41 * horasMotor;
 
+  // ── Q7 Embalagens ───────────────────────────────────
+  // Q7 = Σ(m_emb × c_emb × ΔT) para cada item de embalagem
+  // Aplicado somente quando massa total de embalagem > 10% da carga do produto
+  let q7_kcal24 = 0;
+  let q7Items = [];
+  let q7MassaTotal = 0;
+  let q7CMedia = 0;
+  if (typeof embalagemList !== 'undefined' && embalagemList.length > 0) {
+    const tEntradaEmb = tEntrada; // embalagem entra na mesma T° que o produto
+    const tFinalEmb   = tFinal;   // deve atingir a mesma T° final
+    const dtEmb = Math.max(0, tEntradaEmb - tFinalEmb);
+    embalagemList.forEach(emb => {
+      const q = emb.massa * emb.ce * dtEmb;
+      q7_kcal24 += q;
+      q7MassaTotal += emb.massa;
+      q7Items.push({ ...emb, q, dt: dtEmb });
+    });
+    if (embalagemList.length > 0)
+      q7CMedia = embalagemList.reduce((s, e) => s + e.ce, 0) / embalagemList.length;
+    // Atualizar display Q7
+    const dtEmb2 = (tEntradaEmb - tFinalEmb).toFixed(1);
+    const q7el = document.getElementById('q7MDisplay'); if (q7el) q7el.textContent = q7MassaTotal.toFixed(1) + ' kg';
+    const q7cel = document.getElementById('q7CDisplay'); if (q7cel) q7cel.innerHTML = q7CMedia.toFixed(3) + '<span style="font-size:10px"> kcal/kg°C</span>';
+    const q7dte = document.getElementById('q7DTDisplay'); if (q7dte) q7dte.innerHTML = dtEmb2 + '<span style="font-size:10px"> °C</span>';
+    const q7re = document.getElementById('q7ResultDisplay'); if (q7re) q7re.innerHTML = q7_kcal24.toFixed(0) + '<span style="font-size:10px"> kcal</span>';
+  }
+  // Aviso: Q7 só é relevante quando embalagem > 10% da carga
+  const q7PctCarga = carga > 0 ? (q7MassaTotal / carga) * 100 : 0;
+
   // ── Total diário (respeitando módulos ativos) ─────────
-  // Cada Q individual continua sendo calculado para fins de exibição,
-  // mas só entra na soma se o módulo correspondente estiver ativo.
   const q1_eff = M.has('q1') ? q1_kcal24 : 0;
   const q2_eff = M.has('q2') ? q2_kcal24 : 0;
   const q3_eff = M.has('q3') ? q3_kcal24 : 0;
   const q4_eff = M.has('q4') ? q4_kcal24 : 0;
   const q5_eff = M.has('q5') ? q5_kcal24 : 0;
   const q6_eff = M.has('q6') ? q6_kcal24 : 0;
-  const qTotal_24   = q1_eff + q2_eff + q3_eff + q4_eff + q5_eff + q6_eff;
+  const q7_eff = M.has('q7') ? q7_kcal24 : 0;
+  const qTotal_24   = q1_eff + q2_eff + q3_eff + q4_eff + q5_eff + q6_eff + q7_eff;
   const qSeg_24     = qTotal_24 * 1.10;
   const qHorario    = qSeg_24 / 20;             // 20h de funcionamento (BITZER)
   // Conversões
@@ -7921,6 +8240,23 @@ function calcChamber() {
       </div>
       <div style="font-size:10px;color:rgba(255,255,255,0.65);margin-top:8px">Fator de segurança 10% · Regime 20h/dia (BITZER)</div>
     </div>
+
+    ${soQ3 ? `
+    <div class="result-block" style="margin-top:12px">
+      <div class="result-title" style="color:#2e7d32">🌡️ Diferencial de Temperatura — Produto (Q3)</div>
+      <div class="result-row">
+        <span class="result-row-label">T° inicial da carga (entrada)</span>
+        <span class="result-row-value">${tEntrada.toFixed(1)} °C</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-label">T° final desejada</span>
+        <span class="result-row-value">${tFinal.toFixed(1)} °C</span>
+      </div>
+      <div class="result-row" style="border-top:2px solid var(--border);margin-top:4px;padding-top:8px">
+        <span class="result-row-label" style="font-weight:700">ΔT = T_entrada − T_final</span>
+        <span class="result-row-value big" style="color:#2e7d32">${(tEntrada - tFinal).toFixed(1)} °C</span>
+      </div>
+    </div>` : ''}
 
     ${M.has('geometry') ? `
     <div class="result-block" style="margin-top:12px">
@@ -8054,7 +8390,10 @@ function calcChamber() {
     <div class="result-block" style="margin-top:12px">
       <div class="result-title">🔥 Decomposição da carga térmica</div>
       ${M.has('q1') ? `<div class="result-row"><span class="result-row-label">Q1 Transmissão paredes (Tab.1)</span><span class="result-row-value">${q1_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q1_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
-      ${M.has('q2') ? `<div class="result-row"><span class="result-row-label">Q2 Infiltração porta (Tab.2·3) · ${nTrocas.toFixed(1)} trocas/24h</span><span class="result-row-value">${q2_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q2_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>` : ''}
+      ${M.has('q2') ? `
+      <div class="result-row"><span class="result-row-label">Q2 Infiltração porta (Tab.2·3) · ${nTrocas.toFixed(1)} trocas/24h</span><span class="result-row-value">${q2_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q2_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
+      <div class="result-row" style="font-size:11px;color:var(--text-mute)"><span style="grid-column:1/-1">&nbsp;&nbsp;↳ T° ext ${tExt}°C − T° int ${tInt}°C = <strong style="color:var(--primary)">ΔT ${deltaTbase.toFixed(1)}°C</strong>${solarDelta > 0 ? ` (+${solarDelta}°C solar = ΔT efetivo ${deltaT.toFixed(1)}°C)` : ''} · UR ${ur}% · Fator Tab.3 = ${factorTab3} kcal/m³</span></div>
+      ` : ''}
       ${M.has('q3') ? `
       <div class="result-row"><span class="result-row-label">Q3 — Carga Térmica do Produto</span><span class="result-row-value">${q3_kcal24.toFixed(1)} kcal <span style="opacity:0.55;font-size:10px">(${(q3_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
       ${foodParcelas.length > 0 ? foodParcelas.map(p => `
@@ -8118,6 +8457,10 @@ function calcChamber() {
       <div class="result-row"><span class="result-row-label">Q6 Motores ventiladores</span><span class="result-row-value">${q6_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${(q6_kcal24/qTotal_24*100).toFixed(0)}%)</span></span></div>
       <div class="result-row" style="font-size:11px;color:var(--text-mute)"><span style="grid-column:1/-1">&nbsp;&nbsp;↳ N = ${nTotalCV.toFixed(2)} CV × 632,41 kcal/h × ${horasMotor}h/dia</span></div>
       ` : ''}
+      ${M.has('q7') && q7_kcal24 > 0 ? `
+      <div class="result-row"><span class="result-row-label">Q7 Embalagens${q7PctCarga < 10 ? ' <span style="color:var(--warning);font-size:10px">⚠ &lt;10% da carga</span>' : ''}</span><span class="result-row-value">${q7_kcal24.toFixed(0)} kcal/24h <span style="opacity:0.55;font-size:10px">(${qTotal_24 > 0 ? (q7_kcal24/qTotal_24*100).toFixed(0) : 0}%)</span></span></div>
+      <div class="result-row" style="font-size:11px;color:var(--text-mute)"><span style="grid-column:1/-1">&nbsp;&nbsp;↳ ${q7Items.map(e => e.massa.toFixed(1)+'kg × '+e.ce+' kcal/kg°C').join(' + ')} × ΔT ${q7Items[0]?.dt.toFixed(1)}°C</span></div>
+      ` : (M.has('q7') ? `<div class="result-row"><span class="result-row-label" style="color:var(--text-mute)">Q7 Embalagens</span><span class="result-row-value" style="color:var(--text-mute)">0 kcal — nenhuma embalagem adicionada</span></div>` : '')}
       <div class="result-row" style="border-top:2px solid var(--border);margin-top:4px;padding-top:8px"><span class="result-row-label" style="font-weight:700">Total diário</span><span class="result-row-value">${qTotal_24.toFixed(0)} kcal/24h</span></div>
       <div class="result-row"><span class="result-row-label" style="font-weight:700">Total + 10% segurança</span><span class="result-row-value">${qSeg_24.toFixed(0)} kcal/24h</span></div>
       <div class="result-row"><span class="result-row-label" style="font-weight:700">Carga horária (÷ 20h)</span><span class="result-row-value big">${qHorario.toFixed(0)} kcal/h</span></div>
@@ -8147,6 +8490,459 @@ function calcChamber() {
   `;
 }
 
+
+/* ============================================
+   Q7 — EMBALAGENS
+   ============================================ */
+let embalagemList = [];
+
+const embalagemDB = [
+  { label: 'Alumínio',       ce: 0.20 },
+  { label: 'Vidro',          ce: 0.20 },
+  { label: 'Ferro / Aço',   ce: 0.10 },
+  { label: 'Madeira',        ce: 0.60 },
+  { label: 'Papel Cartão',   ce: 0.35 },
+  { label: 'Caixa de Plástico (peixe/cerveja)', ce: 0.40 }
+];
+
+function addEmbalagem() {
+  const id = Date.now();
+  embalagemList.push({ id, tipoIdx: 4, massa: 0, ce: embalagemDB[4].ce }); // padrão: papel cartão
+  renderEmbalagemList();
+}
+
+function removeEmbalagem(id) {
+  embalagemList = embalagemList.filter(e => e.id !== id);
+  renderEmbalagemList();
+}
+
+function renderEmbalagemList() {
+  const cont = document.getElementById('chEmbalagemList');
+  if (!cont) return;
+  if (embalagemList.length === 0) {
+    cont.innerHTML = '<div style="font-size:12px;color:var(--text-mute);text-align:center;padding:8px 0">Nenhuma embalagem adicionada</div>';
+    updateEmbalagemTotal();
+    return;
+  }
+  cont.innerHTML = embalagemList.map(emb => `
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:end;margin-bottom:8px;background:white;padding:8px;border-radius:8px;border:1px solid var(--border-soft)">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--text-mute);margin-bottom:3px">MATERIAL</div>
+        <select class="form-select" style="font-size:12px;padding:6px 8px" onchange="updateEmbalagemTipo(${emb.id}, this.value)">
+          ${embalagemDB.map((e, i) => `<option value="${i}" ${emb.tipoIdx === i ? 'selected' : ''}>${e.label} (${e.ce} kcal/kg°C)</option>`).join('')}
+        </select>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--text-mute);margin-bottom:3px">MASSA (kg)</div>
+        <input type="number" class="form-input" style="font-size:13px" value="${emb.massa || ''}" placeholder="0" min="0" step="0.1"
+          oninput="updateEmbalagemMassa(${emb.id}, this.value)">
+      </div>
+      <button onclick="removeEmbalagem(${emb.id})"
+        style="background:#ffeaea;border:1px solid #ffb3b3;color:#e63946;border-radius:8px;padding:6px 10px;font-size:16px;cursor:pointer;line-height:1">✕</button>
+    </div>
+  `).join('');
+  updateEmbalagemTotal();
+}
+
+function updateEmbalagemTipo(id, idx) {
+  const emb = embalagemList.find(e => e.id === id);
+  if (!emb) return;
+  emb.tipoIdx = parseInt(idx);
+  emb.ce = embalagemDB[emb.tipoIdx].ce;
+  updateEmbalagemTotal();
+}
+
+function updateEmbalagemMassa(id, val) {
+  const emb = embalagemList.find(e => e.id === id);
+  if (!emb) return;
+  emb.massa = parseFloat(val) || 0;
+  updateEmbalagemTotal();
+}
+
+function updateEmbalagemTotal() {
+  const total = embalagemList.reduce((s, e) => s + (e.massa || 0), 0);
+  const el = document.getElementById('chEmbalagemTotal');
+  if (el) el.textContent = total.toFixed(1) + ' kg';
+  // Atualizar display Q7 com ΔT atual
+  const tEnt = parseFloat(document.getElementById('chTEntrada')?.value) || 25;
+  const tFim = parseFloat(document.getElementById('chTFinal')?.value) ||
+               parseFloat(document.getElementById('chTInt')?.value) || -8;
+  const dt = Math.max(0, tEnt - tFim);
+  let q7 = 0;
+  embalagemList.forEach(e => { q7 += (e.massa || 0) * e.ce * dt; });
+  const cMed = embalagemList.length > 0
+    ? embalagemList.reduce((s, e) => s + e.ce, 0) / embalagemList.length : 0;
+  const q7m = document.getElementById('q7MDisplay'); if (q7m) q7m.innerHTML = total.toFixed(1) + '<span style="font-size:10px"> kg</span>';
+  const q7c = document.getElementById('q7CDisplay'); if (q7c) q7c.innerHTML = cMed.toFixed(3) + '<span style="font-size:10px"> kcal/kg°C</span>';
+  const q7d = document.getElementById('q7DTDisplay'); if (q7d) q7d.innerHTML = dt.toFixed(1) + '<span style="font-size:10px"> °C</span>';
+  const q7r = document.getElementById('q7ResultDisplay'); if (q7r) q7r.innerHTML = q7.toFixed(0) + '<span style="font-size:10px"> kcal</span>';
+}
+
+/* ============================================
+   UR CUSTOMIZADA
+   ============================================ */
+function toggleURCustom() {
+  const sel = document.getElementById('chUR');
+  const blk = document.getElementById('chURCustomBlock');
+  if (!sel || !blk) return;
+  blk.style.display = sel.value === 'outro' ? 'block' : 'none';
+}
+
+/* ============================================
+   CHOI & OKOS (1986) — CALOR ESPECÍFICO
+   ============================================ */
+// choiOkosDB: composição centesimal (Choi & Okos) + propriedades térmicas completas
+// n=nome, xw/xp/xf/xa/xc=frações, tC=T°conservação, urMin/urMax=UR%,
+// ceAC=cp antes congel.(kcal/kg°C), ceAB=cp após congel., L=calor latente(kcal/kg),
+// pC=ponto congel.(°C), cR=calor respiração(kcal/kg·24h), cons=tempo conservação, agua=%
+const choiOkosDB = {
+  // ── Carnes e Aves ──────────────────────────────────────────────────────────
+  frango_magro:       { label:'Frango (peito, magro)',         xw:0.740, xp:0.235, xf:0.010, xa:0.010, xc:0.005,
+                        n:'Frango (peito, magro)',  tC:0,   urMin:85, urMax:90, ceAC:0.79, ceAB:0.37, L:59,  pC:-2.8, cR:null, cons:'1 semana',    agua:74 },
+  carne_bovina_magra: { label:'Carne bovina (magra)',          xw:0.680, xp:0.210, xf:0.080, xa:0.010, xc:0.020,
+                        n:'Carne bovina (magra)',  tC:-1,  urMin:88, urMax:92, ceAC:0.77, ceAB:0.40, L:56,  pC:-1.7, cR:null, cons:'1-6 semanas', agua:68 },
+  carne_bovina_gorda: { label:'Carne bovina (gorda)',          xw:0.600, xp:0.175, xf:0.200, xa:0.008, xc:0.017,
+                        n:'Carne bovina (gorda)',  tC:-1,  urMin:88, urMax:92, ceAC:0.60, ceAB:0.35, L:44,  pC:-2.2, cR:null, cons:'1-6 semanas', agua:52 },
+  suino_magro:        { label:'Suíno (lombo, magro)',          xw:0.680, xp:0.200, xf:0.090, xa:0.010, xc:0.020,
+                        n:'Suíno (lombo, magro)',  tC:0,   urMin:85, urMax:90, ceAC:0.68, ceAB:0.38, L:48,  pC:-2.8, cR:null, cons:'3-7 dias',    agua:60 },
+  suino_gordo:        { label:'Suíno (pernil, gordo)',         xw:0.600, xp:0.170, xf:0.200, xa:0.010, xc:0.020,
+                        n:'Suíno (pernil, gordo)', tC:4,   urMin:85, urMax:90, ceAC:0.52, ceAB:0.30, L:40,  pC:-2.5, cR:null, cons:'4-8 meses',   agua:48 },
+  presunto_cozido:    { label:'Presunto cozido',               xw:0.720, xp:0.180, xf:0.070, xa:0.025, xc:0.005,
+                        n:'Presunto cozido',       tC:0,   urMin:85, urMax:90, ceAC:0.68, ceAB:0.38, L:48,  pC:-2.8, cR:null, cons:'7-12 dias',   agua:72 },
+  linguica:           { label:'Linguiça fresca',               xw:0.640, xp:0.160, xf:0.160, xa:0.015, xc:0.025,
+                        n:'Linguiça fresca',       tC:0,   urMin:80, urMax:85, ceAC:0.60, ceAB:0.35, L:44,  pC:-2.5, cR:null, cons:'5-10 dias',   agua:64 },
+  aves_congeladas:    { label:'Aves congeladas',               xw:0.740, xp:0.220, xf:0.020, xa:0.010, xc:0.010,
+                        n:'Aves congeladas',       tC:-18, urMin:90, urMax:95, ceAC:null, ceAB:0.37, L:59,  pC:-2.8, cR:null, cons:'9-10 meses',  agua:74 },
+  // ── Peixes e Frutos do Mar ─────────────────────────────────────────────────
+  peixe_magro:        { label:'Peixe magro (tilápia/pescada)', xw:0.780, xp:0.190, xf:0.015, xa:0.015, xc:0.000,
+                        n:'Peixe magro (tilápia/pescada)', tC:0, urMin:90, urMax:95, ceAC:0.90, ceAB:0.49, L:66, pC:-2.2, cR:null, cons:'5-15 dias',  agua:78 },
+  peixe_gordo:        { label:'Peixe gordo (salmão/sardinha)', xw:0.680, xp:0.200, xf:0.100, xa:0.020, xc:0.000,
+                        n:'Peixe gordo (salmão/sardinha)', tC:-1.5, urMin:85, urMax:90, ceAC:0.70, ceAB:0.38, L:50, pC:-2.2, cR:null, cons:'1 semana',    agua:60 },
+  camarao:            { label:'Camarão',                       xw:0.760, xp:0.200, xf:0.010, xa:0.020, xc:0.010,
+                        n:'Camarão',               tC:0,   urMin:90, urMax:95, ceAC:0.85, ceAB:0.47, L:62,  pC:-2.0, cR:null, cons:'1-2 semanas', agua:76 },
+  atum_fresco:        { label:'Atum fresco',                   xw:0.710, xp:0.250, xf:0.028, xa:0.012, xc:0.000,
+                        n:'Atum fresco',           tC:0,   urMin:90, urMax:95, ceAC:0.84, ceAB:0.46, L:58,  pC:-2.2, cR:null, cons:'1-2 semanas', agua:71 },
+  bacalhau_salgado:   { label:'Bacalhau salgado',              xw:0.520, xp:0.410, xf:0.010, xa:0.060, xc:0.000,
+                        n:'Bacalhau salgado',      tC:0,   urMin:50, urMax:60, ceAC:0.54, ceAB:0.34, L:36,  pC:null, cR:null, cons:'6-12 meses',  agua:52 },
+  lula_polvo:         { label:'Lula / Polvo',                  xw:0.800, xp:0.160, xf:0.012, xa:0.018, xc:0.010,
+                        n:'Lula / Polvo',          tC:0,   urMin:90, urMax:95, ceAC:0.85, ceAB:0.47, L:62,  pC:-2.0, cR:null, cons:'5-10 dias',   agua:80 },
+  // ── Laticínios ─────────────────────────────────────────────────────────────
+  queijo_mussarela:   { label:'Queijo mussarela',              xw:0.480, xp:0.220, xf:0.250, xa:0.030, xc:0.020,
+                        n:'Queijo mussarela',      tC:4,   urMin:80, urMax:85, ceAC:0.52, ceAB:0.30, L:38,  pC:-4.0, cR:null, cons:'2-4 semanas', agua:48 },
+  queijo_prato:       { label:'Queijo prato',                  xw:0.420, xp:0.250, xf:0.290, xa:0.035, xc:0.005,
+                        n:'Queijo prato',          tC:4,   urMin:80, urMax:85, ceAC:0.48, ceAB:0.28, L:34,  pC:-4.5, cR:null, cons:'4-8 semanas', agua:42 },
+  queijo_parmesao:    { label:'Queijo parmesão',               xw:0.280, xp:0.350, xf:0.290, xa:0.060, xc:0.020,
+                        n:'Queijo parmesão',       tC:4,   urMin:75, urMax:80, ceAC:0.40, ceAB:0.25, L:28,  pC:-5.0, cR:null, cons:'6-12 meses',  agua:28 },
+  manteiga:           { label:'Manteiga',                      xw:0.158, xp:0.006, xf:0.810, xa:0.002, xc:0.024,
+                        n:'Manteiga',              tC:4,   urMin:null,urMax:null,ceAC:0.33, ceAB:0.25, L:24,  pC:-2.5, cR:null, cons:'3-6 meses',  agua:16 },
+  leite_integral:     { label:'Leite integral',                xw:0.876, xp:0.033, xf:0.033, xa:0.007, xc:0.051,
+                        n:'Leite integral',        tC:4,   urMin:null,urMax:null,ceAC:0.93, ceAB:0.55, L:70,  pC:-0.5, cR:null, cons:'15-20 dias', agua:88 },
+  leite_desnatado:    { label:'Leite desnatado',               xw:0.906, xp:0.036, xf:0.002, xa:0.007, xc:0.049,
+                        n:'Leite desnatado',       tC:4,   urMin:null,urMax:null,ceAC:0.94, ceAB:0.56, L:72,  pC:-0.5, cR:null, cons:'10-15 dias', agua:91 },
+  iogurte:            { label:'Iogurte natural',               xw:0.870, xp:0.050, xf:0.015, xa:0.008, xc:0.057,
+                        n:'Iogurte natural',       tC:4,   urMin:null,urMax:null,ceAC:0.88, ceAB:null, L:null, pC:null, cR:null, cons:'3-4 semanas', agua:87 },
+  creme_leite:        { label:'Creme de leite',                xw:0.600, xp:0.020, xf:0.370, xa:0.006, xc:0.024,
+                        n:'Creme de leite',        tC:4,   urMin:null,urMax:null,ceAC:0.68, ceAB:null, L:null, pC:-3.5, cR:null, cons:'2-3 semanas', agua:60 },
+  sorvete:            { label:'Sorvete (industrial)',          xw:0.600, xp:0.040, xf:0.100, xa:0.010, xc:0.250,
+                        n:'Sorvete (industrial)',  tC:-18, urMin:null,urMax:null,ceAC:0.79, ceAB:0.45, L:58,  pC:-3.0, cR:null, cons:'6-12 meses',  agua:60 },
+  // ── Frutas ─────────────────────────────────────────────────────────────────
+  maca:               { label:'Maçã',                          xw:0.840, xp:0.003, xf:0.004, xa:0.003, xc:0.150,
+                        n:'Maçã',                  tC:-0.5,urMin:85, urMax:90, ceAC:0.86, ceAB:0.45, L:67,  pC:-2.0, cR:0.25, cons:'2-6 meses',   agua:84 },
+  banana:             { label:'Banana',                        xw:0.740, xp:0.013, xf:0.003, xa:0.008, xc:0.236,
+                        n:'Banana',                tC:14,  urMin:85, urMax:95, ceAC:0.80, ceAB:0.42, L:60,  pC:-2.2, cR:2.5,  cons:'1-2 semanas', agua:74 },
+  morango:            { label:'Morango',                       xw:0.908, xp:0.007, xf:0.004, xa:0.004, xc:0.077,
+                        n:'Morango',               tC:-0.5,urMin:85, urMax:90, ceAC:0.92, ceAB:null, L:null, pC:null,  cR:1.5,  cons:'4-5 dias',    agua:90 },
+  laranja:            { label:'Laranja',                       xw:0.870, xp:0.009, xf:0.002, xa:0.004, xc:0.115,
+                        n:'Laranja',               tC:0,   urMin:85, urMax:90, ceAC:0.90, ceAB:0.46, L:69,  pC:-2.2, cR:0.22, cons:'8-12 semanas',agua:87 },
+  tomate:             { label:'Tomate',                        xw:0.940, xp:0.009, xf:0.002, xa:0.005, xc:0.044,
+                        n:'Tomate',                tC:10,  urMin:85, urMax:95, ceAC:0.95, ceAB:0.50, L:72,  pC:-0.6, cR:0.40, cons:'1-3 semanas', agua:94 },
+  manga:              { label:'Manga',                         xw:0.820, xp:0.006, xf:0.004, xa:0.004, xc:0.166,
+                        n:'Manga',                 tC:10,  urMin:85, urMax:90, ceAC:0.90, ceAB:0.46, L:74,  pC:0,    cR:null, cons:'2-3 semanas', agua:82 },
+  uva:                { label:'Uva',                           xw:0.807, xp:0.007, xf:0.006, xa:0.005, xc:0.175,
+                        n:'Uva',                   tC:-0.5,urMin:80, urMax:85, ceAC:0.88, ceAB:0.46, L:67,  pC:-3.2, cR:null, cons:'3-8 semanas', agua:82 },
+  melancia:           { label:'Melancia',                      xw:0.917, xp:0.006, xf:0.002, xa:0.003, xc:0.072,
+                        n:'Melancia',              tC:2,   urMin:85, urMax:90, ceAC:0.97, ceAB:0.48, L:73,  pC:-1.6, cR:null, cons:'2-3 semanas', agua:92 },
+  abacaxi:            { label:'Abacaxi (ananás)',              xw:0.855, xp:0.005, xf:0.001, xa:0.003, xc:0.136,
+                        n:'Abacaxi',               tC:4,   urMin:85, urMax:90, ceAC:0.88, ceAB:0.45, L:68,  pC:-1.4, cR:null, cons:'2-6 semanas', agua:86 },
+  // ── Hortaliças ─────────────────────────────────────────────────────────────
+  alface:             { label:'Alface',                        xw:0.956, xp:0.014, xf:0.002, xa:0.008, xc:0.020,
+                        n:'Alface',                tC:0,   urMin:95, urMax:100,ceAC:0.96, ceAB:0.50, L:72,  pC:-0.3, cR:0.65, cons:'2-3 semanas', agua:96 },
+  cenoura:            { label:'Cenoura',                       xw:0.882, xp:0.009, xf:0.002, xa:0.008, xc:0.099,
+                        n:'Cenoura',               tC:0,   urMin:95, urMax:100,ceAC:0.90, ceAB:0.47, L:68,  pC:-1.4, cR:0.21, cons:'1-2 meses',   agua:88 },
+  batata:             { label:'Batata',                        xw:0.775, xp:0.021, xf:0.001, xa:0.010, xc:0.193,
+                        n:'Batata',                tC:4,   urMin:90, urMax:95, ceAC:0.85, ceAB:0.44, L:64,  pC:-1.7, cR:0.19, cons:'3-8 meses',   agua:78 },
+  cebola:             { label:'Cebola',                        xw:0.875, xp:0.013, xf:0.002, xa:0.005, xc:0.105,
+                        n:'Cebola',                tC:0,   urMin:65, urMax:75, ceAC:0.91, ceAB:0.47, L:68,  pC:-1.1, cR:0.15, cons:'1-3 meses',   agua:88 },
+  brocolis:           { label:'Brócolis',                      xw:0.906, xp:0.028, xf:0.004, xa:0.010, xc:0.052,
+                        n:'Brócolis',              tC:0,   urMin:95, urMax:100,ceAC:0.94, ceAB:0.49, L:71,  pC:-0.6, cR:0.81, cons:'1-2 semanas', agua:91 },
+  milho_verde:        { label:'Milho verde',                   xw:0.730, xp:0.033, xf:0.039, xa:0.009, xc:0.189,
+                        n:'Milho verde',           tC:0,   urMin:95, urMax:100,ceAC:0.83, ceAB:0.44, L:62,  pC:-1.1, cR:0.62, cons:'4-8 dias',    agua:73 },
+  // ── Ovos e Derivados ───────────────────────────────────────────────────────
+  ovo_inteiro:        { label:'Ovo inteiro (fresco)',          xw:0.737, xp:0.126, xf:0.099, xa:0.010, xc:0.028,
+                        n:'Ovo inteiro (fresco)',  tC:3,   urMin:75, urMax:80, ceAC:0.76, ceAB:null, L:null, pC:null,  cR:null, cons:'3-4 semanas', agua:74 },
+  // ── Bebidas ────────────────────────────────────────────────────────────────
+  cerveja_lata:       { label:'Cerveja (lata / garrafa 350 ml)',xw:0.920, xp:0.004, xf:0.000, xa:0.002, xc:0.074,
+                        n:'Cerveja (lata / garrafa)', tC:4, urMin:null,urMax:null,ceAC:0.92, ceAB:null, L:72,  pC:-2.5, cR:null, cons:'3-6 meses',  agua:92 },
+  refrigerante_cola:  { label:'Refrigerante cola (lata 350 ml)',xw:0.880, xp:0.000, xf:0.000, xa:0.002, xc:0.118,
+                        n:'Refrigerante cola',     tC:4,   urMin:null,urMax:null,ceAC:0.91, ceAB:null, L:70,  pC:-3.0, cR:null, cons:'9-12 meses', agua:88 },
+  refrigerante_diet:  { label:'Refrigerante diet / zero',      xw:0.988, xp:0.000, xf:0.000, xa:0.001, xc:0.011,
+                        n:'Refrigerante diet',     tC:4,   urMin:null,urMax:null,ceAC:0.99, ceAB:null, L:77,  pC:-0.2, cR:null, cons:'9-12 meses', agua:99 },
+  agua_mineral:       { label:'Água mineral / purificada',     xw:1.000, xp:0.000, xf:0.000, xa:0.000, xc:0.000,
+                        n:'Água mineral',          tC:4,   urMin:null,urMax:null,ceAC:1.00, ceAB:0.50, L:79.7,pC:0.0,  cR:null, cons:'24 meses',   agua:100},
+  suco_laranja:       { label:'Suco de laranja natural',       xw:0.880, xp:0.007, xf:0.002, xa:0.004, xc:0.107,
+                        n:'Suco de laranja natural',tC:2,  urMin:null,urMax:null,ceAC:0.90, ceAB:null, L:70,  pC:-1.5, cR:null, cons:'7-15 dias',  agua:88 },
+  vinho:              { label:'Vinho tinto / branco',          xw:0.870, xp:0.001, xf:0.000, xa:0.003, xc:0.030,
+                        n:'Vinho',                 tC:7,   urMin:60, urMax:70, ceAC:0.92, ceAB:null, L:70,  pC:-5.0, cR:null, cons:'meses-anos',  agua:87 },
+  suco_caixa:         { label:'Suco de caixa (néctar)',        xw:0.860, xp:0.003, xf:0.001, xa:0.003, xc:0.133,
+                        n:'Suco de caixa (néctar)',tC:4,   urMin:null,urMax:null,ceAC:0.90, ceAB:null, L:70,  pC:-2.0, cR:null, cons:'6-12 meses', agua:86 },
+  agua_coco:          { label:'Água de coco natural',          xw:0.948, xp:0.007, xf:0.002, xa:0.006, xc:0.037,
+                        n:'Água de coco',          tC:4,   urMin:null,urMax:null,ceAC:0.95, ceAB:null, L:74,  pC:-0.5, cR:null, cons:'15-30 dias', agua:95 },
+  energetico:         { label:'Energético (lata 250 ml)',      xw:0.888, xp:0.003, xf:0.000, xa:0.002, xc:0.107,
+                        n:'Energético',            tC:4,   urMin:null,urMax:null,ceAC:0.91, ceAB:null, L:70,  pC:-2.8, cR:null, cons:'18-24 meses',agua:89 },
+  // ── Pães e Farináceos ──────────────────────────────────────────────────────
+  pao_frances:        { label:'Pão francês',                   xw:0.340, xp:0.090, xf:0.030, xa:0.015, xc:0.525,
+                        n:'Pão francês',           tC:4,   urMin:null,urMax:null,ceAC:0.53, ceAB:null, L:null, pC:null,  cR:null, cons:'3-7 dias',    agua:34 },
+  arroz_cozido:       { label:'Arroz cozido',                  xw:0.690, xp:0.026, xf:0.003, xa:0.002, xc:0.279,
+                        n:'Arroz cozido',          tC:4,   urMin:null,urMax:null,ceAC:0.70, ceAB:null, L:null, pC:null,  cR:null, cons:'3-5 dias',    agua:69 },
+  // ── Composição manual ──────────────────────────────────────────────────────
+  personalizado:      { label:'Composição manual',             xw:0, xp:0, xf:0, xa:0, xc:0,
+                        n:'Personalizado',         tC:null,urMin:null,urMax:null,ceAC:null, ceAB:null, L:null, pC:null,  cR:null, cons:null,         agua:null }
+};
+
+function loadCoAlimento() {
+  const sel = document.getElementById('coAlimento');
+  if (!sel || !sel.value) return;
+  const d = choiOkosDB[sel.value];
+  if (!d) return;
+  document.getElementById('coXw').value = d.xw;
+  document.getElementById('coXp').value = d.xp;
+  document.getElementById('coXf').value = d.xf;
+  document.getElementById('coXa').value = d.xa;
+  document.getElementById('coXc').value = d.xc;
+  updateCoSoma();
+}
+
+function updateCoSoma() {
+  const xw = parseFloat(document.getElementById('coXw')?.value) || 0;
+  const xp = parseFloat(document.getElementById('coXp')?.value) || 0;
+  const xf = parseFloat(document.getElementById('coXf')?.value) || 0;
+  const xa = parseFloat(document.getElementById('coXa')?.value) || 0;
+  const xc = parseFloat(document.getElementById('coXc')?.value) || 0;
+  const soma = xw + xp + xf + xa + xc;
+  const el = document.getElementById('coSomaDisplay');
+  if (!el) return;
+  el.textContent = soma.toFixed(4);
+  const diff = Math.abs(soma - 1.0);
+  if (diff < 0.005) {
+    el.style.background = 'var(--success)';
+  } else if (diff < 0.02) {
+    el.style.background = 'var(--warning)';
+  } else {
+    el.style.background = 'var(--danger)';
+  }
+}
+
+function calcChoiOkos() {
+  const xw = parseFloat(document.getElementById('coXw')?.value) || 0;
+  const xp = parseFloat(document.getElementById('coXp')?.value) || 0;
+  const xf = parseFloat(document.getElementById('coXf')?.value) || 0;
+  const xa = parseFloat(document.getElementById('coXa')?.value) || 0;
+  const xc = parseFloat(document.getElementById('coXc')?.value) || 0;
+  const T  = parseFloat(document.getElementById('coTemp')?.value) ?? 5;
+  const soma = xw + xp + xf + xa + xc;
+
+  if (xw + xp + xf + xa + xc < 0.01) {
+    toast('Preencha a composição centesimal do alimento');
+    return;
+  }
+  if (Math.abs(soma - 1.0) > 0.02) {
+    toast(`Soma das frações = ${soma.toFixed(4)} — deve ser ≈ 1,0`);
+    return;
+  }
+
+  // Equações de Choi & Okos (1986) em kJ/(kg·°C)
+  const cpw = 4.1289 - (9.0864e-5 * T) + (5.4731e-6 * T * T);
+  const cpp = 2.0082 + (1.2089e-3 * T) - (1.3129e-6 * T * T);
+  const cpf = 1.9842 + (1.4733e-3 * T) - (4.8008e-6 * T * T);
+  const cpa = 1.0926 + (1.8896e-3 * T) - (3.6817e-6 * T * T);
+  // Carboidratos: equação de Choi & Okos para carbohydrate
+  const cpc = 1.5488 + (1.9625e-3 * T) - (5.9399e-6 * T * T);
+
+  const cpTotal = (xw * cpw) + (xp * cpp) + (xf * cpf) + (xa * cpa) + (xc * cpc);
+  const cpKcal  = cpTotal / 4.186; // kJ → kcal
+
+  const coKey   = document.getElementById('coAlimento')?.value || '';
+  const coData  = choiOkosDB[coKey] || {};
+  const nomeAlimento = coData.label || 'Composição manual';
+
+  // Bloco de propriedades térmicas (se disponíveis na base)
+  const temProps = coData.ceAC !== null && coData.ceAC !== undefined;
+  const propBlock = temProps ? `
+    <div class="result-block" style="margin-top:10px">
+      <div class="result-title">🧊 Propriedades térmicas (Tabelas 4 / BITZER)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:#e3f2fd;border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:#1565c0;text-transform:uppercase;margin-bottom:3px">T° conservação</div>
+          <div style="font-size:18px;font-weight:800;color:#0d47a1">${coData.tC !== null && coData.tC !== undefined ? coData.tC + ' °C' : '—'}</div>
+        </div>
+        <div style="background:#f3e5f5;border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:#6a1b9a;text-transform:uppercase;margin-bottom:3px">Umidade relativa</div>
+          <div style="font-size:18px;font-weight:800;color:#4a148c">${coData.urMin !== null && coData.urMin !== undefined ? coData.urMin + ' – ' + coData.urMax + ' %' : '—'}</div>
+        </div>
+        <div style="background:#e8f5e9;border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:#2e7d32;text-transform:uppercase;margin-bottom:3px">cp antes congelamento</div>
+          <div style="font-size:18px;font-weight:800;color:#1b5e20">${coData.ceAC !== null && coData.ceAC !== undefined ? coData.ceAC + ' kcal/kg°C' : '—'}</div>
+        </div>
+        <div style="background:#e8f5e9;border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:#2e7d32;text-transform:uppercase;margin-bottom:3px">cp após congelamento</div>
+          <div style="font-size:18px;font-weight:800;color:#1b5e20">${coData.ceAB !== null && coData.ceAB !== undefined ? coData.ceAB + ' kcal/kg°C' : '—'}</div>
+        </div>
+        <div style="background:#fff3e0;border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:#e65100;text-transform:uppercase;margin-bottom:3px">Calor latente (L)</div>
+          <div style="font-size:18px;font-weight:800;color:#bf360c">${coData.L !== null && coData.L !== undefined ? coData.L + ' kcal/kg' : '—'}</div>
+        </div>
+        <div style="background:#fce4ec;border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:#c62828;text-transform:uppercase;margin-bottom:3px">Ponto de congelamento</div>
+          <div style="font-size:18px;font-weight:800;color:#b71c1c">${coData.pC !== null && coData.pC !== undefined ? coData.pC + ' °C' : '—'}</div>
+        </div>
+        ${coData.cR !== null && coData.cR !== undefined ? `
+        <div style="background:#fdf3e3;border-radius:8px;padding:9px 11px;grid-column:1/-1">
+          <div style="font-size:10px;font-weight:700;color:#e65100;text-transform:uppercase;margin-bottom:3px">Calor de respiração</div>
+          <div style="font-size:18px;font-weight:800;color:#bf360c">${coData.cR} kcal/kg·24h</div>
+        </div>` : ''}
+        <div style="background:var(--bg-soft);border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:var(--text-mute);text-transform:uppercase;margin-bottom:3px">Água (%)</div>
+          <div style="font-size:18px;font-weight:800;color:var(--text)">${coData.agua !== null && coData.agua !== undefined ? coData.agua + ' %' : '—'}</div>
+        </div>
+        <div style="background:var(--bg-soft);border-radius:8px;padding:9px 11px">
+          <div style="font-size:10px;font-weight:700;color:var(--text-mute);text-transform:uppercase;margin-bottom:3px">Tempo de conservação</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text)">${coData.cons || '—'}</div>
+        </div>
+      </div>
+    </div>` : '';
+
+  const res = document.getElementById('choiOkosResult');
+  res.classList.remove('hidden');
+  res.innerHTML = `
+    <div class="result-block" style="text-align:center;padding:20px 16px;background:linear-gradient(135deg,#00897b,#00695c)">
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.75);text-transform:uppercase;letter-spacing:1.5px">${nomeAlimento} — ${T}°C</div>
+      <div style="font-size:38px;font-weight:800;color:white;letter-spacing:-1px;margin:6px 0">${cpTotal.toFixed(4)} <span style="font-size:16px;font-weight:600;color:rgba(255,255,255,0.8)">kJ/(kg·°C)</span></div>
+      <div style="background:rgba(255,255,255,0.18);display:inline-block;padding:6px 16px;border-radius:8px;font-size:14px;font-weight:700;color:white;margin-top:4px">
+        = ${cpKcal.toFixed(4)} kcal/(kg·°C)
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.6);margin-top:8px">Método Choi &amp; Okos (1986) · acima do ponto de congelamento</div>
+    </div>
+
+    ${propBlock}
+
+    <div class="result-block" style="margin-top:10px">
+      <div class="result-title">📊 Decomposição por componente</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="background:var(--bg-soft)">
+              <th style="padding:8px;text-align:left;font-weight:700;color:var(--text)">Componente</th>
+              <th style="padding:8px;text-align:right;font-weight:700;color:var(--text)">Fração (X)</th>
+              <th style="padding:8px;text-align:right;font-weight:700;color:var(--text)">cp(T) kJ/kg·°C</th>
+              <th style="padding:8px;text-align:right;font-weight:700;color:var(--text)">X × cp</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[
+              ['Água',       xw, cpw, '#1565c0'],
+              ['Proteína',   xp, cpp, '#2e7d32'],
+              ['Gordura',    xf, cpf, '#e65100'],
+              ['Cinzas',     xa, cpa, '#6a1b9a'],
+              ['Carboidrato',xc, cpc, '#c62828']
+            ].filter(([,xi]) => xi > 0).map(([nome, xi, cpi, cor]) => `
+              <tr style="border-bottom:1px solid var(--border-soft)">
+                <td style="padding:7px 8px;font-weight:700;color:${cor}">${nome}</td>
+                <td style="padding:7px 8px;text-align:right;font-family:monospace">${xi.toFixed(4)}</td>
+                <td style="padding:7px 8px;text-align:right;font-family:monospace">${cpi.toFixed(4)}</td>
+                <td style="padding:7px 8px;text-align:right;font-weight:700;font-family:monospace;color:${cor}">${(xi * cpi).toFixed(4)}</td>
+              </tr>
+            `).join('')}
+            <tr style="background:var(--bg-soft);font-weight:800">
+              <td colspan="3" style="padding:8px;text-align:right;color:var(--primary)">cp TOTAL</td>
+              <td style="padding:8px;text-align:right;color:var(--primary);font-family:monospace;font-size:14px">${cpTotal.toFixed(4)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="result-block" style="margin-top:10px">
+      <div class="result-title">📐 Equações (T = ${T}°C)</div>
+      <div style="font-family:monospace;font-size:11px;line-height:2;color:var(--text-soft)">
+        <div>cpw = 4,1289 − 9,0864×10⁻⁵·T + 5,4731×10⁻⁶·T² = <b>${cpw.toFixed(4)}</b></div>
+        <div>cpp = 2,0082 + 1,2089×10⁻³·T − 1,3129×10⁻⁶·T² = <b>${cpp.toFixed(4)}</b></div>
+        <div>cpf = 1,9842 + 1,4733×10⁻³·T − 4,8008×10⁻⁶·T² = <b>${cpf.toFixed(4)}</b></div>
+        <div>cpa = 1,0926 + 1,8896×10⁻³·T − 3,6817×10⁻⁶·T² = <b>${cpa.toFixed(4)}</b></div>
+        <div>cpc = 1,5488 + 1,9625×10⁻³·T − 5,9399×10⁻⁶·T² = <b>${cpc.toFixed(4)}</b></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderChoiOkosRef() {
+  const el = document.getElementById('coTabelaRef');
+  if (!el) return;
+  const rows = Object.entries(choiOkosDB).filter(([k]) => k !== 'personalizado');
+  const fmt = v => (v !== null && v !== undefined) ? v : '—';
+  el.innerHTML = `
+    <div style="font-size:10px;color:var(--text-mute);padding:8px 0 4px">
+      Deslize horizontalmente para ver todas as colunas
+    </div>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+    <table style="width:100%;border-collapse:collapse;font-size:10px;min-width:700px">
+      <thead>
+        <tr style="background:var(--primary);color:white;position:sticky;top:0">
+          <th style="padding:7px 8px;text-align:left;font-weight:700;min-width:130px">Alimento</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Temperatura de conservação">T°cons</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Umidade relativa mín/máx">UR %</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Cp antes congelamento kcal/kg°C">ceAC</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Cp após congelamento kcal/kg°C">ceAB</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Calor latente kcal/kg">L</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Ponto de congelamento °C">pCong</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Calor de respiração kcal/kg·24h">cResp</th>
+          <th style="padding:7px 6px;text-align:right;font-weight:700" title="Água %">H₂O%</th>
+          <th style="padding:7px 8px;text-align:left;font-weight:700">Conservação</th>
+        </tr>
+        <tr style="background:var(--bg-soft);font-size:9px;color:var(--text-mute)">
+          <th style="padding:3px 8px;text-align:left">—</th>
+          <th style="padding:3px 6px;text-align:right">°C</th>
+          <th style="padding:3px 6px;text-align:right">%</th>
+          <th style="padding:3px 6px;text-align:right">kcal/kg°C</th>
+          <th style="padding:3px 6px;text-align:right">kcal/kg°C</th>
+          <th style="padding:3px 6px;text-align:right">kcal/kg</th>
+          <th style="padding:3px 6px;text-align:right">°C</th>
+          <th style="padding:3px 6px;text-align:right">kcal/kg·24h</th>
+          <th style="padding:3px 6px;text-align:right">%</th>
+          <th style="padding:3px 8px;text-align:left">—</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(([k, d], i) => `
+          <tr style="border-bottom:1px solid var(--border-soft);background:${i%2===0?'white':'var(--bg-soft)'}">
+            <td style="padding:6px 8px;font-weight:600;color:var(--primary);white-space:nowrap">${d.label}</td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace">${fmt(d.tC)}</td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace;white-space:nowrap">
+              ${d.urMin !== null && d.urMin !== undefined ? d.urMin+'–'+d.urMax : '—'}
+            </td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace;font-weight:700;color:#2e7d32">${fmt(d.ceAC)}</td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace;font-weight:700;color:#1565c0">${fmt(d.ceAB)}</td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace;font-weight:700;color:#e65100">${fmt(d.L)}</td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace;font-weight:700;color:#c62828">${fmt(d.pC)}</td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace;color:#6a1b9a">${fmt(d.cR)}</td>
+            <td style="padding:6px 6px;text-align:right;font-family:monospace">${fmt(d.agua)}</td>
+            <td style="padding:6px 8px;font-size:9px;color:var(--text-mute);white-space:nowrap">${fmt(d.cons)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+}
 
 /* ============================================
    CONVERSORES
@@ -8235,10 +9031,19 @@ function convKgf(el) {
 function convC(el) {
   const v = parseFloat(el.value) || 0;
   setIfNotFocused('fIn', ((v * 9/5) + 32).toFixed(1));
+  setIfNotFocused('kIn', (v + 273.15).toFixed(2));
 }
 function convF(el) {
   const v = parseFloat(el.value) || 0;
-  setIfNotFocused('cIn', ((v - 32) * 5/9).toFixed(1));
+  const c = (v - 32) * 5/9;
+  setIfNotFocused('cIn', c.toFixed(1));
+  setIfNotFocused('kIn', (c + 273.15).toFixed(2));
+}
+function convK(el) {
+  const v = parseFloat(el.value) || 0;
+  const c = v - 273.15;
+  setIfNotFocused('cIn', c.toFixed(1));
+  setIfNotFocused('fIn', ((c * 9/5) + 32).toFixed(1));
 }
 
 /* ============================================
@@ -10962,12 +11767,14 @@ const tab1 = {
 };
 
 function getTab1Factor(deltaT, isoKey) {
-  // Pegar o ΔT imediatamente INFERIOR ou igual na tabela (conservador)
-  // Conforme anotações do professor: não interpolar, usar valor seguro
+  // REGRA: usar ΔT imediatamente SUPERIOR (ceiling) na tabela
+  // ΔT maior → fator maior → mais conservador (a favor da segurança)
+  // Ex: ΔT=47°C, tabela tem 45 e 50 → usa 50
   const dts = Object.keys(tab1).map(Number).sort((a, b) => a - b);
-  let best = dts[0];
+  // Procura o menor ΔT da tabela que seja >= deltaT real
+  let best = dts[dts.length - 1]; // default: maior ΔT disponível
   for (const d of dts) {
-    if (d <= deltaT) best = d;
+    if (d >= deltaT) { best = d; break; }
   }
   return (tab1[best] || {})[isoKey] || 200;
 }
@@ -11016,14 +11823,12 @@ function getTab2(vol, acima0) {
 }
 
 function getTab5(tCamara) {
-  // Pegar a linha da tabela com temperatura mais próxima de tCamara.
-  // Se tCamara cair exatamente em um valor da tabela, usa esse valor.
-  // Ex: T=-20°C → 338 kcal/h (não 358, que é a linha de -25°C)
-  let best = tab5[0];
-  let bestDiff = Math.abs(tCamara - best.t);
-  for (const r of tab5) {
-    const diff = Math.abs(tCamara - r.t);
-    if (diff < bestDiff) { best = r; bestDiff = diff; }
+  // REGRA: usar temperatura imediatamente INFERIOR (mais fria) → mais kcal/h → mais conservador
+  // Ex: tCamara=-22°C, tabela tem -20 e -25 → usa -25 (floor = mais frio)
+  const sorted = [...tab5].sort((a,b) => a.t - b.t); // ordem crescente (mais frio primeiro)
+  let best = sorted[0]; // mais frio como default
+  for (let i = sorted.length - 1; i >= 0; i--) {
+    if (sorted[i].t <= tCamara) { best = sorted[i]; break; }
   }
   return best.q;
 }
@@ -11035,31 +11840,55 @@ function getTab5(tCamara) {
    Umidade relativa externa: 40–60%
    ============================================ */
 // tab3[tCamara][tExt] = kcal/m³
+// Tabela 3 — Calor necessário para resfriar o ar externo até a T° da câmara (kcal/m³)
+// Fonte: tabela_calor_camara_fria.xlsx (BITZER), valores exatos da planilha do professor
+// Estrutura: tab3[tCamara][tExterna][UR%]
 const tab3 = {
-  10:  {15:{40:0.2,50:1.0,60:1.8}, 20:{40:2.9,50:4.0,60:5.1}, 25:{40:6.0,50:7.4,60:8.9}, 30:{40:9.5,50:11.5,60:13.6}, 35:{40:13.6,50:16.5,60:19.2}, 40:{40:18.7,50:22.3,60:26.0}},
-  5:   {15:{40:2.7,50:3.5,60:4.3}, 20:{40:5.5,50:6.6,60:7.7}, 25:{40:8.6,50:10.0,60:11.1}, 30:{40:12.3,50:14.4,60:16.5}, 35:{40:16.5,50:19.2,60:22.3}, 40:{40:21.7,50:25.4,60:29.2}},
-  0:   {15:{40:5.4,50:6.2,60:7.0}, 20:{40:8.1,50:9.3,60:10.5}, 25:{40:11.4,50:12.3,60:14.4}, 30:{40:15.1,50:17.2,60:19.4}, 35:{40:19.4,50:22.3,60:25.7}, 40:{40:24.7,50:28.5,60:32.8}},
-  '-5':{15:{40:8.0,50:8.8,60:9.7}, 20:{40:10.8,50:12.0,60:13.2}, 25:{40:14.1,50:15.8,60:17.2}, 30:{40:17.9,50:20.1,60:22.3}, 35:{40:22.3,50:25.4,60:29.2}, 40:{40:27.6,50:31.7,60:36.3}},
-  '-10':{15:{40:10.2,50:11.1,60:12.0}, 20:{40:13.1,50:14.3,60:15.6}, 25:{40:16.5,50:18.1,60:19.8}, 30:{40:20.4,50:22.8,60:25.4}, 35:{40:25.4,50:29.2,60:33.5}, 40:{40:31.7,50:36.3,60:41.7}},
-  '-15':{15:{40:12.7,50:13.5,60:14.4}, 20:{40:15.6,50:16.8,60:18.1}, 25:{40:19.1,50:21.3,60:23.0}, 30:{40:23.0,50:25.7,60:28.5}, 35:{40:28.5,50:32.8,60:37.6}, 40:{40:35.4,50:40.7,60:46.7}},
-  '-20':{15:{40:14.8,50:15.7,60:16.6}, 20:{40:17.9,50:19.1,60:20.4}, 25:{40:21.3,50:23.0,60:24.7}, 30:{40:25.4,50:27.6,60:30.0}, 35:{40:29.2,50:31.7,60:36.3}, 40:{40:33.2,50:36.3,60:43.9}},
-  '-25':{15:{40:17.0,50:17.9,60:18.8}, 20:{40:20.1,50:21.3,60:22.6}, 25:{40:23.7,50:25.4,60:27.0}, 30:{40:27.7,50:30.2,60:32.5}, 35:{40:32.5,50:35.4,60:40.4}, 40:{40:37.6,50:41.7,60:50.0}},
-  '-30':{15:{40:19.2,50:20.2,60:21.1}, 20:{40:22.4,50:23.7,60:25.0}, 25:{40:26.1,50:27.7,60:29.5}, 30:{40:30.2,50:32.5,60:35.4}, 35:{40:35.4,50:38.5,60:43.9}, 40:{40:40.7,50:45.4,60:52.7}},
-  '-35':{15:{40:21.6,50:22.5,60:23.5}, 20:{40:24.8,50:26.1,60:27.4}, 25:{40:28.5,50:30.2,60:32.5}, 30:{40:33.5,50:36.3,60:39.4}, 35:{40:39.4,50:43.9,60:50.0}, 40:{40:45.4,50:50.0,60:58.2}},
-  '-40':{15:{40:23.8,50:24.8,60:25.8}, 20:{40:27.1,50:28.5,60:29.8}, 25:{40:31.7,50:33.5,60:35.4}, 30:{40:36.3,50:39.4,60:42.5}, 35:{40:42.5,50:47.2,60:54.0}, 40:{40:49.1,50:54.0,60:62.7}}
+  10:   {15:{40:0.2, 50:1.0, 60:1.8},  20:{40:2.9, 50:4.0, 60:5.1},  25:{40:6.0,  50:7.4,  60:8.9},  30:{40:9.5,  50:11.5, 60:13.6}, 35:{40:13.6, 50:16.5, 60:19.2}, 40:{40:18.7, 50:22.3, 60:26.0}},
+  5:    {15:{40:2.7, 50:3.5, 60:4.3},  20:{40:5.5, 50:6.6, 60:7.7},  25:{40:8.6,  50:10.0, 60:11.7}, 30:{40:12.3, 50:14.4, 60:16.5}, 35:{40:16.5, 50:19.4, 60:22.2}, 40:{40:21.7, 50:25.4, 60:29.2}},
+  0:    {15:{40:5.4, 50:6.2, 60:7.0},  20:{40:8.1, 50:9.3, 60:10.5}, 25:{40:11.4, 50:13.0, 60:14.5}, 30:{40:15.1, 50:17.2, 60:19.4}, 35:{40:19.4, 50:22.4, 60:25.2}, 40:{40:24.7, 50:28.4, 60:32.3}},
+  '-5': {15:{40:8.0, 50:8.8, 60:9.7},  20:{40:10.8,50:12.0,60:13.2}, 25:{40:14.1, 50:16.0, 60:17.3}, 30:{40:18.0, 50:20.1, 60:22.3}, 35:{40:22.3, 50:25.3, 60:28.2}, 40:{40:27.7, 50:31.5, 60:35.5}},
+  '-10':{15:{40:10.2,50:11.1,60:12.0}, 20:{40:13.1,50:14.3,60:15.5}, 25:{40:16.5, 50:18.0, 60:19.7}, 30:{40:20.4, 50:22.5, 60:24.8}, 35:{40:24.8, 50:27.9, 60:30.8}, 40:{40:30.3, 50:34.2, 60:38.2}},
+  '-15':{15:{40:12.7,50:13.5,60:14.4}, 20:{40:15.6,50:16.8,60:18.1}, 25:{40:19.0, 50:21.0, 60:22.3}, 30:{40:23.0, 50:25.2, 60:27.5}, 35:{40:27.5, 50:30.7, 60:33.7}, 40:{40:33.2, 50:37.1, 60:41.2}},
+  '-20':{15:{40:14.8,50:15.7,60:16.6}, 20:{40:17.9,50:19.1,60:20.4}, 25:{40:21.3, 50:23.0, 60:24.7}, 30:{40:25.4, 50:27.6, 60:30.0}, 35:{40:30.0, 50:33.2, 60:36.3}, 40:{40:35.7, 50:39.8, 60:43.9}},
+  '-25':{15:{40:17.0,50:17.9,60:18.8}, 20:{40:20.1,50:21.3,60:22.6}, 25:{40:23.6, 50:25.0, 60:27.0}, 30:{40:27.7, 50:30.0, 60:32.4}, 35:{40:32.4, 50:35.7, 60:38.8}, 40:{40:38.3, 50:42.4, 60:46.7}},
+  '-30':{15:{40:19.2,50:20.2,60:21.1}, 20:{40:22.4,50:23.7,60:25.0}, 25:{40:26.0, 50:28.0, 60:29.5}, 30:{40:30.2, 50:32.5, 60:35.0}, 35:{40:35.0, 50:38.4, 60:41.6}, 40:{40:41.0, 50:45.2, 60:49.5}},
+  '-35':{15:{40:21.6,50:22.5,60:23.5}, 20:{40:24.8,50:26.1,60:27.4}, 25:{40:28.5, 50:30.0, 60:32.0}, 30:{40:32.8, 50:35.1, 60:37.7}, 35:{40:37.7, 50:41.1, 60:44.3}, 40:{40:43.7, 50:48.0, 60:52.5}},
+  '-40':{15:{40:23.8,50:24.8,60:25.8}, 20:{40:27.1,50:28.5,60:29.8}, 25:{40:30.9, 50:33.0, 60:34.5}, 30:{40:35.3, 50:37.7, 60:40.3}, 35:{40:40.3, 50:43.8, 60:47.1}, 40:{40:46.5, 50:50.9, 60:55.4}}
 };
 
 function getTab3(tCamara, tExt, ur) {
-  ur = ur || 60; // padrao UR=60% (condicoes tropicais / professor)
-  const tCKeys = Object.keys(tab3).map(Number).sort((a,b)=>a-b);
-  let bestTC = tCKeys[0];
-  tCKeys.forEach(k => { if (Math.abs(k-tCamara) < Math.abs(bestTC-tCamara)) bestTC = k; });
-  const tEKeys = [15,20,25,30,35,40];
-  let bestTE = tEKeys[0];
-  tEKeys.forEach(k => { if (Math.abs(k-tExt) < Math.abs(bestTE-tExt)) bestTE = k; });
-  const urKeys = [40,50,60];
-  let bestUR = urKeys[0];
-  urKeys.forEach(k => { if (Math.abs(k-ur) < Math.abs(bestUR-ur)) bestUR = k; });
+  ur = ur || 60;
+
+  // ── tCamara: valor imediatamente MAIS NEGATIVO (mais frio) na tabela ────────
+  // Regra: pegar o próximo valor da tabela ≤ tCamara real (floor).
+  // Temperatura interna mais fria → ΔT maior → fator maior → mais conservador.
+  // Ex: tCamara = −26°C, tabela tem −25 e −30 → usa −30
+  // Ex: tCamara = −22°C, tabela tem −20 e −25 → usa −25
+  const tCKeys = Object.keys(tab3).map(Number).sort((a, b) => a - b); // crescente: −40 … 10
+  let bestTC = tCKeys[0]; // fallback: temperatura mais fria disponível
+  for (let i = tCKeys.length - 1; i >= 0; i--) {
+    if (tCKeys[i] <= tCamara) { bestTC = tCKeys[i]; break; }
+  }
+
+  // ── tExt: valor imediatamente SUPERIOR (ceiling) ─────────────────────────
+  // Temperatura externa maior → ΔT maior → fator maior → mais conservador.
+  // Ex: tExt = 34°C, tabela tem 30 e 35 → usa 35
+  const tEKeys = [15, 20, 25, 30, 35, 40];
+  let bestTE = tEKeys[tEKeys.length - 1]; // fallback: maior disponível
+  for (const k of tEKeys) {
+    if (k >= tExt) { bestTE = k; break; }
+  }
+
+  // ── UR: valor imediatamente SUPERIOR (ceiling) ────────────────────────────
+  // Maior umidade → maior ganho de calor por infiltração → mais conservador.
+  // Ex: ur = 53,4%, tabela tem 50 e 60 → usa 60
+  const urKeys = [40, 50, 60];
+  let bestUR = urKeys[urKeys.length - 1]; // fallback: maior disponível
+  for (const k of urKeys) {
+    if (k >= ur) { bestUR = k; break; }
+  }
+
   return ((tab3[bestTC] || {})[bestTE] || {})[bestUR] || 10;
 }
 
@@ -11449,28 +12278,53 @@ function updateFoodList() {
     return;
   }
   sel.disabled = false;
-  const items = foodDB[cat] || [];
-  sel.innerHTML = '<option value="">— Selecione o alimento —</option>' +
-    items.map((f, i) => `<option value="${i}">${f.n}</option>`).join('');
+  if (cat === 'outros') {
+    // Popula com produtos do choiOkosDB que tenham propriedades térmicas
+    const coEntries = Object.entries(choiOkosDB)
+      .filter(([k, d]) => k !== 'personalizado' && d.ceAC !== null && d.ceAC !== undefined);
+    sel.innerHTML = '<option value="">— Selecione o alimento —</option>' +
+      coEntries.map(([k, d]) => `<option value="co:${k}">${d.label}</option>`).join('');
+  } else {
+    const items = foodDB[cat] || [];
+    sel.innerHTML = '<option value="">— Selecione o alimento —</option>' +
+      items.map((f, i) => `<option value="${i}">${f.n}</option>`).join('');
+  }
 }
 
 function addFoodToList() {
-  const cat = document.getElementById('chFoodCat').value;
+  const cat    = document.getElementById('chFoodCat').value;
   const idxStr = document.getElementById('chFoodItem').value;
-  if (!cat || idxStr === '') {
-    toast('Selecione uma categoria e um alimento');
-    return;
+  if (!cat || idxStr === '') { toast('Selecione uma categoria e um alimento'); return; }
+
+  let f;
+  if (cat === 'outros') {
+    // Produto vem do choiOkosDB
+    const coKey = idxStr.replace('co:', '');
+    const coD = choiOkosDB[coKey];
+    if (!coD) return;
+    if (chFoodList.some(x => x.cat === 'outros' && x.coKey === coKey)) {
+      toast('Este alimento já foi adicionado'); return;
+    }
+    // Mapeia para o formato foodDB
+    f = {
+      cat: 'outros', coKey,
+      n: coD.n || coD.label,
+      ceAC: coD.ceAC, ceAB: coD.ceAB, L: coD.L,
+      pC: coD.pC, cR: coD.cR,
+      tC: coD.tC, urMin: coD.urMin, urMax: coD.urMax,
+      cons: coD.cons, agua: coD.agua
+    };
+    chFoodList.push(f);
+  } else {
+    const idx = parseInt(idxStr);
+    f = (foodDB[cat] || [])[idx];
+    if (!f) return;
+    if (chFoodList.some(x => x.cat === cat && x.idx === idx)) {
+      toast('Este alimento já foi adicionado'); return;
+    }
+    chFoodList.push({ cat, idx, ...f });
   }
-  const idx = parseInt(idxStr);
-  const f = (foodDB[cat] || [])[idx];
-  if (!f) return;
-  // Evitar duplicatas
-  if (chFoodList.some(x => x.cat === cat && x.idx === idx)) {
-    toast('Este alimento já foi adicionado');
-    return;
-  }
-  chFoodList.push({ cat, idx, ...f });
-  // Reset selects
+
   document.getElementById('chFoodCat').value = '';
   updateFoodList();
   renderFoodList();
@@ -11619,6 +12473,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderErrorList();
   applySettings();
   renderMotorList();
+  renderEmbalagemList();
 });
 
 // Para garantir, inicializa imediatamente também
@@ -11626,6 +12481,7 @@ renderDiag();
 renderErrorList();
 applySettings();
 renderMotorList();
+renderEmbalagemList();
 </script>
 </body>
 </html>
