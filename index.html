@@ -2344,6 +2344,20 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
           <div class="tool-tile-sub">Fluidos, elétrica...</div>
         </div>
       </div>
+
+      <div class="tool-tile" onclick="goTo('psicrometria')">
+        <div class="tool-tile-icon" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2);color:#006064">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a5 5 0 00-5 5c0 5.25 5 13 5 13s5-7.75 5-13a5 5 0 00-5-5z"/>
+            <circle cx="12" cy="7" r="2"/>
+            <path d="M3 13c2 2 4 3 6 2M21 13c-2 2-4 3-6 2"/>
+          </svg>
+        </div>
+        <div class="tool-tile-text">
+          <div class="tool-tile-title">Psicrometria</div>
+          <div class="tool-tile-sub">Carta psicrométrica</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -3602,6 +3616,30 @@ input, textarea, select { user-select: text; -webkit-user-select: text; }
 </div>
 
 <!-- ============================================
+     PSICROMETRIA — Carta Psicrométrica
+     ============================================ -->
+<div id="psicrometria" class="screen">
+  <div class="header">
+    <button class="header-back" onclick="goTo('menu'); stopPsico()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div>
+      <div class="header-title">Psicrometria</div>
+      <div class="header-subtitle">Carta Psicrométrica · ASHRAE / SI</div>
+    </div>
+  </div>
+  <div style="flex:1;overflow:hidden;position:relative">
+    <iframe
+      id="psicoFrame"
+      src=""
+      style="width:100%;height:100%;border:none;display:block"
+      title="Carta Psicrométrica"
+      loading="lazy"
+    ></iframe>
+  </div>
+</div>
+
+<!-- ============================================
      CONVERSOR DE MEDIDAS
      ============================================ -->
 <div id="converter" class="screen">
@@ -4390,6 +4428,19 @@ function goTo(id) {
   else if (id === 'compressors') renderCompressors();
   else if (id === 'foodTable') renderFoodTable();
   else if (id === 'choiOkos') renderChoiOkosRef();
+  else if (id === 'psicrometria') {
+    // Carrega o iframe apenas quando a tela é aberta (lazy load)
+    const fr = document.getElementById('psicoFrame');
+    if (fr && !fr.src.includes('implemento.html')) {
+      fr.src = 'implemento.html';
+    }
+  }
+}
+
+function stopPsico() {
+  // Limpa o iframe ao sair para liberar memória
+  const fr = document.getElementById('psicoFrame');
+  if (fr) fr.src = '';
 }
 
 function toast(msg) {

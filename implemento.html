@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta Psicrométrica — Calculadora</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0e1a; --surface:#111827; --surface2:#1a2236; --border:#1e2d45;
+  --accent:#00d4ff; --accent2:#ff6b35; --accent3:#7fff6e; --accent4:#c084fc;
+  --text:#e8f0fe; --muted:#6b7fa3; --error:#ff4d6d;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;z-index:0;}
+.container{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:32px 18px;}
+
+header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px;}
+.header-left h1{font-size:clamp(1.7rem,5vw,2.9rem);font-weight:800;line-height:1;letter-spacing:-0.03em;}
+.header-left h1 span{color:var(--accent);}
+.header-left p{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);margin-top:7px;letter-spacing:0.1em;text-transform:uppercase;}
+.badge{background:linear-gradient(135deg,var(--accent2),#ff3d7f);color:#fff;font-family:'Space Mono',monospace;font-size:0.6rem;padding:4px 12px;border-radius:2px;letter-spacing:0.15em;text-transform:uppercase;align-self:flex-start;}
+
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:700px){.main-grid{grid-template-columns:1fr;}}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:22px;position:relative;}
+.panel.input-panel,.panel.chart-panel{overflow:hidden;}
+.panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.panel.input-panel::before {background:linear-gradient(90deg,var(--accent),transparent);}
+.panel.output-panel::before{background:linear-gradient(90deg,var(--accent3),transparent);}
+.panel.chart-panel::before {background:linear-gradient(90deg,var(--accent2),transparent);}
+.panel.chart-panel{grid-column:1/-1;}
+
+.panel-label{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── VARIABLE SELECTOR SLOTS ─────────────────────────── */
+.slots-wrap{display:flex;flex-direction:column;gap:14px;margin-bottom:18px;}
+.slot{background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:14px;}
+.slot-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.slot-number{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:0.65rem;font-weight:700;flex-shrink:0;}
+.slot-number.s1{background:rgba(0,212,255,0.15);color:var(--accent);border:1px solid rgba(0,212,255,0.3);}
+.slot-number.s2{background:rgba(255,107,53,0.15);color:var(--accent2);border:1px solid rgba(255,107,53,0.3);}
+
+.var-select{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:2px;color:var(--text);font-family:'Space Mono',monospace;font-size:0.75rem;padding:7px 10px;cursor:pointer;outline:none;transition:border-color 0.2s;appearance:none;-webkit-appearance:none;}
+.var-select:focus,.var-select:hover{border-color:var(--accent);}
+.var-select option{background:#111827;color:var(--text);}
+.var-select option:disabled{color:var(--muted);}
+
+.slot-input-row{display:flex;gap:6px;align-items:center;}
+input[type="number"]{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:2px;color:var(--text);font-family:'Space Mono',monospace;font-size:1rem;padding:8px 11px;outline:none;transition:border-color 0.2s;-moz-appearance:textfield;min-width:0;}
+input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;}
+input[type="number"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,255,0.08);}
+
+.unit-select{background:var(--surface);border:1px solid rgba(255,107,53,0.3);border-radius:2px;color:var(--accent2);font-family:'Space Mono',monospace;font-size:0.65rem;padding:7px 8px;cursor:pointer;outline:none;transition:border-color 0.2s;appearance:none;-webkit-appearance:none;min-width:72px;text-align:center;}
+.unit-select:hover,.unit-select:focus{border-color:var(--accent2);background:rgba(255,107,53,0.06);}
+.unit-select option{background:#1a2236;color:var(--text);}
+
+/* conflict warning */
+.conflict-msg{display:none;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.3);border-radius:2px;padding:7px 11px;font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--error);margin-bottom:10px;}
+
+/* pressure row */
+.pressure-row{display:flex;gap:6px;align-items:center;margin-bottom:4px;}
+.pressure-label{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);white-space:nowrap;}
+
+.calc-btn{width:100%;background:var(--accent);color:var(--bg);border:none;border-radius:2px;font-family:'Syne',sans-serif;font-weight:800;font-size:0.86rem;letter-spacing:0.15em;text-transform:uppercase;padding:12px;cursor:pointer;transition:all 0.2s;margin-top:8px;}
+.calc-btn:hover{background:#33ddff;transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,212,255,0.25);}
+.calc-btn:active{transform:translateY(0);}
+.error-msg{color:var(--error);font-family:'Space Mono',monospace;font-size:0.64rem;margin-top:7px;display:none;}
+
+/* ── RESULTS ─────────────────────────────────────────── */
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.result-card{background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:11px 13px;position:relative;overflow:hidden;transition:border-color 0.3s;}
+.result-card.hi-blue  {border-color:rgba(0,212,255,0.5);}
+.result-card.hi-blue::before  {content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--accent);}
+.result-card.hi-green {border-color:rgba(127,255,110,0.5);}
+.result-card.hi-green::before {content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--accent3);}
+.result-card.hi-purple{border-color:rgba(192,132,252,0.5);}
+.result-card.hi-purple::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--accent4);}
+.result-card.hi-orange{border-color:rgba(255,107,53,0.5);}
+.result-card.hi-orange::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--accent2);}
+
+.result-label{font-family:'Space Mono',monospace;font-size:0.56rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.result-row{display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.result-value{font-family:'Space Mono',monospace;font-size:1.15rem;font-weight:700;color:var(--text);line-height:1;white-space:nowrap;}
+.result-unit-span{font-size:0.6rem;color:var(--accent2);margin-left:2px;}
+.result-meta{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.result-sym{font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--accent);font-style:italic;}
+.result-unit-sel{background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--accent2);font-family:'Space Mono',monospace;font-size:0.58rem;cursor:pointer;outline:none;padding:1px 2px;appearance:none;-webkit-appearance:none;transition:border-color 0.2s;}
+.result-unit-sel:hover,.result-unit-sel:focus{border-color:var(--accent2);}
+.result-unit-sel option{background:#1a2236;color:var(--text);}
+
+.placeholder-text{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);text-align:center;padding:28px 0;opacity:0.35;}
+.animate-in{animation:fadeUp 0.3s ease forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── CHART ───────────────────────────────────────────── */
+.chart-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:12px;}
+canvas{width:100%!important;display:block;}
+.chart-legend{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--muted);}
+.legend-dot{width:8px;height:8px;border-radius:50%;}
+
+/* ── CONDENSATION PANEL ──────────────────────────────── */
+.cond-panel::before{background:linear-gradient(90deg,#7fff6e,transparent);}
+.cond-panel{grid-column:1/-1;}
+.cond-layout{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start;}
+@media(max-width:800px){.cond-layout{grid-template-columns:1fr;}}
+
+.cond-inputs{display:flex;flex-direction:column;gap:10px;}
+.cond-info-bar{background:rgba(127,255,110,0.05);border:1px solid rgba(127,255,110,0.15);border-radius:2px;padding:10px 13px;font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--muted);line-height:1.7;margin-bottom:4px;}
+.cond-section-title{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent3);margin-top:4px;padding-bottom:4px;border-bottom:1px solid rgba(127,255,110,0.15);}
+.cond-field{display:flex;flex-direction:column;gap:6px;}
+.cond-field label{font-family:'Space Mono',monospace;font-size:0.66rem;color:var(--muted);}
+.cond-field label span{color:var(--accent);font-style:italic;font-size:0.6rem;}
+
+/* Verdict */
+.cond-result{display:flex;flex-direction:column;gap:16px;}
+.cond-verdict{display:flex;align-items:center;gap:18px;padding:20px 22px;border-radius:3px;border:1px solid;}
+.cond-verdict.danger {background:rgba(255,77,109,0.08); border-color:rgba(255,77,109,0.4);}
+.cond-verdict.warning{background:rgba(255,190,0,0.08);  border-color:rgba(255,190,0,0.4);}
+.cond-verdict.safe   {background:rgba(127,255,110,0.08);border-color:rgba(127,255,110,0.4);}
+.verdict-icon{font-size:2.4rem;line-height:1;flex-shrink:0;}
+.verdict-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:4px;}
+.cond-verdict.danger  .verdict-title{color:#ff4d6d;}
+.cond-verdict.warning .verdict-title{color:#ffbe00;}
+.cond-verdict.safe    .verdict-title{color:var(--accent3);}
+.verdict-sub{font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--muted);line-height:1.6;}
+
+/* Temperature bar */
+.cond-compare-title{font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);}
+.cond-temp-bar-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:10px;}
+.cond-temp-bar-wrap canvas{width:100%!important;display:block;}
+
+/* Data cards */
+.cond-data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:600px){.cond-data-grid{grid-template-columns:1fr 1fr;}}
+.cond-data-card{background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:11px 13px;}
+.tpo-card {border-color:rgba(0,212,255,0.45);}
+.tsup-card{border-color:rgba(255,107,53,0.45);}
+.delta-card{border-color:rgba(192,132,252,0.45);}
+.cond-data-label{font-family:'Space Mono',monospace;font-size:0.56rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.cond-data-val{font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--text);}
+
+/* Recommendation */
+.cond-recommendation{background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:16px 18px;font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--muted);line-height:1.9;}
+.cond-recommendation strong{color:var(--text);font-weight:700;}
+
+/* ── HEAT PANEL ───────────────────────────────────────── */
+.heat-panel::before{background:linear-gradient(90deg,var(--accent4),transparent);}
+.heat-panel{grid-column:1/-1;}
+
+/* Row 1: bar (flex) + donut side by side */
+.heat-row1{display:flex; gap:20px; align-items:center; margin-bottom:16px;}
+.heat-bar-col{flex:1; display:flex; flex-direction:column; gap:10px; min-width:0;}
+.heat-donut-col{flex-shrink:0; display:flex; justify-content:center; align-items:center;}
+
+/* Row 2: three cards */
+.heat-row2{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;}
+@media(max-width:600px){ .heat-row2{grid-template-columns:1fr 1fr;} }
+.heat-bar-label-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.heat-bar-title{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+
+.heat-bar-track{
+  width:100%; height:38px;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:3px; overflow:hidden;
+  display:flex;
+}
+.heat-bar-seg{
+  height:100%; display:flex; align-items:center; justify-content:center;
+  font-family:'Space Mono',monospace; font-size:0.72rem; font-weight:700;
+  transition:width 0.7s cubic-bezier(0.4,0,0.2,1);
+  overflow:hidden; white-space:nowrap;
+  color:#fff; letter-spacing:0.05em;
+}
+.seg-sensivel{background:linear-gradient(90deg,#ff6b35,#ff9a5c);}
+.seg-latente {background:linear-gradient(90deg,#00d4ff,#33ddff);}
+
+.heat-bar-ticks{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--border);}
+.heat-bar-legend-row{font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);}
+.dot-s{color:#ff6b35;}
+.dot-l{color:#00d4ff;}
+
+/* Donut */
+.donut-wrap{position:relative;width:160px;height:160px;flex-shrink:0;}
+.donut-wrap canvas{position:absolute;top:0;left:0;width:160px!important;height:160px!important;}
+.donut-center-text{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  text-align:center; pointer-events:none;
+}
+.donut-label{font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+.donut-val{font-family:'Space Mono',monospace;font-size:0.82rem;font-weight:700;color:var(--text);margin-top:2px;}
+
+/* Heat cards */
+.heat-card{
+  background:var(--surface2); border:1px solid var(--border); border-radius:3px;
+  padding:14px 16px; display:flex; flex-direction:column; gap:6px;
+}
+.sensivel-card{border-color:rgba(255,107,53,0.4);}
+.sensivel-card::before{content:'';display:block;position:absolute;} /* avoid panel::before interference */
+.latente-card {border-color:rgba(0,212,255,0.4);}
+.total-card   {border-color:rgba(192,132,252,0.4);}
+.heat-card-header{display:flex;align-items:center;gap:6px;}
+.heat-card-dot{font-size:0.9rem;}
+.heat-card-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;color:var(--text);}
+.heat-card-formula{font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--muted);line-height:1.5;}
+.heat-card-value{font-family:'Space Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--text);line-height:1;}
+.heat-card-pct{
+  font-family:'Space Mono',monospace; font-size:1rem; font-weight:700;
+  margin-top:2px;
+}
+.sensivel-card .heat-card-pct{color:#ff6b35;}
+.latente-card  .heat-card-pct{color:#00d4ff;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="header-left">
+      <h1>Carta <span>Psicrométrica</span></h1>
+      <p>Propriedades termodinâmicas do ar úmido · ASHRAE / SI</p>
+    </div>
+    <div class="badge">v3 · combinação livre</div>
+  </header>
+
+  <div class="main-grid">
+
+    <!-- ── INPUT ── -->
+    <div class="panel input-panel">
+      <div class="panel-label">01 — Variáveis Conhecidas</div>
+
+      <div class="slots-wrap">
+
+        <!-- SLOT A -->
+        <div class="slot">
+          <div class="slot-header">
+            <div class="slot-number s1">A</div>
+            <select class="var-select" id="varA" onchange="onVarChange()">
+              <option value="">— selecione a variável —</option>
+              <option value="Tbs">Tbs — Temperatura de Bulbo Seco</option>
+              <option value="Tbu">Tbu — Temperatura de Bulbo Úmido</option>
+              <option value="Tpo">Tpo — Ponto de Orvalho</option>
+              <option value="UR" >UR  — Umidade Relativa</option>
+              <option value="W"  >W   — Razão de Mistura</option>
+              <option value="h"  >h   — Entalpia</option>
+            </select>
+          </div>
+          <div class="slot-input-row" id="inputA" style="display:none">
+            <input type="number" id="valA" step="any" placeholder="valor">
+            <select class="unit-select" id="unitA" onchange="onTempUnitChangeSlot('A')"></select>
+          </div>
+        </div>
+
+        <!-- SLOT B -->
+        <div class="slot">
+          <div class="slot-header">
+            <div class="slot-number s2">B</div>
+            <select class="var-select" id="varB" onchange="onVarChange()">
+              <option value="">— selecione a variável —</option>
+              <option value="Tbs">Tbs — Temperatura de Bulbo Seco</option>
+              <option value="Tbu">Tbu — Temperatura de Bulbo Úmido</option>
+              <option value="Tpo">Tpo — Ponto de Orvalho</option>
+              <option value="UR" >UR  — Umidade Relativa</option>
+              <option value="W"  >W   — Razão de Mistura</option>
+              <option value="h"  >h   — Entalpia</option>
+            </select>
+          </div>
+          <div class="slot-input-row" id="inputB" style="display:none">
+            <input type="number" id="valB" step="any" placeholder="valor">
+            <select class="unit-select" id="unitB" onchange="onTempUnitChangeSlot('B')"></select>
+          </div>
+        </div>
+
+      </div><!-- /slots-wrap -->
+
+      <div class="conflict-msg" id="conflict_msg"></div>
+
+      <!-- Pressure -->
+      <div class="pressure-row">
+        <span class="pressure-label">Pressão (P):</span>
+        <input type="number" id="pbar" value="101.325" step="0.1" style="max-width:130px">
+        <select class="unit-select" id="unit_pbar" style="min-width:64px">
+          <option value="kPa" >kPa</option>
+          <option value="hPa" >hPa</option>
+          <option value="atm" >atm</option>
+          <option value="mmHg">mmHg</option>
+          <option value="psi" >psi</option>
+        </select>
+      </div>
+
+      <div id="error_msg" class="error-msg"></div>
+      <button class="calc-btn" onclick="calculate()">▶ CALCULAR</button>
+    </div>
+
+    <!-- ── OUTPUT ── -->
+    <div class="panel output-panel">
+      <div class="panel-label">02 — Resultados</div>
+      <div id="results_placeholder" class="placeholder-text">— selecione duas variáveis e calcule —</div>
+      <div id="results_grid" class="result-grid" style="display:none"></div>
+    </div>
+
+    <!-- ── CHART ── -->
+    <div class="panel chart-panel">
+      <div class="panel-label">03 — Diagrama Psicrométrico</div>
+      <div class="chart-wrap">
+        <canvas id="psychChart" height="360"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#00d4ff"></div>Saturação 100%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.4)"></div>UR 75%·50%·25%</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(127,255,110,0.55)"></div>h constante (kJ/kg)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff6b35"></div>Ponto calculado</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEAT DECOMPOSITION -->
+    <div class="panel heat-panel">
+      <div class="panel-label">04 &#x2014; Decomposição da Entalpia: Calor Sensível vs Latente</div>
+      <div id="heat_placeholder" class="placeholder-text">&#x2014; calcule nos quadros 01/02 para ver a decomposição &#x2014;</div>
+      <div id="heat_content" style="display:none">
+
+        <!-- Row 1: bar + donut -->
+        <div class="heat-row1">
+          <div class="heat-bar-col">
+            <div class="heat-bar-label-row">
+              <span class="heat-bar-title">Composição da Entalpia Total</span>
+              <select class="unit-select" id="heat_unit" onchange="renderHeat()" style="min-width:90px">
+                <option value="kJ_kg">kJ/kg</option>
+                <option value="kcal_kg">kcal/kg</option>
+                <option value="BTU_lb">BTU/lb</option>
+              </select>
+            </div>
+            <div class="heat-bar-track">
+              <div class="heat-bar-seg seg-sensivel" id="bar_sensivel"></div>
+              <div class="heat-bar-seg seg-latente"  id="bar_latente"></div>
+            </div>
+            <div class="heat-bar-ticks">
+              <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+            </div>
+            <div class="heat-bar-legend-row">
+              <span class="dot-s">&#9632;</span> Calor Sensível &nbsp;&nbsp;
+              <span class="dot-l">&#9632;</span> Calor Latente
+            </div>
+          </div>
+          <div class="heat-donut-col">
+            <div class="donut-wrap">
+              <canvas id="donutChart" width="160" height="160"></canvas>
+              <div class="donut-center-text">
+                <div class="donut-label">h total</div>
+                <div class="donut-val" id="donut_total">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: three cards -->
+        <div class="heat-row2">
+          <div class="heat-card sensivel-card">
+            <div class="heat-card-header">
+              <span class="heat-card-dot dot-s">&#9632;</span>
+              <span class="heat-card-name">Calor Sensível</span>
+            </div>
+            <div class="heat-card-formula">hs = 1.006 &times; Tbs</div>
+            <div class="heat-card-value" id="val_sensivel">—</div>
+            <div class="heat-card-pct" id="pct_sensivel">—</div>
+          </div>
+          <div class="heat-card latente-card">
+            <div class="heat-card-header">
+              <span class="heat-card-dot dot-l">&#9632;</span>
+              <span class="heat-card-name">Calor Latente</span>
+            </div>
+            <div class="heat-card-formula">hl = W &times; (2501 + 1.805 &times; Tbs)</div>
+            <div class="heat-card-value" id="val_latente">—</div>
+            <div class="heat-card-pct" id="pct_latente">—</div>
+          </div>
+          <div class="heat-card total-card">
+            <div class="heat-card-header">
+              <span class="heat-card-dot" style="color:var(--accent4)">&#9632;</span>
+              <span class="heat-card-name">Total (hs + hl)</span>
+            </div>
+            <div class="heat-card-formula">h = 1.006T + W(2501 + 1.805T)</div>
+            <div class="heat-card-value" id="val_total">—</div>
+            <div class="heat-card-pct" style="color:var(--muted)">100%</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  <!-- ── CONDENSATION CHECK ── -->
+    <div class="panel cond-panel">
+      <div class="panel-label">05 &#x2014; Análise de Condensação em Superfícies / Dutos</div>
+      <div class="cond-layout">
+
+        <!-- LEFT: inputs -->
+        <div class="cond-inputs">
+          <div class="cond-info-bar">
+            Informe as condições do ar externo (ambiente) e a temperatura da superfície fria
+            (ex.: face externa do duto de insuflação). O sistema calcula a TPO do ar externo
+            e verifica se haverá condensação.
+          </div>
+
+          <div class="cond-section-title">Ar Externo (Ambiente)</div>
+
+          <div class="cond-field">
+            <label>Temperatura de Bulbo Seco <span>(Tbs ext)</span></label>
+            <div class="input-row">
+              <input type="number" id="c_tbs" value="30" step="0.1">
+              <select class="unit-select" id="c_unit_tbs" onchange="condTempConvert('c_tbs','c_unit_tbs')">
+                <option value="C">°C</option><option value="F">°F</option><option value="K">K</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="cond-field">
+            <label>Segunda variável do ar externo</label>
+            <div class="input-row" style="gap:6px">
+              <select class="var-select" id="c_var2" onchange="condVar2Change()" style="flex:1">
+                <option value="Tbu">Tbu — Temperatura Bulbo Úmido</option>
+                <option value="UR">UR — Umidade Relativa</option>
+                <option value="Tpo">Tpo — Ponto de Orvalho</option>
+                <option value="W">W — Razão de Mistura</option>
+              </select>
+            </div>
+            <div class="input-row" style="margin-top:6px">
+              <input type="number" id="c_val2" value="26" step="0.1">
+              <select class="unit-select" id="c_unit2" onchange="condTempConvert('c_val2','c_unit2')">
+                <option value="C">°C</option><option value="F">°F</option><option value="K">K</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="cond-section-title" style="margin-top:14px">Superfície Fria</div>
+
+          <div class="cond-field">
+            <label>Temperatura da Superfície <span>(Tsup)</span></label>
+            <div class="input-row">
+              <input type="number" id="c_tsup" value="14" step="0.1">
+              <select class="unit-select" id="c_unit_tsup" onchange="condTempConvert('c_tsup','c_unit_tsup')">
+                <option value="C">°C</option><option value="F">°F</option><option value="K">K</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="cond-field">
+            <label>Pressão Barométrica</label>
+            <div class="input-row">
+              <input type="number" id="c_pbar" value="101.325" step="0.1">
+              <select class="unit-select" id="c_unit_pbar">
+                <option value="kPa">kPa</option><option value="hPa">hPa</option>
+                <option value="atm">atm</option><option value="mmHg">mmHg</option><option value="psi">psi</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="cond_err" class="error-msg"></div>
+          <button class="calc-btn" style="margin-top:12px" onclick="calcCondensation()">▶ VERIFICAR CONDENSAÇÃO</button>
+        </div>
+
+        <!-- RIGHT: result -->
+        <div class="cond-result" id="cond_result_area" style="display:none">
+
+          <!-- Verdict banner -->
+          <div class="cond-verdict" id="cond_verdict">
+            <div class="verdict-icon" id="verdict_icon"></div>
+            <div class="verdict-text">
+              <div class="verdict-title" id="verdict_title"></div>
+              <div class="verdict-sub"   id="verdict_sub"></div>
+            </div>
+          </div>
+
+          <!-- Temperature comparison bar -->
+          <div class="cond-compare-title">Comparação de Temperaturas</div>
+          <div class="cond-temp-bar-wrap">
+            <canvas id="condTempBar" height="90"></canvas>
+          </div>
+
+          <!-- Data cards -->
+          <div class="cond-data-grid">
+            <div class="cond-data-card">
+              <div class="cond-data-label">Tbs Externo</div>
+              <div class="cond-data-val" id="r_tbs_ext">—</div>
+            </div>
+            <div class="cond-data-card">
+              <div class="cond-data-label">UR Externo</div>
+              <div class="cond-data-val" id="r_ur_ext">—</div>
+            </div>
+            <div class="cond-data-card tpo-card">
+              <div class="cond-data-label">TPO do Ar Externo</div>
+              <div class="cond-data-val" id="r_tpo">—</div>
+            </div>
+            <div class="cond-data-card tsup-card" id="tsup_card">
+              <div class="cond-data-label">Temp. Superfície</div>
+              <div class="cond-data-val" id="r_tsup">—</div>
+            </div>
+            <div class="cond-data-card delta-card">
+              <div class="cond-data-label">Margem (Tsup &#x2212; TPO)</div>
+              <div class="cond-data-val" id="r_delta">—</div>
+            </div>
+            <div class="cond-data-card">
+              <div class="cond-data-label">W Externo</div>
+              <div class="cond-data-val" id="r_w_ext">—</div>
+            </div>
+          </div>
+
+          <!-- Recommendation box -->
+          <div class="cond-recommendation" id="cond_recommendation"></div>
+
+        </div><!-- /cond-result -->
+      </div><!-- /cond-layout -->
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  UNIT DEFINITIONS
+// ═══════════════════════════════════════════════════════════════
+const VAR_UNITS = {
+  Tbs: { opts:['C','F','K'],        lbls:['°C','°F','K'],          def:'C' },
+  Tbu: { opts:['C','F','K'],        lbls:['°C','°F','K'],          def:'C' },
+  Tpo: { opts:['C','F','K'],        lbls:['°C','°F','K'],          def:'C' },
+  UR:  { opts:['pct','dec'],        lbls:['%','fração (0–1)'],     def:'pct' },
+  W:   { opts:['g_kg','kg_kg','gr_lb'], lbls:['g/kg','kg/kg','gr/lb'], def:'g_kg' },
+  h:   { opts:['kJ_kg','kcal_kg','BTU_lb'], lbls:['kJ/kg','kcal/kg','BTU/lb'], def:'kJ_kg' },
+};
+
+// Incompatible pairs (same physical meaning)
+// Truly redundant pairs: Tpo and W carry the same information (both define Pv uniquely)
+// All other combinations — including Tbs+Tbu and Tbs+Tpo — are valid and solvable.
+const INCOMPATIBLE = new Set(['Tpo-W','W-Tpo']);
+// Pairs that are solvable (bidirectional key lookup will cover all combos)
+// Any pair NOT in INCOMPATIBLE is potentially solvable; we attempt and catch NaN.
+
+// ─── Conversion to/from SI ──────────────────────────────────
+const toC  = {C:v=>v,       F:v=>(v-32)*5/9, K:v=>v-273.15};
+const fromC= {C:v=>v,       F:v=>v*9/5+32,   K:v=>v+273.15 };
+function tempToC(v,u)  { return toC[u](v);   }
+function tempFromC(v,u){ return fromC[u](v); }
+function tempUnitChange(inputEl, selEl) {
+  const prev = selEl.dataset.prev || 'C';
+  const v = parseFloat(inputEl.value);
+  if (!isNaN(v)) inputEl.value = tempFromC(tempToC(v, prev), selEl.value).toFixed(2);
+  selEl.dataset.prev = selEl.value;
+}
+
+function urToDec(v,u)  { return u==='pct' ? v/100 : v; }
+function urFromDec(v,u){ return u==='pct' ? v*100 : v; }
+
+function wToKgKg(v,u)  { return u==='g_kg'?v/1000 : u==='gr_lb'?v/7000 : v; }
+function wFromKgKg(v,u){ return u==='g_kg'?v*1000 : u==='gr_lb'?v*7000 : v; }
+
+function hToKJkg(v,u)  { return u==='kcal_kg'?v*4.1868 : u==='BTU_lb'?v*2.326 : v; }
+function hFromKJkg(v,u){ return u==='kcal_kg'?v/4.1868 : u==='BTU_lb'?v/2.326 : v; }
+
+function pToKPa(v,u)   {
+  return u==='hPa'?v/10 : u==='atm'?v*101.325 : u==='mmHg'?v*0.133322 : u==='psi'?v*6.89476 : v;
+}
+
+// Generic: read a slot value in SI
+function readSI(varName, val, unit) {
+  if (varName==='Tbs'||varName==='Tbu'||varName==='Tpo') return tempToC(val, unit);
+  if (varName==='UR') return urToDec(val, unit);
+  if (varName==='W')  return wToKgKg(val, unit);
+  if (varName==='h')  return hToKJkg(val, unit);
+  return val;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  PSYCHROMETRIC CORE (SI: °C, kg/kg, kPa, kJ/kg)
+// ═══════════════════════════════════════════════════════════════
+function Psat(T){ return T>=0?0.6108*Math.exp(17.27*T/(T+237.3)):0.6108*Math.exp(21.87*T/(T+265.5)); }
+
+function W_from_UR(T,UR,P){ const ps=Psat(T),pv=UR*ps; return 0.62198*pv/(P-pv); }
+function UR_from_W(T,W,P) { const pv=W*P/(0.62198+W); return pv/Psat(T); }
+function Tpo_from_W(W,P)  { const pv=W*P/(0.62198+W),l=Math.log(pv/0.6108); return 237.3*l/(17.27-l); }
+function W_from_Tbu(T,Tbu,P){ const Ws=W_from_UR(Tbu,1,P); return ((2501-2.381*Tbu)*Ws-1.006*(T-Tbu))/(2501+1.805*T-4.186*Tbu); }
+
+function enthalpy(T,W)   { return 1.006*T+W*(2501+1.805*T); }
+function W_from_h_T(h,T) { const d=2501+1.805*T; return d<=0?NaN:(h-1.006*T)/d; }
+function T_from_h_W(h,W) { const d=1.006+1.805*W; return d<=0?NaN:(h-2501*W)/d; }
+function volEsp(T,W,P)   { return 287.055*(T+273.15)/((P*1000)*(1-W/(0.62198+W))); }
+
+// Numerical solvers
+function Tbu_from_TW(T,W,P){
+  let tbu=T-5;
+  for(let i=0;i<80;i++){
+    const fw=W_from_Tbu(T,tbu,P),err=fw-W;
+    if(Math.abs(err)<1e-10) break;
+    const dfdT=(W_from_Tbu(T,tbu+0.01,P)-fw)/0.01;
+    if(Math.abs(dfdT)<1e-14) break;
+    tbu-=err/dfdT;
+  }
+  return tbu;
+}
+
+// Solve Tbs numerically given h and UR
+function T_from_h_UR(h,UR,P){
+  let T=20;
+  for(let i=0;i<80;i++){
+    const W=W_from_UR(T,UR,P),hc=enthalpy(T,W),err=hc-h;
+    if(Math.abs(err)<1e-8) break;
+    const W2=W_from_UR(T+0.01,UR,P),hc2=enthalpy(T+0.01,W2),dh=(hc2-hc)/0.01;
+    if(Math.abs(dh)<1e-12) break;
+    T-=err/dh;
+  }
+  return T;
+}
+
+// Solve Tbs given Tbu and UR (iterate)
+function T_from_Tbu_UR(Tbu,UR,P){
+  let T=Tbu+5;
+  for(let i=0;i<80;i++){
+    const W_tbu=W_from_Tbu(T,Tbu,P);
+    const UR_calc=UR_from_W(T,W_tbu,P);
+    const err=UR_calc-UR;
+    if(Math.abs(err)<1e-9) break;
+    // numerical derivative dUR/dT
+    const W2=W_from_Tbu(T+0.01,Tbu,P);
+    const UR2=UR_from_W(T+0.01,W2,P);
+    const dUR=(UR2-UR_calc)/0.01;
+    if(Math.abs(dUR)<1e-12) break;
+    T-=err/dUR;
+  }
+  return T;
+}
+
+// Solve Tbs given Tbu and W (iterate)
+function T_from_Tbu_W(Tbu,W,P){
+  let T=Tbu+5;
+  for(let i=0;i<80;i++){
+    const Wc=W_from_Tbu(T,Tbu,P),err=Wc-W;
+    if(Math.abs(err)<1e-10) break;
+    const Wc2=W_from_Tbu(T+0.01,Tbu,P),dW=(Wc2-Wc)/0.01;
+    if(Math.abs(dW)<1e-14) break;
+    T-=err/dW;
+  }
+  return T;
+}
+
+// Solve Tbs given Tbu and h
+function T_from_Tbu_h(Tbu,h,P){
+  let T=Tbu+5;
+  for(let i=0;i<80;i++){
+    const W=W_from_Tbu(T,Tbu,P),hc=enthalpy(T,W),err=hc-h;
+    if(Math.abs(err)<1e-8) break;
+    const W2=W_from_Tbu(T+0.01,Tbu,P),hc2=enthalpy(T+0.01,W2),dh=(hc2-hc)/0.01;
+    if(Math.abs(dh)<1e-12) break;
+    T-=err/dh;
+  }
+  return T;
+}
+
+// Solve Tbs given Tpo and UR
+function T_from_Tpo_UR(Tpo,UR,P){
+  const W=W_from_UR(Tpo,1,P);  // W fixed by Tpo
+  // UR = UR_from_W(T,W,P) → solve for T
+  let T=Tpo+5;
+  for(let i=0;i<80;i++){
+    const URc=UR_from_W(T,W,P),err=URc-UR;
+    if(Math.abs(err)<1e-10) break;
+    const URc2=UR_from_W(T+0.01,W,P),dUR=(URc2-URc)/0.01;
+    if(Math.abs(dUR)<1e-14) break;
+    T-=err/dUR;
+  }
+  return T;
+}
+
+// Solve Tbs given Tpo and h
+function T_from_Tpo_h(Tpo,h,P){
+  const W=W_from_UR(Tpo,1,P);
+  return T_from_h_W(h,W);
+}
+
+// ─── Master solver: given two vars in SI, return {Tbs,W} ───
+function solve(varA,siA,varB,siB,P){
+  // Normalize pair key
+  const pair=[varA,varB].sort().join('-');
+
+  // Helper: direct solves
+  const Tbs_W = (T,W)=>({Tbs:T, W});
+
+  // Shorthand
+  const A=varA,B=varB,a=siA,b=siB;
+
+  // Pair sets
+  if((A==='Tbs'&&B==='UR')||(A==='UR'&&B==='Tbs')){
+    const T=A==='Tbs'?a:b, UR=A==='UR'?a:b;
+    return Tbs_W(T, W_from_UR(T,UR,P));
+  }
+  if((A==='Tbs'&&B==='Tbu')||(A==='Tbu'&&B==='Tbs')){
+    const T=A==='Tbs'?a:b, Tbu=A==='Tbu'?a:b;
+    return Tbs_W(T, W_from_Tbu(T,Tbu,P));
+  }
+  if((A==='Tbs'&&B==='Tpo')||(A==='Tpo'&&B==='Tbs')){
+    const T=A==='Tbs'?a:b, Tpo=A==='Tpo'?a:b;
+    return Tbs_W(T, W_from_UR(Tpo,1,P));
+  }
+  if((A==='Tbs'&&B==='W')||(A==='W'&&B==='Tbs')){
+    const T=A==='Tbs'?a:b, W=A==='W'?a:b;
+    return Tbs_W(T,W);
+  }
+  if((A==='Tbs'&&B==='h')||(A==='h'&&B==='Tbs')){
+    const T=A==='Tbs'?a:b, h=A==='h'?a:b;
+    const W=W_from_h_T(h,T);
+    return Tbs_W(T,W);
+  }
+  if((A==='UR'&&B==='W')||(A==='W'&&B==='UR')){
+    // W and UR fix Tbs via Pv=W*P/(0.62198+W)  and  UR=Pv/Psat(T)
+    const UR=A==='UR'?a:b, W=A==='W'?a:b;
+    const pv=W*P/(0.62198+W);
+    // Psat(T)=pv/UR → invert Magnus
+    const ps=pv/UR;
+    const lnps=Math.log(ps/0.6108);
+    const T=237.3*lnps/(17.27-lnps);
+    return Tbs_W(T,W);
+  }
+  if((A==='UR'&&B==='h')||(A==='h'&&B==='UR')){
+    const UR=A==='UR'?a:b, h=A==='h'?a:b;
+    const T=T_from_h_UR(h,UR,P);
+    const W=W_from_UR(T,UR,P);
+    return Tbs_W(T,W);
+  }
+  if((A==='W'&&B==='h')||(A==='h'&&B==='W')){
+    const W=A==='W'?a:b, h=A==='h'?a:b;
+    const T=T_from_h_W(h,W);
+    return Tbs_W(T,W);
+  }
+  if((A==='Tbu'&&B==='UR')||(A==='UR'&&B==='Tbu')){
+    const Tbu=A==='Tbu'?a:b, UR=A==='UR'?a:b;
+    const T=T_from_Tbu_UR(Tbu,UR,P);
+    const W=W_from_Tbu(T,Tbu,P);
+    return Tbs_W(T,W);
+  }
+  if((A==='Tbu'&&B==='W')||(A==='W'&&B==='Tbu')){
+    const Tbu=A==='Tbu'?a:b, W=A==='W'?a:b;
+    const T=T_from_Tbu_W(Tbu,W,P);
+    return Tbs_W(T,W);
+  }
+  if((A==='Tbu'&&B==='h')||(A==='h'&&B==='Tbu')){
+    const Tbu=A==='Tbu'?a:b, h=A==='h'?a:b;
+    const T=T_from_Tbu_h(Tbu,h,P);
+    const W=W_from_Tbu(T,Tbu,P);
+    return Tbs_W(T,W);
+  }
+  if((A==='Tpo'&&B==='UR')||(A==='UR'&&B==='Tpo')){
+    const Tpo=A==='Tpo'?a:b, UR=A==='UR'?a:b;
+    const T=T_from_Tpo_UR(Tpo,UR,P);
+    const W=W_from_UR(Tpo,1,P);
+    return Tbs_W(T,W);
+  }
+  if((A==='Tpo'&&B==='W')||(A==='W'&&B==='Tpo')){
+    // W from Tpo; then Tbs = any T where W(T,UR=1) gives same Pv → Tbs is underdetermined unless W matches
+    // W is fully determined by Tpo alone; so W input must be consistent. Use W_input, solve Tbs from UR(Tbs,W)=1 → Tbs=Tpo!
+    // Actually Tpo fixes W → Tbs can be anything ≥ Tpo. We need another constraint.
+    // => This pair is underdetermined (Tpo ↔ W is the same information). Flag it.
+    return null; // will be caught as incompatible
+  }
+  if((A==='Tpo'&&B==='h')||(A==='h'&&B==='Tpo')){
+    const Tpo=A==='Tpo'?a:b, h=A==='h'?a:b;
+    const T=T_from_Tpo_h(Tpo,h,P);
+    const W=W_from_UR(Tpo,1,P);
+    return Tbs_W(T,W);
+  }
+  if((A==='Tbu'&&B==='Tpo')||(A==='Tpo'&&B==='Tbu')){
+    const Tbu=A==='Tbu'?a:b, Tpo=A==='Tpo'?a:b;
+    const W=W_from_UR(Tpo,1,P);       // W is fixed by Tpo
+    const T=T_from_Tbu_W(Tbu,W,P);    // Tbs from Tbu + W
+    return Tbs_W(T,W);
+  }
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SLOT UI MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+const prevUnits={A:'',B:''};
+
+function buildUnitSelect(selEl, varName, slot){
+  selEl.innerHTML='';
+  const def=VAR_UNITS[varName];
+  def.opts.forEach((u,i)=>{
+    const o=document.createElement('option');
+    o.value=u; o.textContent=def.lbls[i]; selEl.appendChild(o);
+  });
+  selEl.value=def.def;
+  selEl.dataset.prev=def.def;
+  prevUnits[slot]=def.def;
+}
+
+function onVarChange(){
+  const vA=document.getElementById('varA').value;
+  const vB=document.getElementById('varB').value;
+
+  // Disable in B the same var selected in A (and vice-versa)
+  ['A','B'].forEach(sl=>{
+    const other=sl==='A'?'B':'A';
+    const otherVar=document.getElementById('var'+other).value;
+    const thisSel =document.getElementById('var'+sl);
+    Array.from(thisSel.options).forEach(opt=>{
+      opt.disabled = opt.value!=='' && opt.value===otherVar;
+    });
+  });
+
+  // Show/hide slot inputs and rebuild unit selectors
+  ['A','B'].forEach(sl=>{
+    const v=document.getElementById('var'+sl).value;
+    const inputRow=document.getElementById('input'+sl);
+    const unitSel =document.getElementById('unit'+sl);
+    if(v){
+      inputRow.style.display='flex';
+      buildUnitSelect(unitSel,v,sl);
+    } else {
+      inputRow.style.display='none';
+    }
+  });
+
+  // Check incompatibility
+  const conflict=document.getElementById('conflict_msg');
+  if(vA&&vB){
+    const key=`${vA}-${vB}`;
+    const key1=`${vA}-${vB}`, key2=`${vB}-${vA}`;
+    const incomp = INCOMPATIBLE.has(key1) || INCOMPATIBLE.has(key2) || vA===vB;
+    if(incomp){
+      conflict.textContent=`⚠ ${vA} e ${vB} representam a mesma informação — escolha uma combinação diferente.`;
+      conflict.style.display='block';
+    } else {
+      conflict.style.display='none';
+    }
+  } else {
+    conflict.style.display='none';
+  }
+}
+
+function onTempUnitChangeSlot(slot){
+  const varName=document.getElementById('var'+slot).value;
+  if(!['Tbs','Tbu','Tpo'].includes(varName)) return;
+  const inp=document.getElementById('val'+slot);
+  const sel=document.getElementById('unit'+slot);
+  const prev=sel.dataset.prev||'C';
+  const v=parseFloat(inp.value);
+  if(!isNaN(v)) inp.value=tempFromC(tempToC(v,prev),sel.value).toFixed(2);
+  sel.dataset.prev=sel.value;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CALCULATE
+// ═══════════════════════════════════════════════════════════════
+let lastResult=null;
+
+function showErr(msg){ const e=document.getElementById('error_msg'); e.textContent='⚠ '+msg; e.style.display='block'; }
+function clearErr()  { document.getElementById('error_msg').style.display='none'; }
+
+function calculate(){
+  clearErr();
+  const vA=document.getElementById('varA').value;
+  const vB=document.getElementById('varB').value;
+  if(!vA||!vB){ showErr('Selecione as duas variáveis.'); return; }
+  if(vA===vB)  { showErr('Selecione variáveis diferentes.'); return; }
+
+  const conflict=document.getElementById('conflict_msg');
+  if(conflict.style.display==='block'){ showErr('Combinação inválida — escolha variáveis independentes.'); return; }
+
+  const rawA=parseFloat(document.getElementById('valA').value);
+  const rawB=parseFloat(document.getElementById('valB').value);
+  if(isNaN(rawA)||isNaN(rawB)){ showErr('Preencha os valores das duas variáveis.'); return; }
+
+  const unitA=document.getElementById('unitA').value;
+  const unitB=document.getElementById('unitB').value;
+  const siA=readSI(vA,rawA,unitA);
+  const siB=readSI(vB,rawB,unitB);
+
+  const P=pToKPa(parseFloat(document.getElementById('pbar').value), document.getElementById('unit_pbar').value);
+  if(isNaN(P)||P<55||P>115){ showErr('Pressão inválida.'); return; }
+
+  const res=solve(vA,siA,vB,siB,P);
+  if(!res){ showErr('Esta combinação não pode ser resolvida de forma única.'); return; }
+
+  const {Tbs,W}=res;
+  if(isNaN(Tbs)||isNaN(W)){ showErr('Resultado inválido — verifique os valores informados.'); return; }
+  if(Tbs<-40||Tbs>65){ showErr(`Tbs calculado (${Tbs.toFixed(1)} °C) fora do intervalo -40…65 °C.`); return; }
+  if(W<0){ showErr('Razão de mistura negativa — condição impossível.'); return; }
+
+  const UR   = UR_from_W(Tbs,W,P);
+  const Tpo  = Tpo_from_W(W,P);
+  const Tbu  = Tbu_from_TW(Tbs,W,P);
+  const h    = enthalpy(Tbs,W);
+  const v    = volEsp(Tbs,W,P);
+  const rho  = 1/v;
+  const Pv   = W*P/(0.62198+W);
+  const Ps   = Psat(Tbs);
+
+  lastResult={Tbs,Tbu,Tpo,UR,W,h,v,rho,Pv,Ps,inputVars:[vA,vB]};
+  renderResults();
+  drawChart(P, W*1000, Tbs);
+  renderHeat();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  OUTPUT UNITS & RENDER
+// ═══════════════════════════════════════════════════════════════
+const outU={Tbs:'C',Tbu:'C',Tpo:'C',UR:'pct',W:'g_kg',h:'kJ_kg',v:'m3_kg',rho:'kg_m3',Pv:'Pa',Ps:'Pa'};
+
+const pMult={Pa:1000,kPa:1,hPa:10,mmHg:7.50062,psi:0.145038,atm:0.009869};
+function dispP(kPa,u){ return kPa*(pMult[u]||1); }
+
+const resultDefs=[
+  {id:'Tbs',label:'Bulbo Seco',        sym:'Tbs',hi:'hi-blue',
+   opts:['C','F','K'],                 lbls:['°C','°F','K'],
+   get:r=>tempFromC(r.Tbs,outU.Tbs),  dec:1},
+  {id:'Tbu',label:'Bulbo Úmido',       sym:'Tbu',hi:'',
+   opts:['C','F','K'],                 lbls:['°C','°F','K'],
+   get:r=>tempFromC(r.Tbu,outU.Tbu),  dec:1},
+  {id:'Tpo',label:'Ponto de Orvalho',  sym:'Tpo',hi:'',
+   opts:['C','F','K'],                 lbls:['°C','°F','K'],
+   get:r=>tempFromC(r.Tpo,outU.Tpo),  dec:1},
+  {id:'UR', label:'Umidade Relativa / Específica', sym:'UR', hi:'hi-green',
+   opts:['pct','dec','g_kg','kg_kg'],  lbls:['%','fração','g/kg','kg/kg'],
+   get:r=>{
+     const u=outU.UR;
+     if(u==='pct')    return r.UR*100;
+     if(u==='dec')    return r.UR;
+     if(u==='g_kg')   return r.W*1000;
+     if(u==='kg_kg')  return r.W;
+     return r.UR*100;
+   }, dec:2},
+  {id:'W',  label:'Razão de Mistura',  sym:'W',  hi:'hi-green',
+   opts:['g_kg','kg_kg','gr_lb'],      lbls:['g/kg','kg/kg','gr/lb'],
+   get:r=>wFromKgKg(r.W,outU.W),      dec:3},
+  {id:'h',  label:'Entalpia',          sym:'h',  hi:'hi-purple',
+   opts:['kJ_kg','kcal_kg','BTU_lb'],  lbls:['kJ/kg','kcal/kg','BTU/lb'],
+   get:r=>hFromKJkg(r.h,outU.h),      dec:2},
+  {id:'v',  label:'Vol. Específico',   sym:'v',  hi:'',
+   opts:['m3_kg','ft3_lb'],            lbls:['m³/kg','ft³/lb'],
+   get:r=>outU.v==='ft3_lb'?r.v*16.0185:r.v, dec:4},
+  {id:'rho',label:'Massa Específica',  sym:'ρ',  hi:'',
+   opts:['kg_m3','lb_ft3'],            lbls:['kg/m³','lb/ft³'],
+   get:r=>outU.rho==='lb_ft3'?r.rho*0.062428:r.rho, dec:3},
+  {id:'Pv', label:'Pressão Vapor Parc.',sym:'Pv',hi:'',
+   opts:['Pa','kPa','hPa','mmHg'],     lbls:['Pa','kPa','hPa','mmHg'],
+   get:r=>dispP(r.Pv,outU.Pv),        dec:2},
+  {id:'Ps', label:'Pressão Saturação', sym:'Ps', hi:'',
+   opts:['Pa','kPa','hPa','mmHg'],     lbls:['Pa','kPa','hPa','mmHg'],
+   get:r=>dispP(r.Ps,outU.Ps),        dec:2},
+];
+
+function fmt(v,d){ return (v==null||isNaN(v))?'—':Number(v).toFixed(d); }
+
+function renderResults(){
+  if(!lastResult) return;
+  const grid=document.getElementById('results_grid');
+  document.getElementById('results_placeholder').style.display='none';
+  grid.style.display='grid';
+
+  grid.innerHTML=resultDefs.map((d,i)=>{
+    const v=d.get(lastResult);
+    const isInput=lastResult.inputVars.includes(d.id);
+    const hi=isInput?'hi-orange':d.hi;
+    const curIdx=d.opts.indexOf(outU[d.id]);
+    const curLbl=d.lbls[curIdx>=0?curIdx:0];
+    const optsHTML=d.opts.map((u,j)=>`<option value="${u}"${outU[d.id]===u?' selected':''}>${d.lbls[j]}</option>`).join('');
+    return `<div class="result-card ${hi} animate-in" style="animation-delay:${i*0.026}s">
+      <div class="result-label">${d.label}${isInput?' <span style="color:var(--accent2)">●</span>':''}</div>
+      <div class="result-row">
+        <div class="result-value" id="rv_${d.id}">${fmt(v,d.dec)}<span class="result-unit-span" id="ru_${d.id}">${curLbl}</span></div>
+        <div class="result-meta">
+          <select class="result-unit-sel" onchange="changeOutUnit('${d.id}',this.value)">${optsHTML}</select>
+          <div class="result-sym">${d.sym}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function changeOutUnit(id,unit){
+  outU[id]=unit;
+  if(!lastResult) return;
+  const d=resultDefs.find(x=>x.id===id); if(!d) return;
+  const v=d.get(lastResult);
+  const el=document.getElementById('rv_'+id);
+  const eu=document.getElementById('ru_'+id);
+  if(el){ const t=el.childNodes[0]; if(t) t.textContent=fmt(v,d.dec); }
+  const ci=d.opts.indexOf(unit);
+  if(eu) eu.textContent=d.lbls[ci>=0?ci:0];
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CHART
+// ═══════════════════════════════════════════════════════════════
+function drawChart(P,W_g,Tbs){
+  const canvas=document.getElementById('psychChart');
+  const ctx=canvas.getContext('2d');
+  const CW=canvas.parentElement.clientWidth-24, CH=360;
+  canvas.width=CW; canvas.height=CH;
+  ctx.clearRect(0,0,CW,CH);
+
+  const Tmin=-10,Tmax=50,Wmin=0,Wmax=30;
+  const ml=64,mt=22,mr=48,mb=34;
+  const pw=CW-ml-mr, ph=CH-mt-mb;
+  const tx=T=>ml+(T-Tmin)/(Tmax-Tmin)*pw;
+  const ty=w=>mt+ph-(w-Wmin)/(Wmax-Wmin)*ph;
+
+  ctx.fillStyle='#0d1220'; ctx.fillRect(0,0,CW,CH);
+
+  // Grid
+  for(let T=Tmin;T<=Tmax;T+=5){
+    ctx.strokeStyle='rgba(30,45,69,0.9)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(tx(T),mt);ctx.lineTo(tx(T),mt+ph);ctx.stroke();
+  }
+  for(let w=0;w<=Wmax;w+=5){
+    ctx.strokeStyle='rgba(30,45,69,0.9)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(ml,ty(w));ctx.lineTo(ml+pw,ty(w));ctx.stroke();
+  }
+
+  ctx.strokeStyle='#2a3d5a';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(ml,mt);ctx.lineTo(ml,mt+ph);ctx.lineTo(ml+pw,mt+ph);ctx.stroke();
+
+  ctx.fillStyle='#6b7fa3';ctx.font='10px Space Mono,monospace';
+  ctx.textAlign='center';
+  for(let T=Tmin;T<=Tmax;T+=5) ctx.fillText(T+'°',tx(T),mt+ph+16);
+  ctx.fillText('Tbs (°C)',ml+pw/2,CH-4);
+  ctx.textAlign='right';
+  for(let w=0;w<=Wmax;w+=5) ctx.fillText(w,ml-5,ty(w)+4);
+  ctx.save();ctx.translate(11,mt+ph/2);ctx.rotate(-Math.PI/2);
+  ctx.textAlign='center';ctx.fillText('W (g/kg)',0,0);ctx.restore();
+
+  // h lines
+  for(let h=-10;h<=140;h+=10){
+    const a=h%50===0?0.18:0.07;
+    ctx.strokeStyle=`rgba(127,255,110,${a})`;ctx.lineWidth=1;
+    ctx.beginPath();let f=true;
+    for(let T=Tmin;T<=Tmax;T+=0.4){
+      const wg=((h-1.006*T)/(2501+1.805*T))*1000;
+      if(wg<0||wg>Wmax+0.5){f=true;continue;}
+      f?ctx.moveTo(tx(T),ty(wg)):ctx.lineTo(tx(T),ty(wg));f=false;
+    }
+    ctx.stroke();
+    const Tr=Tmax-0.5, wgr=((h-1.006*Tr)/(2501+1.805*Tr))*1000;
+    if(wgr>=0.5&&wgr<=Wmax-0.5){
+      ctx.fillStyle=`rgba(127,255,110,${a+0.2})`;ctx.font='8px Space Mono,monospace';
+      ctx.textAlign='left';ctx.fillText(h,tx(Tr)+3,ty(wgr)-2);
+    }
+  }
+
+  // UR curves
+  [[100,1],[75,0.55],[50,0.3],[25,0.15]].forEach(([ur,a])=>{
+    ctx.strokeStyle=`rgba(0,212,255,${a})`;ctx.lineWidth=ur===100?2:1;
+    ctx.beginPath();let f=true;
+    for(let T=Tmin;T<=Tmax;T+=0.3){
+      const wg=W_from_UR(T,ur/100,P)*1000;
+      if(wg<0||wg>Wmax+1){f=true;continue;}
+      f?ctx.moveTo(tx(T),ty(wg)):ctx.lineTo(tx(T),ty(wg));f=false;
+    }
+    ctx.stroke();
+    const Tl=38,wl=W_from_UR(Tl,ur/100,P)*1000;
+    if(wl>=0&&wl<=Wmax){
+      ctx.fillStyle=`rgba(0,212,255,${Math.min(a+0.15,1)})`;ctx.font='9px Space Mono,monospace';
+      ctx.textAlign='left';ctx.fillText(ur+'%',tx(Tl)+3,ty(wl)-3);
+    }
+  });
+
+  // Calculated point
+  if(W_g!=null&&Tbs!=null&&!isNaN(W_g)&&!isNaN(Tbs)){
+    const px=tx(Tbs),py=ty(W_g);
+    if(px>=ml-2&&px<=ml+pw+2&&py>=mt-2&&py<=mt+ph+2){
+      ctx.strokeStyle='rgba(255,107,53,0.28)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+      ctx.beginPath();ctx.moveTo(px,mt);ctx.lineTo(px,mt+ph);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(ml,py);ctx.lineTo(ml+pw,py);ctx.stroke();
+      ctx.setLineDash([]);
+      const g=ctx.createRadialGradient(px,py,2,px,py,22);
+      g.addColorStop(0,'rgba(255,107,53,0.4)');g.addColorStop(1,'rgba(255,107,53,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(px,py,22,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#ff6b35';ctx.strokeStyle='#fff';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(px,py,7,0,Math.PI*2);ctx.fill();ctx.stroke();
+      const onRight=px<CW*0.72;
+      ctx.fillStyle='#ff6b35';ctx.font='bold 10px Space Mono,monospace';
+      ctx.textAlign=onRight?'left':'right';
+      const lx=onRight?px+11:px-11;
+      ctx.fillText('Tbs='+Tbs.toFixed(1)+'°C',lx,py-13);
+      ctx.fillText('W='+W_g.toFixed(2)+' g/kg',lx,py+1);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HEAT DECOMPOSITION PANEL
+// ═══════════════════════════════════════════════════════════════
+function renderHeat(){
+  if(!lastResult) return;
+  const r = lastResult;
+  const unit = document.getElementById('heat_unit').value;
+
+  // Sensível: hs = 1.006 * Tbs (kJ/kg_ar_seco)
+  const hs_kj = 1.006 * r.Tbs;
+  // Latente:  hl = W * (2501 + 1.805 * Tbs)
+  const hl_kj = r.W * (2501 + 1.805 * r.Tbs);
+  const h_kj  = hs_kj + hl_kj;  // should equal r.h
+
+  // Convert to display unit
+  const hs = hFromKJkg(hs_kj, unit);
+  const hl = hFromKJkg(hl_kj, unit);
+  const ht = hFromKJkg(h_kj,  unit);
+  const ulbl = {kJ_kg:'kJ/kg', kcal_kg:'kcal/kg', BTU_lb:'BTU/lb'}[unit];
+
+  const pctS = (hs_kj / h_kj * 100);
+  const pctL = (hl_kj / h_kj * 100);
+
+  // Bar
+  document.getElementById('bar_sensivel').style.width = pctS.toFixed(1)+'%';
+  document.getElementById('bar_latente' ).style.width = pctL.toFixed(1)+'%';
+  document.getElementById('bar_sensivel').textContent = pctS>=12 ? pctS.toFixed(1)+'%' : '';
+  document.getElementById('bar_latente' ).textContent = pctL>=12 ? pctL.toFixed(1)+'%' : '';
+
+  // Cards
+  document.getElementById('val_sensivel').textContent = hs.toFixed(2)+' '+ulbl;
+  document.getElementById('val_latente' ).textContent = hl.toFixed(2)+' '+ulbl;
+  document.getElementById('val_total'   ).textContent = ht.toFixed(2)+' '+ulbl;
+  document.getElementById('pct_sensivel').textContent = pctS.toFixed(1)+'%';
+  document.getElementById('pct_latente' ).textContent = pctL.toFixed(1)+'%';
+
+  // Donut center
+  document.getElementById('donut_total').textContent = ht.toFixed(1)+' '+ulbl;
+
+  // Show panel
+  document.getElementById('heat_placeholder').style.display='none';
+  document.getElementById('heat_content').style.display='block';
+
+  // Draw donut
+  drawDonut(pctS, pctL);
+}
+
+function drawDonut(pctS, pctL){
+  const canvas = document.getElementById('donutChart');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=160, H=160;
+  canvas.width=W; canvas.height=H;
+  ctx.clearRect(0,0,W,H);
+
+  const cx=W/2, cy=H/2, R=68, thick=22;
+  const startAngle = -Math.PI/2;
+  const slices = [
+    { pct: pctS/100, color: '#ff6b35', glow: 'rgba(255,107,53,0.4)' },
+    { pct: pctL/100, color: '#00d4ff', glow: 'rgba(0,212,255,0.4)' },
+  ];
+
+  // Background ring
+  ctx.beginPath();
+  ctx.arc(cx,cy,R,0,Math.PI*2);
+  ctx.strokeStyle='rgba(30,45,69,0.8)';
+  ctx.lineWidth=thick+2;
+  ctx.stroke();
+
+  let angle = startAngle;
+  slices.forEach(s=>{
+    const sweep = s.pct * Math.PI * 2;
+    // glow
+    ctx.beginPath();
+    ctx.arc(cx,cy,R,angle,angle+sweep);
+    ctx.strokeStyle=s.glow;
+    ctx.lineWidth=thick+8;
+    ctx.lineCap='round';
+    ctx.stroke();
+    // main arc
+    ctx.beginPath();
+    ctx.arc(cx,cy,R,angle,angle+sweep);
+    ctx.strokeStyle=s.color;
+    ctx.lineWidth=thick;
+    ctx.lineCap='butt';
+    ctx.stroke();
+    angle += sweep;
+  });
+
+  // Small gap dots
+  ctx.strokeStyle='#0a0e1a';
+  ctx.lineWidth=3;
+  [startAngle, startAngle + slices[0].pct*Math.PI*2].forEach(a=>{
+    const x=cx+R*Math.cos(a), y=cy+R*Math.sin(a);
+    ctx.beginPath(); ctx.arc(x,y,2,0,Math.PI*2); ctx.stroke();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CONDENSATION ANALYSIS — PANEL 05
+// ═══════════════════════════════════════════════════════════════
+
+// Track prev units for temp conversion in cond panel
+const condPrevUnits = {c_tbs:'C', c_val2:'C', c_tsup:'C'};
+
+function condTempConvert(inputId, selectId){
+  const inp = document.getElementById(inputId);
+  const sel = document.getElementById(selectId);
+  const prev = condPrevUnits[inputId] || 'C';
+  const v = parseFloat(inp.value);
+  if(!isNaN(v)) inp.value = tempFromC(tempToC(v, prev), sel.value).toFixed(2);
+  condPrevUnits[inputId] = sel.value;
+}
+
+function condVar2Change(){
+  const v2 = document.getElementById('c_var2').value;
+  const unitSel = document.getElementById('c_unit2');
+  const inp = document.getElementById('c_val2');
+
+  if(v2 === 'Tbu' || v2 === 'Tpo'){
+    unitSel.style.display = '';
+    unitSel.innerHTML = '<option value="C">°C</option><option value="F">°F</option><option value="K">K</option>';
+    condPrevUnits['c_val2'] = 'C';
+    inp.value = v2 === 'Tbu' ? '26' : '20';
+  } else if(v2 === 'UR'){
+    unitSel.style.display = '';
+    unitSel.innerHTML = '<option value="pct">%</option><option value="dec">fração</option>';
+    condPrevUnits['c_val2'] = 'pct';
+    inp.value = '70';
+  } else if(v2 === 'W'){
+    unitSel.style.display = '';
+    unitSel.innerHTML = '<option value="g_kg">g/kg</option><option value="kg_kg">kg/kg</option><option value="gr_lb">gr/lb</option>';
+    condPrevUnits['c_val2'] = 'g_kg';
+    inp.value = '15';
+  }
+}
+
+function calcCondensation(){
+  const errEl = document.getElementById('cond_err');
+  errEl.style.display = 'none';
+  const showCondErr = msg => { errEl.textContent = '⚠ ' + msg; errEl.style.display = 'block'; };
+
+  // Read Tbs external
+  const tbs_raw  = parseFloat(document.getElementById('c_tbs').value);
+  const tbs_unit = document.getElementById('c_unit_tbs').value;
+  const Tbs_ext  = tempToC(tbs_raw, tbs_unit);
+  if(isNaN(Tbs_ext) || Tbs_ext < -40 || Tbs_ext > 65){ showCondErr('Tbs externo inválido (-40…65 °C).'); return; }
+
+  // Read second variable
+  const v2      = document.getElementById('c_var2').value;
+  const val2_raw= parseFloat(document.getElementById('c_val2').value);
+  const unit2   = document.getElementById('c_unit2').value;
+  const P       = pToKPa(parseFloat(document.getElementById('c_pbar').value), document.getElementById('c_unit_pbar').value);
+  if(isNaN(P) || P < 55 || P > 115){ showCondErr('Pressão inválida.'); return; }
+
+  let W_ext;
+  if(v2 === 'Tbu'){
+    const Tbu = tempToC(val2_raw, unit2);
+    if(isNaN(Tbu) || Tbu > Tbs_ext){ showCondErr('Tbu deve ser ≤ Tbs.'); return; }
+    W_ext = W_from_Tbu(Tbs_ext, Tbu, P);
+  } else if(v2 === 'Tpo'){
+    const Tpo = tempToC(val2_raw, unit2);
+    if(isNaN(Tpo) || Tpo > Tbs_ext){ showCondErr('TPO deve ser ≤ Tbs.'); return; }
+    W_ext = W_from_UR(Tpo, 1, P);
+  } else if(v2 === 'UR'){
+    const UR = urToDec(val2_raw, unit2);
+    if(isNaN(UR) || UR <= 0 || UR > 1){ showCondErr('UR deve estar entre 0 e 100%.'); return; }
+    W_ext = W_from_UR(Tbs_ext, UR, P);
+  } else if(v2 === 'W'){
+    W_ext = wToKgKg(val2_raw, unit2);
+    if(isNaN(W_ext) || W_ext < 0){ showCondErr('W inválido.'); return; }
+  }
+
+  if(W_ext < 0){ showCondErr('Condição impossível: razão de mistura negativa.'); return; }
+
+  // Compute derived values
+  const UR_ext  = UR_from_W(Tbs_ext, W_ext, P);
+  const Tpo_ext = Tpo_from_W(W_ext, P);
+
+  // Read surface temp
+  const tsup_raw  = parseFloat(document.getElementById('c_tsup').value);
+  const tsup_unit = document.getElementById('c_unit_tsup').value;
+  const Tsup      = tempToC(tsup_raw, tsup_unit);
+  if(isNaN(Tsup)){ showCondErr('Temperatura da superfície inválida.'); return; }
+
+  // Delta: positive = safe, negative = condensation
+  const delta = Tsup - Tpo_ext;
+  // Safety margin thresholds
+  const DANGER  = 0;    // Tsup <= Tpo  → condensation
+  const WARNING = 3;    // Tsup within 3°C of Tpo → risk
+
+  let verdict, recLines;
+  if(delta <= DANGER){
+    verdict = 'danger';
+    recLines = [
+      '<strong>Condensação confirmada.</strong> A temperatura da superfície está abaixo do ponto de orvalho do ar externo.',
+      '→ Isole termicamente o duto/superfície com espessura adequada de isolante (ex.: manta elastomérica, lã de vidro com barreira de vapor).',
+      '→ Verifique a espessura mínima de isolamento com base na resistência térmica necessária para elevar Tsup acima da TPO.',
+      '→ Instale barreira de vapor no lado quente do isolamento para evitar migração de umidade.',
+      '→ Revise o layout dos dutos — evite trechos descobertos em ambientes com alta umidade relativa.',
+    ];
+  } else if(delta <= WARNING){
+    verdict = 'warning';
+    recLines = [
+      '<strong>Risco de condensação.</strong> A margem entre Tsup e TPO é inferior a 3 °C — situação crítica em regime permanente.',
+      '→ Recomenda-se reforçar o isolamento térmico para aumentar a margem de segurança.',
+      '→ Em condições de pico de umidade (chuva, madrugada), a condensação pode ocorrer.',
+      '→ Inspecione periodicamente a superfície e verifique sinais de umidade superficial.',
+      '→ Considere controle de umidade do ambiente (desumidificação) se viável.',
+    ];
+  } else {
+    verdict = 'safe';
+    recLines = [
+      '<strong>Sem risco de condensação.</strong> A temperatura da superfície está acima do ponto de orvalho com margem confortável.',
+      '→ Margem atual: ' + delta.toFixed(1) + ' °C acima da TPO.',
+      '→ Monitore a situação caso o sistema opere em condições de maior umidade relativa.',
+      '→ Certifique-se de que o isolamento existente mantenha Tsup acima da TPO em todos os cenários de operação.',
+    ];
+  }
+
+  // ── Render ──────────────────────────────────────────────────
+  const verdictEl = document.getElementById('cond_verdict');
+  verdictEl.className = 'cond-verdict ' + verdict;
+
+  const icons   = {danger:'💧', warning:'⚠️', safe:'✅'};
+  const titles  = {
+    danger : 'CONDENSAÇÃO PRESENTE',
+    warning: 'RISCO DE CONDENSAÇÃO',
+    safe   : 'SEM CONDENSAÇÃO',
+  };
+  const subs = {
+    danger : 'Tsup (' + Tsup.toFixed(1) + ' °C) ≤ TPO (' + Tpo_ext.toFixed(1) + ' °C)',
+    warning: 'Margem muito pequena: Tsup − TPO = ' + delta.toFixed(1) + ' °C',
+    safe   : 'Tsup (' + Tsup.toFixed(1) + ' °C) > TPO (' + Tpo_ext.toFixed(1) + ' °C)  •  Margem: +' + delta.toFixed(1) + ' °C',
+  };
+
+  document.getElementById('verdict_icon').textContent  = icons[verdict];
+  document.getElementById('verdict_title').textContent = titles[verdict];
+  document.getElementById('verdict_sub').textContent   = subs[verdict];
+
+  // Data cards
+  document.getElementById('r_tbs_ext').textContent = Tbs_ext.toFixed(1) + ' °C';
+  document.getElementById('r_ur_ext').textContent  = (UR_ext * 100).toFixed(1) + ' %';
+  document.getElementById('r_tpo').textContent     = Tpo_ext.toFixed(1) + ' °C';
+  document.getElementById('r_tsup').textContent    = Tsup.toFixed(1) + ' °C';
+  document.getElementById('r_delta').textContent   = (delta >= 0 ? '+' : '') + delta.toFixed(1) + ' °C';
+  document.getElementById('r_w_ext').textContent   = (W_ext * 1000).toFixed(2) + ' g/kg';
+
+  // Highlight delta card
+  const deltaCard = document.querySelector('.delta-card');
+  deltaCard.style.borderColor = verdict === 'danger' ? 'rgba(255,77,109,0.6)' : verdict === 'warning' ? 'rgba(255,190,0,0.6)' : 'rgba(127,255,110,0.6)';
+  document.getElementById('r_delta').style.color = verdict === 'danger' ? '#ff4d6d' : verdict === 'warning' ? '#ffbe00' : 'var(--accent3)';
+
+  // Recommendation
+  document.getElementById('cond_recommendation').innerHTML =
+    '<div style="margin-bottom:8px;font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)">Recomendações</div>' +
+    recLines.map(l => '• ' + l).join('<br>');
+
+  // Show result area
+  document.getElementById('cond_result_area').style.display = 'flex';
+
+  // Draw temperature bar chart
+  drawCondTempBar(Tbs_ext, Tpo_ext, Tsup);
+}
+
+function drawCondTempBar(Tbs, Tpo, Tsup){
+  const canvas = document.getElementById('condTempBar');
+  const ctx    = canvas.getContext('2d');
+  const CW     = canvas.parentElement.clientWidth - 20;
+  const CH     = 90;
+  canvas.width = CW; canvas.height = CH;
+  ctx.clearRect(0,0,CW,CH);
+
+  ctx.fillStyle = '#0d1220';
+  ctx.fillRect(0,0,CW,CH);
+
+  // Determine axis range with padding
+  const temps  = [Tbs, Tpo, Tsup];
+  const Tmin_c = Math.min(...temps) - 5;
+  const Tmax_c = Math.max(...temps) + 5;
+  const ml=50, mr=20, mt=18, mb=28;
+  const pw = CW - ml - mr;
+  const tx = T => ml + (T - Tmin_c) / (Tmax_c - Tmin_c) * pw;
+
+  // Axis line
+  ctx.strokeStyle = '#2a3d5a'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(ml, mt + (CH-mt-mb)/2); ctx.lineTo(ml+pw, mt + (CH-mt-mb)/2); ctx.stroke();
+
+  // Condensation zone: fill from left to Tpo marker
+  const cy = mt + (CH-mt-mb)/2;
+  const pxTpo  = tx(Tpo);
+  const pxTsup = tx(Tsup);
+  const pxTbs  = tx(Tbs);
+
+  // Zone fill: below Tpo = condensation risk
+  const grad = ctx.createLinearGradient(ml, 0, pxTpo, 0);
+  grad.addColorStop(0,   'rgba(255,77,109,0.12)');
+  grad.addColorStop(1,   'rgba(255,77,109,0.04)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(ml, mt, pxTpo - ml, CH - mt - mb);
+
+  // Axis ticks & labels
+  ctx.fillStyle = '#6b7fa3'; ctx.font = '9px Space Mono,monospace'; ctx.textAlign = 'center';
+  const step = Math.ceil((Tmax_c - Tmin_c) / 8);
+  for(let T = Math.ceil(Tmin_c); T <= Tmax_c; T += step){
+    const x = tx(T);
+    ctx.strokeStyle='rgba(30,45,69,0.7)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x, mt); ctx.lineTo(x, CH-mb); ctx.stroke();
+    ctx.fillStyle='#6b7fa3'; ctx.fillText(T+'°', x, CH-mb+11);
+  }
+
+  // ── Draw temperature markers ──────────────────────────────
+  const markers = [
+    { x: pxTbs,  label: 'Tbs ext', val: Tbs.toFixed(1)+'°C',  color: '#e8f0fe',  r: 7 },
+    { x: pxTpo,  label: 'TPO',     val: Tpo.toFixed(1)+'°C',  color: '#00d4ff',  r: 8 },
+    { x: pxTsup, label: 'Tsup',    val: Tsup.toFixed(1)+'°C', color: '#ff6b35',  r: 8 },
+  ];
+
+  markers.forEach(m => {
+    // Vertical line
+    ctx.strokeStyle = m.color + '55'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(m.x, mt); ctx.lineTo(m.x, CH-mb); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Dot
+    ctx.beginPath(); ctx.arc(m.x, cy, m.r, 0, Math.PI*2);
+    ctx.fillStyle = m.color; ctx.fill();
+    ctx.strokeStyle = '#0d1220'; ctx.lineWidth = 2; ctx.stroke();
+
+    // Label above
+    ctx.fillStyle = m.color; ctx.font = 'bold 9px Space Mono,monospace'; ctx.textAlign = 'center';
+    ctx.fillText(m.label, m.x, mt - 4);
+
+    // Value below axis
+    ctx.font = '9px Space Mono,monospace';
+    ctx.fillText(m.val, m.x, CH - mb + 22);
+  });
+
+  // Arrow between Tpo and Tsup showing delta
+  if(Math.abs(pxTsup - pxTpo) > 20){
+    const arrowY = cy - 18;
+    const x1 = Math.min(pxTpo, pxTsup) + 2;
+    const x2 = Math.max(pxTpo, pxTsup) - 2;
+    const delta = (Tsup - Tpo).toFixed(1);
+    const col = Tsup > Tpo ? 'var(--accent3)' : '#ff4d6d';
+    ctx.strokeStyle = Tsup > Tpo ? 'rgba(127,255,110,0.6)' : 'rgba(255,77,109,0.6)';
+    ctx.lineWidth = 1.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(x1, arrowY); ctx.lineTo(x2, arrowY); ctx.stroke();
+    // Arrow heads
+    [[x1,-1],[x2,1]].forEach(([x,dir])=>{
+      ctx.beginPath(); ctx.moveTo(x, arrowY);
+      ctx.lineTo(x + dir*6, arrowY - 3);
+      ctx.lineTo(x + dir*6, arrowY + 3);
+      ctx.closePath(); ctx.fill();
+    });
+    ctx.fillStyle = Tsup > Tpo ? 'rgba(127,255,110,0.9)' : 'rgba(255,77,109,0.9)';
+    ctx.font = 'bold 9px Space Mono,monospace'; ctx.textAlign = 'center';
+    ctx.fillText((Tsup>Tpo?'+':'')+delta+' °C', (x1+x2)/2, arrowY - 6);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  drawChart(101.325,null,null);
+  condVar2Change(); // initialize unit selector for cond panel var2
+});
+window.addEventListener('resize',()=>{
+  const P=pToKPa(parseFloat(document.getElementById('pbar').value)||101.325,document.getElementById('unit_pbar').value);
+  if(lastResult) drawChart(P,lastResult.W*1000,lastResult.Tbs);
+  else drawChart(P,null,null);
+});
+</script>
+</body>
+</html>
